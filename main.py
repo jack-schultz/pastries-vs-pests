@@ -1,5 +1,7 @@
 import tkinter as tk
 from rectangle import Rectangle
+from card import Card
+from bread import Bread
 
 # Pygame difference to Tkinter
 # Pygame	                    |   Tkinter
@@ -44,7 +46,7 @@ class Game:
         ROWS, COLUMNS = 5, 9
 
         # === GAME SETTINGS ===
-        self.bread_cards_count = 6
+        self.cards_count = 6
 
         # === INPUT VARIABLES ===
         self.mouse_pos = None
@@ -53,12 +55,19 @@ class Game:
         # === GAME OBJECTS ===
         self.floor_rects = create_floor_rects(self.canvas, ROWS, COLUMNS, 90, (40, 120))
         self.pests = []
-        self.bread_cards = [None] * self.bread_cards_count  # Create list of empty bread cards
+        self.cards = [None] * self.cards_count  # Create list of empty bread cards
         self.breads = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
 
+        # Fill card slots
+        self.cards[0] = Card("bread", 25, Bread)
+
+        self._create_game_loop()
+
+    def _create_game_loop(self):
         # === GAME LOOP ===
         def update():
-            #square2.move((1, 0))  # 3 pixels right per frame
+            # Code which runs every frame goes here
+            # square2.move((1, 0))
 
             self.root.after(16, update)  # run again in about 16 ms (~60 FPS)
 
