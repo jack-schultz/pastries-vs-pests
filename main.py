@@ -2,6 +2,7 @@ import tkinter as tk
 from rectangle import Rectangle
 from card import Card
 from good import Good
+from tile import Tile
 
 # Pygame difference to Tkinter
 # Pygame	                    |   Tkinter
@@ -38,21 +39,36 @@ class Game:
         self.cards = [None] * self.cards_count  # Create list of empty bread cards
         self.breads = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
 
-        # Fill card slots
-        self.cards[0] = Card("bread", 25, Good)
+        # Holds the rects that make up the grid on the floor
+        tiles = []
+        for rect in self._create_tile_rects(ROWS, COLUMNS, 90, (40, 120)):
+            tiles.append(Tile(rect))
 
-        self.floor_rects = self._create_floor_rects(ROWS, COLUMNS, 90, (40, 120))
-        self.card_rects = self._create_card_rects((60, 20), (70, 85), 10)
+        # Holds the cards which are displayed along the top
+        card_rects = self._create_card_rects((60, 20), (70, 85), 10)
+        card_info = {
+            0: (card_rects[0], "bread", 25, Good),
+        }
+        cards = []
+        for i in range(len(card_rects)):
+            if i > max(card_info.keys()):
+                break
+            cards.append(Card(*card_info[i]))
 
-    def _create_floor_rects(self, rows: int, columns: int, grid_size: tuple[int, int], margins: tuple[int, int]):
-        floor_rects = []
+        # Holds the game objects like flour or bullets. objects always have an obj.rect
+        self.objects = []
+        self.objects = self.objects + tiles
+        self.objects = self.objects + cards
+
+    def _create_tile_rects(self, rows: int, columns: int, grid_size: tuple[int, int], margins: tuple[int, int]):
+        rects = []
         x_margin, y_margin = margins
         colour_a = "#e0fa5f"
         colour_b = "#c8e04a"
         for i in range(columns):  # columns
             for j in range(rows):  # rows
                 colour = colour_a if (i + j) % 2 == 0 else colour_b
-                floor_rects.append(
+                rects.append(
                     Rectangle(
                         self.canvas,
                         x_margin + grid_size * i, y_margin + grid_size * j,
@@ -60,7 +76,7 @@ class Game:
                         colour
                     )
                 )
-        return floor_rects
+        return rects
 
     def _create_card_rects(self, location: tuple[int, int], size: tuple[int, int], gap: int):
         card_rects = []
@@ -96,12 +112,9 @@ class Game:
             print(f"Clicked at ({event.x}, {event.y})")
             pos = (event.x, event.y)
 
-            for i, rect in enumerate(self.card_rects):
-                if rect.collide_point(point=pos):
-                    print(f"Clicked a Card (index = {i})")
-            for i, rect in enumerate(self.floor_rects):
-                if rect.collide_point(point=pos):
-                    print(f"Clicked a Floor (index = {i})")
+            for obj in self.objects:
+                if obj.rect.collide_point(point=pos):
+                    print(f"Clicked a {type(obj).__name__}")
 
         self.canvas.bind("<Motion>", on_motion)  # Mouse movement
         self.canvas.bind("<Button-1>", on_click)  # Left mouse click

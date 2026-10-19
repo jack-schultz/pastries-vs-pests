@@ -17,7 +17,7 @@ class Rectangle:
         return width
 
     @width.setter
-    def width(self, new_width):
+    def width(self, new_width: int):
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         # x1, y1 is top left
         # x2, y2 is bottom right
@@ -36,7 +36,7 @@ class Rectangle:
         return height
 
     @height.setter
-    def height(self, new_height):
+    def height(self, new_height: int):
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         # x1, y1 is top left
         # x2, y2 is bottom right
@@ -55,7 +55,7 @@ class Rectangle:
         return centre  # (cx, cy)
 
     @centre.setter
-    def centre(self, centre):
+    def centre(self, centre: tuple[int, int]):
         cx, cy = centre
         half_width = self.width // 2
         half_height = self.height // 2
@@ -67,7 +67,7 @@ class Rectangle:
             cy + half_height,
             )
 
-    def move(self, difference):
+    def move(self, difference: tuple[int, int]):
         dx, dy = difference
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         self.__canvas.coords(
