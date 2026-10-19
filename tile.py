@@ -1,15 +1,12 @@
+from entity import Entity
 from rectangle import Rectangle
 from good import Good
 
 
-class Tile:
+class Tile(Entity):
     def __init__(self, rect: Rectangle):
-        self.__rect = rect
+        super().__init__(rect)
         self.__good = None
-
-    @property
-    def rect(self):
-        return self.__rect
 
     @property
     def good(self):
@@ -26,6 +23,10 @@ class Tile:
 
         self.__good = good
         return True
+
+    @property
+    def is_empty(self) -> bool:
+        return self.__good is None
 
     def clear_good(self):
         self.__good = None

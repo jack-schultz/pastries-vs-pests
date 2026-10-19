@@ -2,30 +2,29 @@ from __future__ import annotations
 import math
 import random
 import time
-from abc import ABC
+from abc import ABC, abstractmethod
+from entity import Living
 from rectangle import Rectangle
 from objects import Flour, Projectile
 
 
-class Good(ABC):
+class Good(Living, ABC):
+    # Base class for goods placed on tiles. Each good acts on its own timer
     def __init__(self, rect: Rectangle, health: int):
-        self.__rect = rect
-        self.__health = health
+        super().__init__(rect, health)
+        self.__last_action = time.monotonic()
 
-    @property
-    def rect(self):
-        return self.__rect
+    def _ready(self, interval: float) -> bool:
+        # True once `interval` seconds have passed since the last action, and restarts the timer
+        if time.monotonic() - self.__last_action < interval:
+            return False
+        self.__last_action = time.monotonic()
+        return True
 
-    @property
-    def health(self):
-        return self.__health
-
-    @property
-    def is_dead(self):
-        return self.__health <= 0
-
-    def take_damage(self, amount: int):
-        self.__health -= amount
+    @abstractmethod
+    def act(self, canvas) -> Flour | Projectile | None:
+        # Called every frame. Returns whatever the good made this frame, if anything
+        pass
 
 
 class FlourFlower(Good):
@@ -36,12 +35,10 @@ class FlourFlower(Good):
         self.__production_interval = 15  # seconds between spawns
         self.__spawn_distance = 40  # pixels from the flower's centre
         self.__flour_size = 30
-        self.__last_spawn = time.monotonic()
 
-    def produce(self, canvas) -> Flour | None:
-        if time.monotonic() - self.__last_spawn < self.__production_interval:
+    def act(self, canvas) -> Flour | None:
+        if not self._ready(self.__production_interval):
             return None
-        self.__last_spawn = time.monotonic()
 
         # Spawn a small distance away from the flower in a random direction
         angle = random.uniform(0, 2 * math.pi)
@@ -61,12 +58,10 @@ class SugarShooter(Good):
         self.__projectile_size = 14
         self.__projectile_speed = 6  # pixels per frame
         self.__damage = 10
-        self.__last_shot = time.monotonic()
 
-    def shoot(self, canvas) -> Projectile | None:
-        if time.monotonic() - self.__last_shot < self.__shoot_interval:
+    def act(self, canvas) -> Projectile | None:
+        if not self._ready(self.__shoot_interval):
             return None
-        self.__last_shot = time.monotonic()
 
         # Fire from the front-right of the shooter, along its row
         cx, cy = self.rect.centre
