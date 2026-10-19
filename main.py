@@ -44,7 +44,7 @@ class Game:
         self.floor_rects = self._create_floor_rects(ROWS, COLUMNS, 90, (40, 120))
         self.card_rects = self._create_card_rects((60, 20), (70, 85), 10)
 
-    def _create_floor_rects(self, rows, columns, grid_size, margins):
+    def _create_floor_rects(self, rows: int, columns: int, grid_size: tuple[int, int], margins: tuple[int, int]):
         floor_rects = []
         x_margin, y_margin = margins
         colour_a = "#e0fa5f"
@@ -62,7 +62,7 @@ class Game:
                 )
         return floor_rects
 
-    def _create_card_rects(self, location, size, gap):
+    def _create_card_rects(self, location: tuple[int, int], size: tuple[int, int], gap: int):
         card_rects = []
         colour = "#e63946"
         lx, ly = location

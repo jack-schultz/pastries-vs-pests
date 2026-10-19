@@ -1,6 +1,6 @@
 
 class Bread:
-    def __init__(self, name, health):
+    def __init__(self, name: str, health: int):
         self.__name = name
         self.__health = health
 

@@ -1,7 +1,7 @@
 
 
 class Card:
-    def __init__(self, name, cost, bread_class):
+    def __init__(self, name: str, cost: int, bread_class):
         self.__name = name
         self.__cost = cost
         self.__bread_class = bread_class
