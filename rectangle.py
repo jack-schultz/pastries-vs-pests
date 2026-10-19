@@ -75,3 +75,9 @@ class Rectangle:
             x1 + dx, y1 + dy,
             x2 + dx, y2 + dy,
             )
+
+    def raise_to_top(self):
+        self.__canvas.tag_raise(self.__rect)
+
+    def delete(self):
+        self.__canvas.delete(self.__rect)

@@ -11,22 +11,9 @@ from rectangle import Rectangle
 # Rect.x                        |   Calc from points x1, y1, x2, y2 = self.__canvas.coords(self.__rect) where (x1, y1) is top left and (x2, y2) is bottom right
 
 
-def main():
-    root = tk.Tk()
-    root.title("Bakery vs. Pests")
-    root.resizable(False, False)
-
-    # Create the world canvas to store our rects coordinates
-    canvas = tk.Canvas(root, width=900, height=600, bg="#fdf3e1", highlightthickness=0)
-    # Places canvas widget inside parent window as tk is designed for menus
-    canvas.pack()
-
-    # === GAME OBJECTS ===
-    rows, columns = 5, 9
-    breads = [None] * rows * columns  # Create 5 rows of 10 prefilled as None
+def create_floor_rects(canvas, rows, columns, grid_size, margins):
     floor_rects = []
-    grid_size = 90
-    x_margin, y_margin = 40, 120
+    x_margin, y_margin = margins
     colour_a = "#e0fa5f"
     colour_b = "#c8e04a"
     for i in range(columns):  # columns
@@ -40,30 +27,52 @@ def main():
                     colour
                 )
             )
-
-    square1 = Rectangle(canvas, 0, 0, 40, 40, "#e07a5f")
-    square2 = Rectangle(canvas,  0, 0, 40, 40, "#e07a5f")
-
-    # === GAME LOOP ===
-    def update():
-        square2.move((3, 0))  # 3 pixels right per frame
-
-        root.after(16, update)  # run again in about 16 ms (~60 FPS)
-
-    update()
-
-    # === EVENTS ===
-    def on_motion(event):
-        square1.centre = (event.x, event.y)
-
-    def on_click(event):
-        print(f"Clicked at ({event.x}, {event.y})")
-
-    canvas.bind("<Motion>", on_motion)  # Mouse movement
-    canvas.bind("<Button-1>", on_click)  # Left mouse click
-
-    # === RUN ===
-    root.mainloop()
+    return floor_rects
 
 
-main()
+class Game:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Bakery vs. Pests")
+        self.root.resizable(False, False)
+
+        # Create the world canvas to store our rects coordinates
+        self.canvas = tk.Canvas(self.root, width=900, height=600, bg="#fdf3e1", highlightthickness=0)
+        # Places canvas widget inside parent window as tk is designed for menus
+        self.canvas.pack()
+
+        ROWS, COLUMNS = 5, 9
+        self.mouse_pos = None
+        self.mouse_click_pos = None
+
+        # === GAME OBJECTS ===
+        self.floor_rects = create_floor_rects(self.canvas, ROWS, COLUMNS, 90, (40, 120))
+        self.pests = []
+        self.bread_cards = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
+        self.breads = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
+
+        # === GAME LOOP ===
+        def update():
+            #square2.move((1, 0))  # 3 pixels right per frame
+
+            self.root.after(16, update)  # run again in about 16 ms (~60 FPS)
+
+        update()
+
+        # === EVENTS ===
+        def on_motion(event):
+            self.mouse_pos = (event.x, event.y)
+
+        def on_click(event):
+            print(f"Clicked at ({event.x}, {event.y})")
+            self.mouse_click_pos = (event.x, event.y)
+
+        self.canvas.bind("<Motion>", on_motion)  # Mouse movement
+        self.canvas.bind("<Button-1>", on_click)  # Left mouse click
+
+    def run(self):
+        self.root.mainloop()
+
+
+game = Game()
+game.run()
