@@ -1,14 +1,21 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from entity import Entity
 from rectangle import Rectangle
 
+# Only needed for the type hint
+# importing at runtime would create an import loop error
+if TYPE_CHECKING:
+    from pest import Pest
+
 
 class Flour(Entity):
-    def __init__(self, rect: Rectangle, amount: int):
+    def __init__(self, rect: Rectangle, amount: int) -> None:
         super().__init__(rect)
         self.__amount = amount
 
     @property
-    def amount(self):
+    def amount(self) -> int:
         return self.__amount
 
     def collect(self) -> int:
@@ -18,18 +25,18 @@ class Flour(Entity):
 
 
 class Projectile(Entity):
-    def __init__(self, rect: Rectangle, damage: int, speed: float):
+    def __init__(self, rect: Rectangle, damage: int, speed: float) -> None:
         super().__init__(rect)
         self.__damage = damage
         self.__speed = speed  # pixels moved right each frame
 
     @property
-    def damage(self):
+    def damage(self) -> int:
         return self.__damage
 
-    def move(self):
+    def move(self) -> None:
         self.rect.move((self.__speed, 0))
 
-    def hits(self, pest) -> bool:
+    def hits(self, pest: Pest) -> bool:
         # A projectile hits a pest when its centre is inside the pest's rect
         return pest.rect.collide_point(self.rect.centre)

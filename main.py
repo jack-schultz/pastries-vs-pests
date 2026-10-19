@@ -1,8 +1,9 @@
+from __future__ import annotations
 import random
 import time
 import tkinter as tk
 from rectangle import Rectangle
-from pest import Ant
+from pest import Ant, Pest
 from card import Card
 from good import FlourFlower, SugarShooter
 from objects import Flour, Projectile
@@ -19,7 +20,7 @@ from tile import Tile
 
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         self.root = tk.Tk()
         self.root.title("Bakery vs. Pests")
         self.root.resizable(False, False)
@@ -32,33 +33,33 @@ class Game:
         ROWS, COLUMNS = 5, 9
 
         # === GAME SETTINGS ===
-        self.cards_count = 6
-        self.grid_size = 90
-        self.rows = ROWS
-        self.tile_margins = (40, 120)
+        self.cards_count: int = 6
+        self.grid_size: int = 90
+        self.rows: int = ROWS
+        self.tile_margins: tuple[int, int] = (40, 120)
         card_location = (120, 20)
         card_size = (70, 85)
         card_gap = 10
         tile_margins = self.tile_margins
 
-        self.ant_spawn_interval = 5  # seconds between ant spawns
-        self.last_ant_spawn = time.monotonic()
+        self.ant_spawn_interval: float = 5  # seconds between ant spawns
+        self.last_ant_spawn: float = time.monotonic()
 
         # === INPUT VARIABLES ===
-        self.mouse_pos = None
-        self.selected_card = None
+        self.mouse_pos: tuple[int, int] | None = None
+        self.selected_card: Card | None = None
 
         # === GAME VARIABLES ===
-        self.flour = 50  # This is the currency to make bakery goods
+        self.flour: int = 50  # This is the currency to make bakery goods
 
         # === GAME OBJECTS ===
-        self.pests = []
-        self.projectiles = []
-        self.cards = [None] * self.cards_count  # Create list of empty bread cards
-        self.breads = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
+        self.pests: list[Pest] = []
+        self.projectiles: list[Projectile] = []
+        self.cards: list[Card | None] = [None] * self.cards_count  # Create list of empty bread cards
+        self.breads: list[None] = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
 
         # Holds the rects that make up the grid on the floor
-        tiles = []
+        tiles: list[Tile] = []
         for rect in self._create_tile_rects(ROWS, COLUMNS, self.grid_size, tile_margins):
             tiles.append(Tile(rect))
 
@@ -88,7 +89,7 @@ class Game:
             fill="#3d405b",
         )
 
-    def _create_tile_rects(self, rows: int, columns: int, grid_size: int, margins: tuple[int, int]):
+    def _create_tile_rects(self, rows: int, columns: int, grid_size: int, margins: tuple[int, int]) -> list[Rectangle]:
         rects = []
         x_margin, y_margin = margins
         colour_a = "#e0fa5f"
@@ -106,7 +107,7 @@ class Game:
                 )
         return rects
 
-    def _create_card_rects(self, location: tuple[int, int], size: tuple[int, int], gap: int):
+    def _create_card_rects(self, location: tuple[int, int], size: tuple[int, int], gap: int) -> list[Rectangle]:
         card_rects = []
         colour = "#e63946"
         lx, ly = location
@@ -122,7 +123,7 @@ class Game:
             )
         return card_rects
 
-    def _tile_blocking(self, pest):
+    def _tile_blocking(self, pest: Pest) -> Tile | None:
         # Returns the tile whose good the pest's left edge has reached, if any
         px = pest.rect.x
         _, py = pest.rect.centre
@@ -131,14 +132,14 @@ class Game:
                 return obj
         return None
 
-    def _pest_at(self, projectile):
+    def _pest_at(self, projectile: Projectile) -> Pest | None:
         # Returns the first pest the projectile is overlapping, if any
         for pest in self.pests:
             if projectile.hits(pest):
                 return pest
         return None
 
-    def _spawn_ant(self):
+    def _spawn_ant(self) -> None:
         row = random.randrange(self.rows)
         _, y_margin = self.tile_margins
         # Spawn just off the right edge of the canvas (width 900), centred in the row
@@ -147,7 +148,7 @@ class Game:
         rect = Rectangle(self.canvas, ax, ay, self.grid_size - 40, self.grid_size - 40, "#7a4a2b")
         self.pests.append(Ant(rect))
 
-    def _create_game_loop(self):
+    def _create_game_loop(self) -> None:
         # === GAME LOOP ===
         def update():
             # Code which runs every frame goes here
@@ -170,10 +171,13 @@ class Game:
             # Pests walk left unless blocked by a good, which they attack instead
             for pest in list(self.pests):
                 blocking_tile = self._tile_blocking(pest)
-                if blocking_tile:
-                    pest.attack(blocking_tile.good)
-                    if blocking_tile.good.is_dead:
-                        blocking_tile.good.destroy()
+                if blocking_tile and blocking_tile.good:
+                    blocking_good = blocking_tile.good
+                    if not blocking_good:
+                        continue
+                    pest.attack(blocking_good)
+                    if blocking_good.is_dead:
+                        blocking_good.destroy()
                         blocking_tile.clear_good()
                 else:
                     pest.move()
@@ -211,10 +215,10 @@ class Game:
         update()
 
         # === EVENTS ===
-        def on_motion(event):
+        def on_motion(event: tk.Event) -> None:
             self.mouse_pos = (event.x, event.y)
 
-        def on_click(event):
+        def on_click(event: tk.Event) -> None:
             pos = (event.x, event.y)
 
             for obj in list(self.objects):
@@ -257,7 +261,7 @@ class Game:
         self.canvas.bind("<Motion>", on_motion)  # Mouse movement
         self.canvas.bind("<Button-1>", on_click)  # Left mouse click
 
-    def run(self):
+    def run(self) -> None:
         self._create_game_loop()
         self.root.mainloop()
 
