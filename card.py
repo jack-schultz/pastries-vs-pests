@@ -1,11 +1,11 @@
 
 
 class Card:
-    def __init__(self, rect, name: str, cost: int, bread_class):
+    def __init__(self, rect, name: str, cost: int, good_class):
         self.__rect = rect
         self.__name = name
         self.__cost = cost
-        self.__bread_class = bread_class
+        self.__good_class = good_class
 
     @property
     def rect(self):
@@ -20,5 +20,5 @@ class Card:
         return self.__cost
 
     @property
-    def bread_class(self):
-        return self.__bread_class
+    def good_class(self):
+        return self.__good_class

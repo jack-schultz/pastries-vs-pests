@@ -1,7 +1,7 @@
 import tkinter as tk
 from rectangle import Rectangle
 from card import Card
-from good import Good
+from good import FlourFlower
 from tile import Tile
 
 # Pygame difference to Tkinter
@@ -29,6 +29,7 @@ class Game:
 
         # === GAME SETTINGS ===
         self.cards_count = 6
+        self.grid_size = 90
 
         # === INPUT VARIABLES ===
         self.mouse_pos = None
@@ -41,13 +42,13 @@ class Game:
 
         # Holds the rects that make up the grid on the floor
         tiles = []
-        for rect in self._create_tile_rects(ROWS, COLUMNS, 90, (40, 120)):
+        for rect in self._create_tile_rects(ROWS, COLUMNS, self.grid_size, (40, 120)):
             tiles.append(Tile(rect))
 
         # Holds the cards which are displayed along the top
         card_rects = self._create_card_rects((60, 20), (70, 85), 10)
         card_info = {
-            0: (card_rects[0], "bread", 25, Good),
+            0: (card_rects[0], "The Flour Flower", 25, FlourFlower),
         }
         cards = []
         for i in range(len(card_rects)):
@@ -60,7 +61,7 @@ class Game:
         self.objects = self.objects + tiles
         self.objects = self.objects + cards
 
-    def _create_tile_rects(self, rows: int, columns: int, grid_size: tuple[int, int], margins: tuple[int, int]):
+    def _create_tile_rects(self, rows: int, columns: int, grid_size: int, margins: tuple[int, int]):
         rects = []
         x_margin, y_margin = margins
         colour_a = "#e0fa5f"
@@ -115,6 +116,16 @@ class Game:
             for obj in self.objects:
                 if obj.rect.collide_point(point=pos):
                     print(f"Clicked a {type(obj).__name__}")
+                    if type(obj).__name__.lower() == "tile":
+                        if self.selected_card:
+                            obj.good = self.selected_card.good_class(
+                                rect=Rectangle(self.canvas, obj.rect.x + 10, obj.rect.y + 10, obj.rect.w - 20, obj.rect.h - 20, "#FFFF00"),
+                                tile=obj,
+                            )
+                            self.selected_card = None
+                    elif type(obj).__name__.lower() == "card":
+                        self.selected_card = obj
+                        print(f"Selected card {obj}")
 
         self.canvas.bind("<Motion>", on_motion)  # Mouse movement
         self.canvas.bind("<Button-1>", on_click)  # Left mouse click

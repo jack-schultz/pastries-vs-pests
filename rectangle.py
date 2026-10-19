@@ -1,4 +1,5 @@
 
+
 class Rectangle:
     def __init__(self, canvas, x, y, width, height, colour):
         self.__canvas = canvas
@@ -9,12 +10,26 @@ class Rectangle:
         )
 
     @property
+    def x(self):
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        return x1
+
+    @property
+    def y(self):
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        return y1
+
+    @property
     def width(self):
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         # x1, y1 is top left
         # x2, y2 is bottom right
         width = x2 - x1  # Calculate difference between points
         return width
+
+    @property
+    def w(self):
+        return self.width
 
     @width.setter
     def width(self, new_width: int):
@@ -34,6 +49,10 @@ class Rectangle:
         # x2, y2 is bottom right
         height = y2 - y1  # Calculate difference between points
         return height
+
+    @property
+    def h(self):
+        return self.height
 
     @height.setter
     def height(self, new_height: int):
