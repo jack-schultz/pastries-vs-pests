@@ -117,6 +117,18 @@ class Game:
             # Code which runs every frame goes here
             self.canvas.itemconfig(self.flour_text, text=f"{self.flour}")
 
+            # Flower producing flour, spawn it next to the flower
+            for obj in list(self.objects):
+                if isinstance(obj, Tile) and isinstance(obj.good, FlourFlower):
+                    flour = obj.good.produce(self.canvas)
+                    if flour:
+                        self.objects.append(flour)
+
+            # Draw flour on top of everything else
+            for obj in self.objects:
+                if type(obj).__name__.lower() == "flour":
+                    obj.rect.raise_to_top()
+
             self.root.after(16, update)  # run again in about 16 ms (~60 FPS)
 
         update()
@@ -128,7 +140,7 @@ class Game:
         def on_click(event):
             pos = (event.x, event.y)
 
-            for obj in self.objects:
+            for obj in list(self.objects):
                 if obj.rect.collide_point(point=pos):
                     if type(obj).__name__.lower() == "tile":
                         if self.selected_card:
@@ -145,7 +157,6 @@ class Game:
                             # Create new good on the tiles
                             obj.good = self.selected_card.good_class(
                                 rect=Rectangle(self.canvas, obj.rect.x + 10, obj.rect.y + 10, obj.rect.w - 20, obj.rect.h - 20, "#FFFF00"),
-                                tile=obj,
                             )
 
                             # Take flour amount and reset selected card
@@ -163,6 +174,9 @@ class Game:
 
                     elif type(obj).__name__.lower() == "flour":
                         self.flour += obj.amount
+                        # Collected, so remove it from the canvas and game objects
+                        obj.rect.delete()
+                        self.objects.remove(obj)
 
         self.canvas.bind("<Motion>", on_motion)  # Mouse movement
         self.canvas.bind("<Button-1>", on_click)  # Left mouse click
