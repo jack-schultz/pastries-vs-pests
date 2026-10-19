@@ -1,6 +1,10 @@
+from __future__ import annotations
 from abc import ABC
-from tile import Tile
+from typing import TYPE_CHECKING
 from rectangle import Rectangle
+
+if TYPE_CHECKING:
+    from tile import Tile
 
 
 class Good(ABC):

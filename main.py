@@ -126,16 +126,20 @@ class Game:
             self.mouse_pos = (event.x, event.y)
 
         def on_click(event):
-            print(f"Clicked at ({event.x}, {event.y})")
             pos = (event.x, event.y)
 
             for obj in self.objects:
                 if obj.rect.collide_point(point=pos):
-                    print(f"Clicked a {type(obj).__name__}")
                     if type(obj).__name__.lower() == "tile":
                         if self.selected_card:
+                            # Skip if tile already has a good
+                            if obj.good:
+                                self.selected_card = None
+                                continue
+
                             # Skip if not enough flour
                             if self.flour < self.selected_card.cost:
+                                self.selected_card = None
                                 continue
 
                             # Create new good on the tiles
@@ -147,6 +151,7 @@ class Game:
                             # Take flour amount and reset selected card
                             self.flour -= self.selected_card.cost
                             self.selected_card = None
+
                     elif type(obj).__name__.lower() == "card":
                         # If card is already selected, deselect
                         if self.selected_card == obj:
@@ -155,6 +160,7 @@ class Game:
 
                         # Select card
                         self.selected_card = obj
+
                     elif type(obj).__name__.lower() == "flour":
                         self.flour += obj.amount
 
