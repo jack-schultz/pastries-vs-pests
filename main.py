@@ -134,12 +134,26 @@ class Game:
                     print(f"Clicked a {type(obj).__name__}")
                     if type(obj).__name__.lower() == "tile":
                         if self.selected_card:
+                            # Skip if not enough flour
+                            if self.flour < self.selected_card.cost:
+                                continue
+
+                            # Create new good on the tiles
                             obj.good = self.selected_card.good_class(
                                 rect=Rectangle(self.canvas, obj.rect.x + 10, obj.rect.y + 10, obj.rect.w - 20, obj.rect.h - 20, "#FFFF00"),
                                 tile=obj,
                             )
+
+                            # Take flour amount and reset selected card
+                            self.flour -= self.selected_card.cost
                             self.selected_card = None
                     elif type(obj).__name__.lower() == "card":
+                        # If card is already selected, deselect
+                        if self.selected_card == obj:
+                            self.selected_card = None
+                            continue
+
+                        # Select card
                         self.selected_card = obj
                     elif type(obj).__name__.lower() == "flour":
                         self.flour += obj.amount
