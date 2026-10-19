@@ -152,15 +152,15 @@ class Game:
         # Spawn just off the right edge of the canvas, centred in the row
         ax = self.width
         ay = y_margin + self.grid_size * row + 20
-        rect = Rectangle(self.canvas, ax, ay, self.grid_size - 40, self.grid_size - 40, "#7a4a2b")
         self.pests.append(Ant(self.canvas, ax, ay))
 
     def _create_game_loop(self) -> None:
-        # === GAME LOOP ===
+        # ========== GAME LOOP =========
         def update():
             # Code which runs every frame goes here
             self.canvas.itemconfig(self.flour_text, text=f"{self.flour}")
 
+            # ===== GOODS ACT =====
             # Every good acts on its own timer; flour and projectiles it makes are routed to the right list
             for obj in list(self.objects):
                 if isinstance(obj, Tile) and obj.good:
@@ -170,11 +170,13 @@ class Game:
                     elif isinstance(made, Projectile):
                         self.projectiles.append(made)
 
+            # ===== SPAWN ANTS =====
             # Spawn an ant on the right edge of a random row
             if time.monotonic() - self.last_ant_spawn >= self.ant_spawn_interval:
                 self.last_ant_spawn = time.monotonic()
                 self._spawn_ant()
 
+            # ===== PESTS WALK =====
             # Pests walk left unless blocked by a good, which they attack instead
             for pest in list(self.pests):
                 blocking_tile = self._tile_blocking(pest)
@@ -201,6 +203,7 @@ class Game:
                     # Draw pests above goods (flour is raised after, so it stays on top)
                     pest.rect.raise_to_top()
 
+            # ===== MOVE PROJECTILES =====
             # projectiles fly right and damage the first pest they touch
             for projectile in list(self.projectiles):
                 projectile.move()
@@ -220,6 +223,7 @@ class Game:
 
                 projectile.rect.raise_to_top()
 
+            # ===== DRAW FLOUR ON TOP  =====
             # Draw flour on top of everything else
             for obj in self.objects:
                 if isinstance(obj, Flour):
@@ -236,6 +240,9 @@ class Game:
         def on_click(event: tk.Event) -> None:
             pos = (event.x, event.y)
 
+            # ===== CHECK CLICK POS =====
+            # Loop through all objects to find which was clicked
+            # Objects are tiles and cards
             for obj in list(self.objects):
                 if obj.rect.collide_point(point=pos):
                     if isinstance(obj, Tile):

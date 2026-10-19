@@ -6,7 +6,17 @@ from good import Good
 
 
 class Pest(Living, ABC):
-    def __init__(self, canvas, x, y, size, colour, health: int, speed: float, damage: int = 10, attack_interval: float = 1.0) -> None:
+    def __init__(
+        self,
+        canvas,
+        x, y,
+        size,
+        colour,
+        health: int,
+        speed: float,
+        damage: int = 10,
+        attack_interval: float = 1.0
+    ) -> None:
         super().__init__(canvas, x, y, size, size, colour, health)
         self.rect.set_text("Ant", colour="#ffffff")
 
