@@ -76,6 +76,14 @@ class Rectangle:
             x2 + dx, y2 + dy,
             )
 
+    def collide_point(self, point: tuple[int, int]):
+        px, py = point
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        if x1 < px < x2 and y1 < py < y2:
+            return True
+        else:
+            return False
+
     def raise_to_top(self):
         self.__canvas.tag_raise(self.__rect)
 
