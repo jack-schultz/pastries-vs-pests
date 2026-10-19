@@ -26,3 +26,6 @@ class Tile:
 
         self.__good = good
         return True
+
+    def clear_good(self):
+        self.__good = None

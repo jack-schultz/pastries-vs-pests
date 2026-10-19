@@ -119,6 +119,15 @@ class Game:
             )
         return card_rects
 
+    def _tile_blocking(self, pest):
+        # Returns the tile whose good the pest's left edge has reached, if any
+        px = pest.rect.x
+        _, py = pest.rect.centre
+        for obj in self.objects:
+            if isinstance(obj, Tile) and obj.good and obj.good.rect.collide_point((px, py)):
+                return obj
+        return None
+
     def _spawn_ant(self):
         row = random.randrange(self.rows)
         _, y_margin = self.tile_margins
@@ -146,9 +155,18 @@ class Game:
                 self.last_ant_spawn = time.monotonic()
                 self._spawn_ant()
 
-            # Ants walk left, and are removed once they leave the screen
+            # Pests walk left unless blocked by a good, which they attack instead
             for pest in list(self.pests):
-                pest.move()
+                blocking_tile = self._tile_blocking(pest)
+                if blocking_tile:
+                    pest.attack(blocking_tile.good)
+                    if blocking_tile.good.is_dead:
+                        blocking_tile.good.rect.delete()
+                        blocking_tile.clear_good()
+                else:
+                    pest.move()
+
+                # Remove pests that have left the screen
                 if pest.rect.x + pest.rect.w < 0:
                     pest.rect.delete()
                     self.pests.remove(pest)

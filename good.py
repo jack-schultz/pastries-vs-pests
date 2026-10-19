@@ -20,6 +20,13 @@ class Good(ABC):
     def health(self):
         return self.__health
 
+    @property
+    def is_dead(self):
+        return self.__health <= 0
+
+    def take_damage(self, amount: int):
+        self.__health -= amount
+
 
 class FlourFlower(Good):
     def __init__(self, rect):
