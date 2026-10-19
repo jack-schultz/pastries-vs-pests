@@ -31,7 +31,6 @@ class Game:
 
         # === INPUT VARIABLES ===
         self.mouse_pos = None
-        self.mouse_click_pos = None
         self.selected_card = None
 
         # === GAME OBJECTS ===
@@ -95,11 +94,14 @@ class Game:
 
         def on_click(event):
             print(f"Clicked at ({event.x}, {event.y})")
-            self.mouse_click_pos = (event.x, event.y)
+            pos = (event.x, event.y)
 
-            for rect in self.card_rects:
-                if rect.collide_point(point=(event.x, event.y)):
-                    print("Clicked a Card")
+            for i, rect in enumerate(self.card_rects):
+                if rect.collide_point(point=pos):
+                    print(f"Clicked a Card (index = {i})")
+            for i, rect in enumerate(self.floor_rects):
+                if rect.collide_point(point=pos):
+                    print(f"Clicked a Floor (index = {i})")
 
         self.canvas.bind("<Motion>", on_motion)  # Mouse movement
         self.canvas.bind("<Button-1>", on_click)  # Left mouse click
