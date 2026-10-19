@@ -32,6 +32,23 @@ def create_floor_rects(canvas, rows, columns, grid_size, margins):
     return floor_rects
 
 
+def create_card_rects(canvas, cards, location, size, gap):
+    card_rects = []
+    colour = "#e63946"
+    lx, ly = location
+    w, h = size
+    for i in range(len(cards)):  # columns
+        card_rects.append(
+            Rectangle(
+                canvas,
+                lx + w * i + gap * i, ly,
+                w, h,
+                colour
+            )
+        )
+    return card_rects
+
+
 class Game:
     def __init__(self):
         self.root = tk.Tk()
@@ -53,15 +70,15 @@ class Game:
         self.mouse_click_pos = None
 
         # === GAME OBJECTS ===
-        self.floor_rects = create_floor_rects(self.canvas, ROWS, COLUMNS, 90, (40, 120))
         self.pests = []
         self.cards = [None] * self.cards_count  # Create list of empty bread cards
         self.breads = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
 
+        self.floor_rects = create_floor_rects(self.canvas, ROWS, COLUMNS, 90, (40, 120))
+        self.card_rects = create_card_rects(self.canvas, self.cards, (60, 20), (70, 85), 10)
+
         # Fill card slots
         self.cards[0] = Card("bread", 25, Bread)
-
-        self._create_game_loop()
 
     def _create_game_loop(self):
         # === GAME LOOP ===
@@ -85,6 +102,7 @@ class Game:
         self.canvas.bind("<Button-1>", on_click)  # Left mouse click
 
     def run(self):
+        self._create_game_loop()
         self.root.mainloop()
 
 
