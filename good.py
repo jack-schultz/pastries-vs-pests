@@ -1,5 +1,5 @@
 
-class Bread:
+class Good:
     def __init__(self, name: str, health: int):
         self.__name = name
         self.__health = health

@@ -1,7 +1,7 @@
 import tkinter as tk
 from rectangle import Rectangle
 from card import Card
-from bread import Bread
+from good import Good
 
 # Pygame difference to Tkinter
 # Pygame	                    |   Tkinter
@@ -39,7 +39,7 @@ class Game:
         self.breads = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
 
         # Fill card slots
-        self.cards[0] = Card("bread", 25, Bread)
+        self.cards[0] = Card("bread", 25, Good)
 
         self.floor_rects = self._create_floor_rects(ROWS, COLUMNS, 90, (40, 120))
         self.card_rects = self._create_card_rects((60, 20), (70, 85), 10)
