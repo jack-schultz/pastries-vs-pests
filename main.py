@@ -30,10 +30,17 @@ class Game:
         # === GAME SETTINGS ===
         self.cards_count = 6
         self.grid_size = 90
+        card_location = (120, 20)
+        card_size = (70, 85)
+        card_gap = 10
+        tile_margins = (40, 120)
 
         # === INPUT VARIABLES ===
         self.mouse_pos = None
         self.selected_card = None
+
+        # === GAME VARIABLES ===
+        self.flour = 50  # This is the currency to make bakery goods
 
         # === GAME OBJECTS ===
         self.pests = []
@@ -42,11 +49,11 @@ class Game:
 
         # Holds the rects that make up the grid on the floor
         tiles = []
-        for rect in self._create_tile_rects(ROWS, COLUMNS, self.grid_size, (40, 120)):
+        for rect in self._create_tile_rects(ROWS, COLUMNS, self.grid_size, tile_margins):
             tiles.append(Tile(rect))
 
         # Holds the cards which are displayed along the top
-        card_rects = self._create_card_rects((60, 20), (70, 85), 10)
+        card_rects = self._create_card_rects(card_location, card_size, card_gap)
         card_info = {
             0: (card_rects[0], "The Flour Flower", 25, FlourFlower),
         }
@@ -60,6 +67,15 @@ class Game:
         self.objects = []
         self.objects = self.objects + tiles
         self.objects = self.objects + cards
+
+        # Text in top left to display flour count
+        self.flour_text = self.canvas.create_text(
+            10, 10,
+            text=f"{self.flour}",  # amount of flour
+            anchor="nw",  # top-left of the text sits at (10, 10)
+            font=("Arial", 90, "bold"),
+            fill="#3d405b",
+        )
 
     def _create_tile_rects(self, rows: int, columns: int, grid_size: int, margins: tuple[int, int]):
         rects = []
@@ -99,7 +115,7 @@ class Game:
         # === GAME LOOP ===
         def update():
             # Code which runs every frame goes here
-            # square2.move((1, 0))
+            self.canvas.itemconfig(self.flour_text, text=f"{self.flour}")
 
             self.root.after(16, update)  # run again in about 16 ms (~60 FPS)
 
@@ -125,7 +141,8 @@ class Game:
                             self.selected_card = None
                     elif type(obj).__name__.lower() == "card":
                         self.selected_card = obj
-                        print(f"Selected card {obj}")
+                    elif type(obj).__name__.lower() == "flour":
+                        self.flour += obj.amount
 
         self.canvas.bind("<Motion>", on_motion)  # Mouse movement
         self.canvas.bind("<Button-1>", on_click)  # Left mouse click
