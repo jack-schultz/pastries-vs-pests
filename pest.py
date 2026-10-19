@@ -5,6 +5,7 @@ from rectangle import Rectangle
 
 class Pest(ABC):
     def __init__(self, rect: Rectangle, health: int, speed: float, damage: int = 10, attack_interval: float = 1.0):
+        rect.set_text("Ant", colour="#ffffff")
         self.__rect = rect
         self.__health = health
         self.__speed = speed  # pixels moved left each frame

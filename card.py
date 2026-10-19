@@ -2,6 +2,7 @@
 
 class Card:
     def __init__(self, rect, name: str, cost: int, good_class):
+        rect.set_text(name, colour="#ffffff")
         self.__rect = rect
         self.__name = name
         self.__cost = cost

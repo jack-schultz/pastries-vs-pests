@@ -30,6 +30,7 @@ class Good(ABC):
 
 class FlourFlower(Good):
     def __init__(self, rect):
+        rect.set_text(type(self).__name__)
         super().__init__(rect, 50)
         self.__production_amount = 25
         self.__production_interval = 15  # seconds between spawns

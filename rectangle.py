@@ -8,6 +8,25 @@ class Rectangle:
             fill=colour,
             outline="",
         )
+        self.__text = None  # Optional label drawn on top of the rect
+
+    def set_text(self, text: str, colour: str = "#3d405b", size: int = 9):
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        self.__text = self.__canvas.create_text(
+            (x1 + x2) / 2, (y1 + y2) / 2,
+            text=text,
+            fill=colour,
+            font=("Arial", size, "bold"),
+            width=(x2 - x1) - 6,  # wrap long names inside the rect
+            justify="center",
+        )
+
+    def __centre_text(self):
+        # Keep the label centred on the rect whenever the rect moves or resizes
+        if self.__text is None:
+            return
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        self.__canvas.coords(self.__text, (x1 + x2) / 2, (y1 + y2) / 2)
 
     @property
     def x(self):
@@ -41,6 +60,7 @@ class Rectangle:
             x1, y1,  # top left
             x1 + new_width, y2  # bottom right
         )
+        self.__centre_text()
 
     @property
     def height(self):
@@ -64,6 +84,7 @@ class Rectangle:
             x1, y1,  # top left
             x2, y1 + new_height  # bottom right
         )
+        self.__centre_text()
 
     @property
     def centre(self):
@@ -85,6 +106,7 @@ class Rectangle:
             cx + half_width,
             cy + half_height,
             )
+        self.__centre_text()
 
     def move(self, difference: tuple[int, int]):
         dx, dy = difference
@@ -94,6 +116,7 @@ class Rectangle:
             x1 + dx, y1 + dy,
             x2 + dx, y2 + dy,
             )
+        self.__centre_text()
 
     def collide_point(self, point: tuple[int, int]):
         px, py = point
@@ -105,6 +128,10 @@ class Rectangle:
 
     def raise_to_top(self):
         self.__canvas.tag_raise(self.__rect)
+        if self.__text is not None:
+            self.__canvas.tag_raise(self.__text)
 
     def delete(self):
         self.__canvas.delete(self.__rect)
+        if self.__text is not None:
+            self.__canvas.delete(self.__text)
