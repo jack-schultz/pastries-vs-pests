@@ -25,6 +25,13 @@ class Pest(ABC):
     def speed(self):
         return self.__speed
 
+    @property
+    def is_dead(self):
+        return self.__health <= 0
+
+    def take_damage(self, amount: int):
+        self.__health -= amount
+
     def move(self):
         self.__rect.move((-self.__speed, 0))
 

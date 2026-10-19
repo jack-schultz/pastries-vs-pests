@@ -4,7 +4,7 @@ import tkinter as tk
 from rectangle import Rectangle
 from pest import Ant
 from card import Card
-from good import FlourFlower
+from good import FlourFlower, SugarShooter
 from tile import Tile
 
 # Pygame difference to Tkinter
@@ -52,6 +52,7 @@ class Game:
 
         # === GAME OBJECTS ===
         self.pests = []
+        self.projectiles = []
         self.cards = [None] * self.cards_count  # Create list of empty bread cards
         self.breads = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
 
@@ -64,6 +65,7 @@ class Game:
         card_rects = self._create_card_rects(card_location, card_size, card_gap)
         card_info = {
             0: (card_rects[0], "The Flour Flower", 25, FlourFlower),
+            1: (card_rects[1], "The Sugar Shooter", 60, SugarShooter),
         }
         cards = []
         for i in range(len(card_rects)):
@@ -128,6 +130,14 @@ class Game:
                 return obj
         return None
 
+    def _pest_at(self, projectile):
+        # Returns the first pest the projectile is overlapping, if any
+        point = projectile.rect.centre
+        for pest in self.pests:
+            if pest.rect.collide_point(point):
+                return pest
+        return None
+
     def _spawn_ant(self):
         row = random.randrange(self.rows)
         _, y_margin = self.tile_margins
@@ -149,6 +159,13 @@ class Game:
                     flour = obj.good.produce(self.canvas)
                     if flour:
                         self.objects.append(flour)
+
+            # Sugar Shooters fire projectiles
+            for obj in list(self.objects):
+                if isinstance(obj, Tile) and isinstance(obj.good, SugarShooter):
+                    projectile = obj.good.shoot(self.canvas)
+                    if projectile:
+                        self.projectiles.append(projectile)
 
             # Spawn an ant on the right edge of a random row
             if time.monotonic() - self.last_ant_spawn >= self.ant_spawn_interval:
@@ -173,6 +190,21 @@ class Game:
                 else:
                     # Draw pests above goods (flour is raised after, so it stays on top)
                     pest.rect.raise_to_top()
+
+            # projectiles fly right and damage the first pest they touch
+            for projectile in list(self.projectiles):
+                projectile.move()
+                hit_pest = self._pest_at(projectile)
+                if hit_pest:
+                    hit_pest.take_damage(projectile.damage)
+                    if hit_pest.is_dead:
+                        hit_pest.rect.delete()
+                        self.pests.remove(hit_pest)
+                elif projectile.rect.x < 900:
+                    projectile.rect.raise_to_top()
+                    continue
+                projectile.rect.delete()
+                self.projectiles.remove(projectile)
 
             # Draw flour on top of everything else
             for obj in self.objects:
