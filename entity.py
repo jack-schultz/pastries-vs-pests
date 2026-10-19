@@ -4,8 +4,8 @@ from rectangle import Rectangle
 
 class Entity:
     # Base class for everything drawn on the canvas. Every entity owns one rect
-    def __init__(self, rect: Rectangle) -> None:
-        self.__rect = rect
+    def __init__(self, canvas, x, y, width, height, colour) -> None:
+        self.__rect = Rectangle(canvas, x, y, width, height, colour)
 
     @property
     def rect(self) -> Rectangle:
@@ -17,8 +17,8 @@ class Entity:
 
 class Living(Entity):
     # Base class for entities with health that can be hurt and die
-    def __init__(self, rect: Rectangle, health: int) -> None:
-        super().__init__(rect)
+    def __init__(self, canvas, x, y, width, height, colour, health: int) -> None:
+        super().__init__(canvas, x, y, width, height, colour)
         self.__health = health
 
     @property

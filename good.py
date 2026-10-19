@@ -11,8 +11,8 @@ from objects import Flour, Projectile
 
 class Good(Living, ABC):
     # Base class for goods placed on tiles. Each good acts on its own timer
-    def __init__(self, rect: Rectangle, health: int) -> None:
-        super().__init__(rect, health)
+    def __init__(self, canvas, x, y, width, height, colour, health: int) -> None:
+        super().__init__(canvas, x, y, width, height, colour, health)
         self.__last_action = time.monotonic()
 
     def _ready(self, interval: float) -> bool:
@@ -29,13 +29,14 @@ class Good(Living, ABC):
 
 
 class FlourFlower(Good):
-    def __init__(self, rect: Rectangle) -> None:
-        rect.set_text(type(self).__name__)
-        super().__init__(rect, 50)
+    def __init__(self, canvas, x, y, width, height) -> None:
+        colour = "#FFFF00"
+        health = 50
+        super().__init__(canvas, x, y, width, height, colour, health)
+        self.rect.set_text(type(self).__name__)
         self.__production_amount = 25
         self.__production_interval = 15  # seconds between spawns
         self.__spawn_distance = 40  # pixels from the flower's centre
-        self.__flour_size = 30
 
     def act(self, canvas: tk.Canvas) -> Flour | None:
         if not self._ready(self.__production_interval):
@@ -46,26 +47,31 @@ class FlourFlower(Good):
         cx, cy = self.rect.centre
         fx = cx + self.__spawn_distance * math.cos(angle)
         fy = cy + self.__spawn_distance * math.sin(angle)
-        half = self.__flour_size // 2
-        flour_rect = Rectangle(canvas, fx - half, fy - half, self.__flour_size, self.__flour_size, "#ffffff")
-        return Flour(rect=flour_rect, amount=self.__production_amount)
+        return Flour(canvas, fx, fy, amount=self.__production_amount)
 
 
 class SugarShooter(Good):
-    def __init__(self, rect: Rectangle) -> None:
-        rect.set_text(type(self).__name__)
-        super().__init__(rect, 50)
+    def __init__(self, canvas, x, y, width, height) -> None:
+        colour = "#FFFF00"
+        health = 50
+        super().__init__(canvas, x, y, width, height, colour, health)
+        self.rect.set_text(type(self).__name__)
         self.__shoot_interval = 1.5  # seconds between shots
         self.__projectile_size = 14
         self.__projectile_speed = 6  # pixels per frame
-        self.__damage = 10
+        self.__projectile_colour = "#ff8fab"
+        self.__projectile_damage = 10
 
     def act(self, canvas: tk.Canvas) -> Projectile | None:
         if not self._ready(self.__shoot_interval):
             return None
 
         # Fire from the front-right of the shooter, along its row
-        cx, cy = self.rect.centre
-        half = self.__projectile_size // 2
-        projectile_rect = Rectangle(canvas, cx + 20 - half, cy - half, self.__projectile_size, self.__projectile_size, "#ff8fab")
-        return Projectile(rect=projectile_rect, damage=self.__damage, speed=self.__projectile_speed)
+        x, y = self.rect.centre
+        return Projectile(
+            canvas, x, y,
+            size=self.__projectile_size,
+            colour=self.__projectile_colour,
+            damage=self.__projectile_damage,
+            speed=self.__projectile_speed
+        )

@@ -8,6 +8,7 @@ from card import Card
 from good import FlourFlower, SugarShooter
 from objects import Flour, Projectile
 from tile import Tile
+from good import Good
 
 # Pygame difference to Tkinter
 # Pygame	                    |   Tkinter
@@ -25,22 +26,21 @@ class Game:
         self.root.title("Bakery vs. Pests")
         self.root.resizable(False, False)
 
-        # Create the world canvas to store our rects coordinates
-        self.canvas = tk.Canvas(self.root, width=900, height=600, bg="#fdf3e1", highlightthickness=0)
-        # Places canvas widget inside parent window as tk is designed for menus
-        self.canvas.pack()
+        self.width, self.height = (900, 600)
 
-        ROWS, COLUMNS = 5, 9
+        # Create the world canvas to store our rects coordinates
+        self.canvas = tk.Canvas(self.root, width=self.width, height=self.height, bg="#fdf3e1", highlightthickness=0)
+        # Places canvas widget inside parent window as tk is designed for menus so it needs this
+        self.canvas.pack()
 
         # === GAME SETTINGS ===
         self.cards_count: int = 6
         self.grid_size: int = 90
-        self.rows: int = ROWS
+        self.rows, self.columns = 5, 9
         self.tile_margins: tuple[int, int] = (40, 120)
-        card_location = (120, 20)
-        card_size = (70, 85)
-        card_gap = 10
-        tile_margins = self.tile_margins
+        self.card_location = (120, 20)
+        self.card_size = (70, 85)
+        self.card_gap = 10
 
         self.ant_spawn_interval: float = 5  # seconds between ant spawns
         self.last_ant_spawn: float = time.monotonic()
@@ -56,24 +56,15 @@ class Game:
         self.pests: list[Pest] = []
         self.projectiles: list[Projectile] = []
         self.cards: list[Card | None] = [None] * self.cards_count  # Create list of empty bread cards
-        self.breads: list[None] = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
+        self.goods: list[None] = [None] * self.rows * self.columns  # Create 5 rows of 10 prefilled as None
 
-        # Holds the rects that make up the grid on the floor
-        tiles: list[Tile] = []
-        for rect in self._create_tile_rects(ROWS, COLUMNS, self.grid_size, tile_margins):
-            tiles.append(Tile(rect))
-
-        # Holds the cards which are displayed along the top
-        card_rects = self._create_card_rects(card_location, card_size, card_gap)
-        card_info = {
-            0: (card_rects[0], "The Flour Flower", 25, FlourFlower),
-            1: (card_rects[1], "The Sugar Shooter", 60, SugarShooter),
-        }
-        cards = []
-        for i in range(len(card_rects)):
-            if i > max(card_info.keys()):
-                break
-            cards.append(Card(*card_info[i]))
+        self.card_attributes = [
+            # Name, Cost, Class
+            ("The Flour Flower", 25, FlourFlower),
+            ("The Sugar Shooter", 60, SugarShooter),
+        ]
+        cards = self._create_cards()  # Holds the cards which are displayed along the top
+        tiles = self._create_tiles()  # Holds the rects that make up the grid on the floor
 
         # Holds the game objects like flour or bullets. objects always have an obj.rect
         self.objects = []
@@ -89,46 +80,62 @@ class Game:
             fill="#3d405b",
         )
 
-    def _create_tile_rects(self, rows: int, columns: int, grid_size: int, margins: tuple[int, int]) -> list[Rectangle]:
-        rects = []
-        x_margin, y_margin = margins
+    def _create_cards(self):
+        """Create the cards displayed along the top of the screen."""
+        positions = []
+        lx, ly = self.card_location
+        w, h = self.card_size
+        for i in range(len(self.cards)):  # columns
+            positions.append(
+                (
+                    lx + w * i + self.card_gap * i,
+                    ly,
+                )
+            )
+
+        cards = []
+        for (x, y), (name, cost, good_class) in zip(positions, self.card_attributes):
+            cards.append(
+                Card(
+                    canvas=self.canvas,
+                    width=self.card_size[0],
+                    height=self.card_size[1],
+                    x=x,
+                    y=y,
+                    name=name,
+                    cost=cost,
+                    good_class=good_class,
+                )
+            )
+
+        return cards
+
+    def _create_tiles(self):
+        positions = []
+        x_margin, y_margin = self.tile_margins
         colour_a = "#e0fa5f"
         colour_b = "#c8e04a"
-        for i in range(columns):  # columns
-            for j in range(rows):  # rows
+        for i in range(self.columns):  # columns
+            for j in range(self.rows):  # rows
                 colour = colour_a if (i + j) % 2 == 0 else colour_b
-                rects.append(
-                    Rectangle(
-                        self.canvas,
-                        x_margin + grid_size * i, y_margin + grid_size * j,
-                        grid_size, grid_size,
+                positions.append(
+                    (
+                        x_margin + self.grid_size * i,
+                        y_margin + self.grid_size * j,
                         colour
                     )
                 )
-        return rects
 
-    def _create_card_rects(self, location: tuple[int, int], size: tuple[int, int], gap: int) -> list[Rectangle]:
-        card_rects = []
-        colour = "#e63946"
-        lx, ly = location
-        w, h = size
-        for i in range(len(self.cards)):  # columns
-            card_rects.append(
-                Rectangle(
-                    self.canvas,
-                    lx + w * i + gap * i, ly,
-                    w, h,
-                    colour
-                )
-            )
-        return card_rects
+        tiles: list[Tile] = []
+        for x, y, colour in positions:
+            tiles.append(Tile(self.canvas, x, y, self.grid_size, colour))
+        return tiles
 
     def _tile_blocking(self, pest: Pest) -> Tile | None:
         # Returns the tile whose good the pest's left edge has reached, if any
-        px = pest.rect.x
         _, py = pest.rect.centre
         for obj in self.objects:
-            if isinstance(obj, Tile) and obj.good and pest.is_blocked_by(obj.good):
+            if isinstance(obj, Tile) and isinstance(obj.good, Good) and pest.is_blocked_by(obj.good):
                 return obj
         return None
 
@@ -142,11 +149,11 @@ class Game:
     def _spawn_ant(self) -> None:
         row = random.randrange(self.rows)
         _, y_margin = self.tile_margins
-        # Spawn just off the right edge of the canvas (width 900), centred in the row
-        ax = 900
+        # Spawn just off the right edge of the canvas, centred in the row
+        ax = self.width
         ay = y_margin + self.grid_size * row + 20
         rect = Rectangle(self.canvas, ax, ay, self.grid_size - 40, self.grid_size - 40, "#7a4a2b")
-        self.pests.append(Ant(rect))
+        self.pests.append(Ant(self.canvas, ax, ay))
 
     def _create_game_loop(self) -> None:
         # === GAME LOOP ===
@@ -171,15 +178,19 @@ class Game:
             # Pests walk left unless blocked by a good, which they attack instead
             for pest in list(self.pests):
                 blocking_tile = self._tile_blocking(pest)
+                # Colliding with a tile which has a good
                 if blocking_tile and blocking_tile.good:
+                    # Check the good blocking the pest is valid
                     blocking_good = blocking_tile.good
                     if not blocking_good:
                         continue
+                    # Pest attacks good till its dead
                     pest.attack(blocking_good)
                     if blocking_good.is_dead:
                         blocking_good.destroy()
                         blocking_tile.clear_good()
                 else:
+                    # If not colliding, moves
                     pest.move()
 
                 # Remove pests that have left the screen
@@ -199,11 +210,15 @@ class Game:
                     if hit_pest.is_dead:
                         hit_pest.destroy()
                         self.pests.remove(hit_pest)
-                elif projectile.rect.x < 900:
-                    projectile.rect.raise_to_top()
-                    continue
-                projectile.destroy()
-                self.projectiles.remove(projectile)
+                        projectile.destroy()
+                        self.projectiles.remove(projectile)
+
+                # If the projectile goes off the screen, kill it
+                elif projectile.rect.x > self.width:
+                    projectile.destroy()
+                    self.projectiles.remove(projectile)
+
+                projectile.rect.raise_to_top()
 
             # Draw flour on top of everything else
             for obj in self.objects:
@@ -237,7 +252,7 @@ class Game:
 
                             # Create new good on the tiles
                             obj.good = self.selected_card.create_good(
-                                Rectangle(self.canvas, obj.rect.x + 10, obj.rect.y + 10, obj.rect.w - 20, obj.rect.h - 20, "#FFFF00"),
+                                self.canvas, obj.rect.x + 10, obj.rect.y + 10, obj.rect.w - 20, obj.rect.h - 20
                             )
 
                             # Take flour amount and reset selected card

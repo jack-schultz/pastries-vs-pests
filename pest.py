@@ -3,13 +3,13 @@ import time
 from abc import ABC
 from entity import Living
 from good import Good
-from rectangle import Rectangle
 
 
 class Pest(Living, ABC):
-    def __init__(self, rect: Rectangle, health: int, speed: float, damage: int = 10, attack_interval: float = 1.0) -> None:
-        rect.set_text("Ant", colour="#ffffff")
-        super().__init__(rect, health)
+    def __init__(self, canvas, x, y, size, colour, health: int, speed: float, damage: int = 10, attack_interval: float = 1.0) -> None:
+        super().__init__(canvas, x, y, size, size, colour, health)
+        self.rect.set_text("Ant", colour="#ffffff")
+
         self.__speed = speed  # pixels moved left each frame
         self.__damage = damage  # damage dealt to a good per attack
         self.__attack_interval = attack_interval  # seconds between attacks
@@ -41,5 +41,5 @@ class Pest(Living, ABC):
 
 
 class Ant(Pest):
-    def __init__(self, rect: Rectangle) -> None:
-        super().__init__(rect, health=30, speed=0.5)
+    def __init__(self, canvas, x, y) -> None:
+        super().__init__(canvas, x, y, size=50, colour="#7a4a2b", health=30, speed=0.5)

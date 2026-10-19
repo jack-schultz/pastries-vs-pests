@@ -6,9 +6,11 @@ from rectangle import Rectangle
 
 
 class Card(Entity):
-    def __init__(self, rect: Rectangle, name: str, cost: int, good_class: Callable[[Rectangle], Good]) -> None:
-        rect.set_text(name, colour="#ffffff")
-        super().__init__(rect)
+    def __init__(self, canvas, x, y, width, height, name: str, cost: int, good_class: Callable[[Rectangle], Good]) -> None:
+        colour = "#e63946"
+
+        super().__init__(canvas, x, y, width, height, colour)
+        self.rect.set_text(name, colour="#ffffff")
         self.__name = name
         self.__cost = cost
         self.__good_class = good_class
@@ -21,6 +23,6 @@ class Card(Entity):
     def cost(self) -> int:
         return self.__cost
 
-    def create_good(self, rect: Rectangle) -> Good:
+    def create_good(self, canvas, x, y, width, height) -> Good:
         # The card knows which good it sells, so the caller doesn't need to
-        return self.__good_class(rect)
+        return self.__good_class(canvas, x, y, width, height)

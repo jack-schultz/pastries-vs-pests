@@ -10,8 +10,11 @@ if TYPE_CHECKING:
 
 
 class Flour(Entity):
-    def __init__(self, rect: Rectangle, amount: int) -> None:
-        super().__init__(rect)
+    def __init__(self, canvas, x, y, amount: int) -> None:
+        colour = "#ffffff"
+        width, height = 30, 30
+        # Spawn in center of coords given
+        super().__init__(canvas, x - width // 2, y - height // 2, width, height, colour)
         self.__amount = amount
 
     @property
@@ -25,8 +28,8 @@ class Flour(Entity):
 
 
 class Projectile(Entity):
-    def __init__(self, rect: Rectangle, damage: int, speed: float) -> None:
-        super().__init__(rect)
+    def __init__(self, canvas, centre_x, centre_y, size, colour, damage: int, speed: float) -> None:
+        super().__init__(canvas, centre_x + 20 - size // 2, centre_y - size // 2, size, size, colour)
         self.__damage = damage
         self.__speed = speed  # pixels moved right each frame
 

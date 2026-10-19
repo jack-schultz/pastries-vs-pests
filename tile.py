@@ -1,12 +1,11 @@
 from __future__ import annotations
 from entity import Entity
-from rectangle import Rectangle
 from good import Good
 
 
 class Tile(Entity):
-    def __init__(self, rect: Rectangle) -> None:
-        super().__init__(rect)
+    def __init__(self, canvas, x, y, size, colour) -> None:
+        super().__init__(canvas, x, y, size, size, colour)
         self.__good: Good | None = None
 
     @property
