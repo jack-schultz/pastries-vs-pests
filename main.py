@@ -42,13 +42,18 @@ class Game:
         self.canvas.pack()
 
         ROWS, COLUMNS = 5, 9
+
+        # === GAME SETTINGS ===
+        self.bread_cards_count = 6
+
+        # === INPUT VARIABLES ===
         self.mouse_pos = None
         self.mouse_click_pos = None
 
         # === GAME OBJECTS ===
         self.floor_rects = create_floor_rects(self.canvas, ROWS, COLUMNS, 90, (40, 120))
         self.pests = []
-        self.bread_cards = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
+        self.bread_cards = [None] * self.bread_cards_count  # Create list of empty bread cards
         self.breads = [None] * ROWS * COLUMNS  # Create 5 rows of 10 prefilled as None
 
         # === GAME LOOP ===
