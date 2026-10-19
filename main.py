@@ -1,5 +1,8 @@
+import random
+import time
 import tkinter as tk
 from rectangle import Rectangle
+from pest import Ant
 from card import Card
 from good import FlourFlower
 from tile import Tile
@@ -30,10 +33,15 @@ class Game:
         # === GAME SETTINGS ===
         self.cards_count = 6
         self.grid_size = 90
+        self.rows = ROWS
+        self.tile_margins = (40, 120)
         card_location = (120, 20)
         card_size = (70, 85)
         card_gap = 10
-        tile_margins = (40, 120)
+        tile_margins = self.tile_margins
+
+        self.ant_spawn_interval = 5  # seconds between ant spawns
+        self.last_ant_spawn = time.monotonic()
 
         # === INPUT VARIABLES ===
         self.mouse_pos = None
@@ -111,6 +119,15 @@ class Game:
             )
         return card_rects
 
+    def _spawn_ant(self):
+        row = random.randrange(self.rows)
+        _, y_margin = self.tile_margins
+        # Spawn just off the right edge of the canvas (width 900), centred in the row
+        ax = 900
+        ay = y_margin + self.grid_size * row + 20
+        rect = Rectangle(self.canvas, ax, ay, self.grid_size - 40, self.grid_size - 40, "#7a4a2b")
+        self.pests.append(Ant(rect))
+
     def _create_game_loop(self):
         # === GAME LOOP ===
         def update():
@@ -123,6 +140,18 @@ class Game:
                     flour = obj.good.produce(self.canvas)
                     if flour:
                         self.objects.append(flour)
+
+            # Spawn an ant on the right edge of a random row
+            if time.monotonic() - self.last_ant_spawn >= self.ant_spawn_interval:
+                self.last_ant_spawn = time.monotonic()
+                self._spawn_ant()
+
+            # Ants walk left, and are removed once they leave the screen
+            for pest in list(self.pests):
+                pest.move()
+                if pest.rect.x + pest.rect.w < 0:
+                    pest.rect.delete()
+                    self.pests.remove(pest)
 
             # Draw flour on top of everything else
             for obj in self.objects:
