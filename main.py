@@ -152,6 +152,9 @@ class Game:
                 if pest.rect.x + pest.rect.w < 0:
                     pest.rect.delete()
                     self.pests.remove(pest)
+                else:
+                    # Draw pests above goods (flour is raised after, so it stays on top)
+                    pest.rect.raise_to_top()
 
             # Draw flour on top of everything else
             for obj in self.objects:
