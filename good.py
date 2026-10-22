@@ -5,8 +5,8 @@ import time
 import tkinter as tk
 from abc import ABC, abstractmethod
 from entity import Living
-from rectangle import Rectangle
-from objects import Flour, Projectile
+from flour import Flour
+from projectile import Projectile
 
 
 class Good(Living, ABC):

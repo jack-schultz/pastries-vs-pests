@@ -2,11 +2,11 @@ from __future__ import annotations
 import random
 import time
 import tkinter as tk
-from rectangle import Rectangle
 from pest import Ant, Pest
 from card import Card
 from good import FlourFlower, SugarShooter
-from objects import Flour, Projectile
+from flour import Flour
+from projectile import Projectile
 from tile import Tile
 from good import Good
 
@@ -53,23 +53,17 @@ class Game:
         self.flour: int = 50  # This is the currency to make bakery goods
 
         # === GAME OBJECTS ===
-        self.pests: list[Pest] = []
-        self.projectiles: list[Projectile] = []
-        self.cards: list[Card | None] = [None] * self.cards_count  # Create list of empty bread cards
-        self.goods: list[None] = [None] * self.rows * self.columns  # Create 5 rows of 10 prefilled as None
 
         self.card_attributes = [
             # Name, Cost, Class
             ("The Flour Flower", 25, FlourFlower),
             ("The Sugar Shooter", 60, SugarShooter),
         ]
-        cards = self._create_cards()  # Holds the cards which are displayed along the top
-        tiles = self._create_tiles()  # Holds the rects that make up the grid on the floor
-
-        # Holds the game objects like flour or bullets. objects always have an obj.rect
-        self.objects = []
-        self.objects = self.objects + tiles
-        self.objects = self.objects + cards
+        self.pests: list[Pest] = []
+        self.flours: list[Flour] = []
+        self.projectiles: list[Projectile] = []
+        self.cards = self._create_cards()  # Holds the cards which are displayed along the top
+        self.tiles = self._create_tiles()  # Holds the rects that make up the grid on the floor
 
         # Text in top left to display flour count
         self.flour_text = self.canvas.create_text(
@@ -82,10 +76,11 @@ class Game:
 
     def _create_cards(self):
         """Create the cards displayed along the top of the screen."""
+        self.cards: list[Card | None] = [None] * self.cards_count  # Create list of empty bread cards
         positions = []
         lx, ly = self.card_location
         w, h = self.card_size
-        for i in range(len(self.cards)):  # columns
+        for i in range(self.cards_count):  # columns
             positions.append(
                 (
                     lx + w * i + self.card_gap * i,
@@ -134,9 +129,9 @@ class Game:
     def _tile_blocking(self, pest: Pest) -> Tile | None:
         # Returns the tile whose good the pest's left edge has reached, if any
         _, py = pest.rect.centre
-        for obj in self.objects:
-            if isinstance(obj, Tile) and isinstance(obj.good, Good) and pest.is_blocked_by(obj.good):
-                return obj
+        for tile in self.tiles:
+            if isinstance(tile, Tile) and isinstance(tile.good, Good) and pest.is_blocked_by(tile.good):
+                return tile
         return None
 
     def _pest_at(self, projectile: Projectile) -> Pest | None:
@@ -162,13 +157,15 @@ class Game:
 
             # ===== GOODS ACT =====
             # Every good acts on its own timer; flour and projectiles it makes are routed to the right list
-            for obj in list(self.objects):
-                if isinstance(obj, Tile) and obj.good:
-                    made = obj.good.act(self.canvas)
-                    if isinstance(made, Flour):
-                        self.objects.append(made)
-                    elif isinstance(made, Projectile):
-                        self.projectiles.append(made)
+            for tile in list(self.tiles):
+                if not isinstance(tile, Tile) and tile.good:
+                    continue
+
+                made_obj = tile.good.act(self.canvas)
+                if isinstance(made_obj, Flour):
+                    self.flours.append(made_obj)
+                elif isinstance(made_obj, Projectile):
+                    self.projectiles.append(made_obj)
 
             # ===== SPAWN ANTS =====
             # Spawn an ant on the right edge of a random row
@@ -225,7 +222,7 @@ class Game:
 
             # ===== DRAW FLOUR ON TOP  =====
             # Draw flour on top of everything else
-            for obj in self.objects:
+            for obj in self.flours:
                 if isinstance(obj, Flour):
                     obj.rect.raise_to_top()
 
@@ -241,44 +238,61 @@ class Game:
             pos = (event.x, event.y)
 
             # ===== CHECK CLICK POS =====
-            # Loop through all objects to find which was clicked
-            # Objects are tiles and cards
-            for obj in list(self.objects):
-                if obj.rect.collide_point(point=pos):
-                    if isinstance(obj, Tile):
-                        if self.selected_card:
-                            # Skip if tile already has a good
-                            if not obj.is_empty:
-                                self.selected_card = None
-                                continue
+            # Loop through all clickable (tile, card & flour) objects to find which was clicked
+            for tile in list(self.tiles):
+                if not tile.rect.collide_point(point=pos):
+                    continue
 
-                            # Skip if not enough flour
-                            if self.flour < self.selected_card.cost:
-                                self.selected_card = None
-                                continue
+                if not isinstance(tile, Tile):
+                    continue
 
-                            # Create new good on the tiles
-                            obj.good = self.selected_card.create_good(
-                                self.canvas, obj.rect.x + 10, obj.rect.y + 10, obj.rect.w - 20, obj.rect.h - 20
-                            )
+                if not self.selected_card:
+                    continue
 
-                            # Take flour amount and reset selected card
-                            self.flour -= self.selected_card.cost
-                            self.selected_card = None
+                # Skip if tile already has a good
+                if not tile.is_empty:
+                    self.selected_card = None
+                    continue
 
-                    elif isinstance(obj, Card):
-                        # If card is already selected, deselect
-                        if self.selected_card == obj:
-                            self.selected_card = None
-                            continue
+                # Skip if not enough flour
+                if self.flour < self.selected_card.cost:
+                    self.selected_card = None
+                    continue
 
-                        # Select card
-                        self.selected_card = obj
+                # Create new good on the tiles
+                tile.good = self.selected_card.create_good(
+                    self.canvas, tile.rect.x + 10, tile.rect.y + 10, tile.rect.w - 20, tile.rect.h - 20
+                )
 
-                    elif isinstance(obj, Flour):
-                        # Collecting removes it from the canvas and returns its amount
-                        self.flour += obj.collect()
-                        self.objects.remove(obj)
+                # Take flour amount and reset selected card
+                self.flour -= self.selected_card.cost
+                self.selected_card = None
+
+            for card in list(self.cards):
+                if not card.rect.collide_point(point=pos):
+                    continue
+
+                if not isinstance(card, Card):
+                    continue
+
+                # If card is already selected, deselect
+                if self.selected_card == card:
+                    self.selected_card = None
+                    continue
+
+                # Select card
+                self.selected_card = card
+
+            for flour in list(self.flours):
+                if not flour.rect.collide_point(point=pos):
+                    continue
+
+                if not isinstance(flour, Flour):
+                    continue
+
+                # Collecting removes it from the canvas and returns its amount
+                self.flour += flour.collect()
+                self.flours.remove(flour)
 
         self.canvas.bind("<Motion>", on_motion)  # Mouse movement
         self.canvas.bind("<Button-1>", on_click)  # Left mouse click

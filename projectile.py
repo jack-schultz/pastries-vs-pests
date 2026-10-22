@@ -1,30 +1,11 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 from entity import Entity
-from rectangle import Rectangle
 
 # Only needed for the type hint
 # importing at runtime would create an import loop error
 if TYPE_CHECKING:
     from pest import Pest
-
-
-class Flour(Entity):
-    def __init__(self, canvas, x, y, amount: int) -> None:
-        colour = "#ffffff"
-        width, height = 30, 30
-        # Spawn in center of coords given
-        super().__init__(canvas, x - width // 2, y - height // 2, width, height, colour)
-        self.__amount = amount
-
-    @property
-    def amount(self) -> int:
-        return self.__amount
-
-    def collect(self) -> int:
-        # Removes the flour from the canvas and hands back its amount
-        self.destroy()
-        return self.__amount
 
 
 class Projectile(Entity):
