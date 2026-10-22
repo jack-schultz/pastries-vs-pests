@@ -1,0 +1,157 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>1010</x><y>20</y><w>250</w><h>450</h></coordinates><panel_attributes>Game
+--
+-root: tk.Tk
+-canvas: tk.Canvas
+-width: int
+-height: int
+-flour: int
+-cards_count: int
+-grid_size: int
+-rows: int
+-columns: int
+
+-selected_card: Card
+-mouse_pos: tuple
+-ant_spawn_interval: float
+-last_ant_spawn: float
+-flour_text: int
+
+-pests: list[Pest]
+-projectiles: list[Projectile]
+-cards: list[Card]
+-flours: list[Flour]
+--
++run() None
+-_create_cards() list~Card~
+-_create_tiles() list~Tile~
+-_tile_blocking(pest: Pest) Tile
+-_pest_at(projectile: Projectile) Pest
+-_spawn_ant() None
+-_create_game_loop() None</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>0</y><w>250</w><h>270</h></coordinates><panel_attributes>Rectangle
+--
+-__canvas: tk.Canvas
+-__rect: int
+-__text: int
++x: float
++y: float
++width: float
++height: float
++w: float
++h: float
++centre: tuple
++set_text(text, colour, size) None
+--
++move(difference) None
++collide_point(point) bool
++raise_to_top() None
++delete() None
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>700</x><y>340</y><w>250</w><h>130</h></coordinates><panel_attributes>Entity
+--
+&lt;&lt;abstract&gt;&gt;
+-__health: int
++health: int
++is_dead: bool
+--
++take_damage(amount) None
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1270</x><y>840</y><w>250</w><h>190</h></coordinates><panel_attributes>Pest
+--
+&lt;&lt;abstract&gt;&gt;
+-__speed: float
+-__damage: int
+-__attack_interval: float
+-__last_attack: float
++speed: float
+--
++move() None
++is_blocked_by(good: Good) bool
++has_left_screen() bool
++attack(good: Good) None</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1270</x><y>1070</y><w>250</w><h>100</h></coordinates><panel_attributes>Ant
+--
++__init__(canvas, x, y)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>660</x><y>1100</y><w>250</w><h>140</h></coordinates><panel_attributes>SugarShooter
+--
+-__shoot_interval: float
+-__projectile_size: int
+-__projectile_speed: float
+-__projectile_colour: str
+-__projectile_damage: int
+--
++act(canvas) Projectile</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>950</x><y>1100</y><w>250</w><h>120</h></coordinates><panel_attributes>FlourFlower
+--
+-__production_amount: int
+-__production_interval: float
+-__spawn_distance: int
+--
++act(canvas) Flour</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>950</x><y>840</y><w>250</w><h>190</h></coordinates><panel_attributes>Good
+--
+&lt;&lt;abstract&gt;&gt;
+-__last_action: float
+#_ready(interval) bool
+--
++act(canvas)* Flour or Projectile or None</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>550</x><y>600</y><w>270</w><h>190</h></coordinates><panel_attributes>Card
+--
+-__name: str
+-__cost: int
+-__good_class: Callable
++name: str
++cost: int
+--
++create_good(canvas, x, y, width, height) Good</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1120</x><y>600</y><w>250</w><h>160</h></coordinates><panel_attributes>Living
+--
+&lt;&lt;abstract&gt;&gt;
+-__health: int
++health: int
++is_dead: bool
+--
++take_damage(amount) None</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>600</y><w>250</w><h>100</h></coordinates><panel_attributes>Projectile
+--
+-__damage: int
+-__speed: float
++damage: int
++move() None
++hits(pest: Pest) bool</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>280</x><y>600</y><w>250</w><h>130</h></coordinates><panel_attributes>Flour
+--
+-__amount: int
++amount: int
++collect() int</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>810</x><y>260</y><w>40</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1170</x><y>460</y><w>40</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=*
+m2=1</panel_attributes><additional_attributes>10;140;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1050</x><y>460</y><w>140</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=6
+m2=1</panel_attributes><additional_attributes>10;140;10;100;110;100;110;10</additional_attributes></element><element><id>Relation</id><coordinates><x>760</x><y>460</y><w>410</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=*
+m2=1</panel_attributes><additional_attributes>10;140;10;90;380;90;380;10</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>460</y><w>920</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=*
+m2=1</panel_attributes><additional_attributes>10;140;10;70;890;70;890;10</additional_attributes></element><element><id>Relation</id><coordinates><x>360</x><y>460</y><w>380</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>10;140;10;40;360;40;360;10</additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>460</y><w>200</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>180;140;180;60;10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>730</x><y>460</y><w>30</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>10;140;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>770</x><y>460</y><w>400</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>380;140;380;50;10;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>70</x><y>460</y><w>660</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>10;140;10;30;640;30;640;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1020</x><y>690</y><w>40</w><h>170</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes><additional_attributes>10;10;10;150</additional_attributes></element><element><id>Relation</id><coordinates><x>1320</x><y>750</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>UMLClass</id><coordinates><x>850</x><y>600</y><w>250</w><h>100</h></coordinates><panel_attributes>Tile
+--
+-__good: Good
++good: Good
++is_empty: bool
++clear_good() None</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1160</x><y>750</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>1060</x><y>1020</y><w>30</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>1370</x><y>1020</y><w>30</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>10;10;10;50</additional_attributes></element><element><id>Relation</id><coordinates><x>770</x><y>1020</y><w>240</w><h>100</h></coordinates><panel_attributes>lt=&lt;&lt;-
+m1=
+m2=</panel_attributes><additional_attributes>220;10;220;40;10;40;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>1210</x><y>460</y><w>230</w><h>400</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=*
+m2=1</panel_attributes><additional_attributes>200;380;200;90;10;90;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>450</x><y>460</y><w>700</w><h>160</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=*
+m2=1</panel_attributes><additional_attributes>10;140;10;80;670;80;670;10</additional_attributes></element></diagram>
