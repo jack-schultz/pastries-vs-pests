@@ -28,6 +28,26 @@ class Window:
         self.root.mainloop()
 
 
+class World:
+    # Owns the board objects that are drawn on the canvas: the garden, the inventory and the flour counter
+    def __init__(self, canvas: tk.Canvas, flour: int) -> None:
+        self.canvas = canvas
+        self.garden = Garden(canvas, 40, 120)
+        self.inventory = Inventory(canvas, 120, 20)
+
+        # Text in top left to display flour count
+        self.flour_text = canvas.create_text(
+            10, 10,
+            text=f"{flour}",  # amount of flour
+            anchor="nw",  # top-left of the text sits at (10, 10)
+            font=("Arial", 90, "bold"),
+            fill="#3d405b",
+        )
+
+    def update_flour_count(self, flour: int) -> None:
+        self.canvas.itemconfig(self.flour_text, text=f"{flour}")
+
+
 class Game:
     # Holds the game state and rules. Draws onto the window it is given
     def __init__(self) -> None:
@@ -48,17 +68,7 @@ class Game:
         self.pests: list[Pest] = []
         self.flours: list[Flour] = []
         self.projectiles: list[Projectile] = []
-        self.garden = Garden(self.window.canvas, 40, 120)
-        self.inventory = Inventory(self.window.canvas, 120, 20)
-
-        # Text in top left to display flour count
-        self.flour_text = self.window.canvas.create_text(
-            10, 10,
-            text=f"{self.flour}",  # amount of flour
-            anchor="nw",  # top-left of the text sits at (10, 10)
-            font=("Arial", 90, "bold"),
-            fill="#3d405b",
-        )
+        self.world = World(self.window.canvas, self.flour)
 
     def _pest_at(self, projectile: Projectile) -> Pest | None:
         # Returns the first pest the projectile is overlapping, if any
@@ -71,10 +81,10 @@ class Game:
         # ========== GAME LOOP =========
         def update():
             # Code which runs every frame goes here
-            self.window.canvas.itemconfig(self.flour_text, text=f"{self.flour}")
+            self.world.update_flour_count(self.flour)
 
             # ===== GOODS ACT =====
-            new_objs = self.garden.goods_act()
+            new_objs = self.world.garden.goods_act()
             for obj in new_objs:
                 if isinstance(obj, Flour):
                     self.flours.append(obj)
@@ -85,12 +95,12 @@ class Game:
             # Spawn an ant on the right edge of a random row
             if time.monotonic() - self.last_ant_spawn >= self.ant_spawn_interval:
                 self.last_ant_spawn = time.monotonic()
-                self.pests.append(self.garden.spawn_ant(self.window.width))
+                self.pests.append(self.world.garden.spawn_ant(self.window.width))
 
             # ===== PESTS WALK =====
             # Pests walk left unless blocked by a good, which they attack instead
             for pest in list(self.pests):
-                blocking_tile = self.garden.tile_blocking(pest)
+                blocking_tile = self.world.garden.tile_blocking(pest)
                 # Colliding with a tile which has a good
                 if blocking_tile and blocking_tile.good:
                     # Check the good blocking the pest is valid
@@ -153,7 +163,7 @@ class Game:
 
             # ===== CHECK CLICK POS =====
             # Loop through all clickable (tile, card & flour) objects to find which was clicked
-            for tile in list(self.garden.tiles):
+            for tile in list(self.world.garden.tiles):
                 if not tile.rect.collide_point(point=pos):
                     continue
 
@@ -182,7 +192,7 @@ class Game:
                 self.flour -= self.selected_card.cost
                 self.selected_card = None
 
-            for card in list(self.inventory.cards):
+            for card in list(self.world.inventory.cards):
                 if not card.rect.collide_point(point=pos):
                     continue
 
