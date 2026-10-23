@@ -10,7 +10,8 @@ from garden import Garden
 from inventory import Inventory
 
 
-class Game:
+class Window:
+    # Holds the Tk window and the canvas everything is drawn on
     def __init__(self) -> None:
         self.root = tk.Tk()
         self.root.title("Bakery vs. Pests")
@@ -22,6 +23,15 @@ class Game:
         self.canvas = tk.Canvas(self.root, width=self.width, height=self.height, bg="#fdf3e1", highlightthickness=0)
         # Places canvas widget inside parent window as tk is designed for menus so it needs this
         self.canvas.pack()
+
+    def run(self) -> None:
+        self.root.mainloop()
+
+
+class Game:
+    # Holds the game state and rules. Draws onto the window it is given
+    def __init__(self) -> None:
+        self.window = Window()
 
         # === GAME SETTINGS ===
         self.ant_spawn_interval: float = 10  # seconds between ant spawns
@@ -38,11 +48,11 @@ class Game:
         self.pests: list[Pest] = []
         self.flours: list[Flour] = []
         self.projectiles: list[Projectile] = []
-        self.garden = Garden(self.canvas, 40, 120)
-        self.inventory = Inventory(self.canvas, 120, 20)
+        self.garden = Garden(self.window.canvas, 40, 120)
+        self.inventory = Inventory(self.window.canvas, 120, 20)
 
         # Text in top left to display flour count
-        self.flour_text = self.canvas.create_text(
+        self.flour_text = self.window.canvas.create_text(
             10, 10,
             text=f"{self.flour}",  # amount of flour
             anchor="nw",  # top-left of the text sits at (10, 10)
@@ -61,7 +71,7 @@ class Game:
         # ========== GAME LOOP =========
         def update():
             # Code which runs every frame goes here
-            self.canvas.itemconfig(self.flour_text, text=f"{self.flour}")
+            self.window.canvas.itemconfig(self.flour_text, text=f"{self.flour}")
 
             # ===== GOODS ACT =====
             new_objs = self.garden.goods_act()
@@ -75,7 +85,7 @@ class Game:
             # Spawn an ant on the right edge of a random row
             if time.monotonic() - self.last_ant_spawn >= self.ant_spawn_interval:
                 self.last_ant_spawn = time.monotonic()
-                self.pests.append(self.garden.spawn_ant(self.width))
+                self.pests.append(self.garden.spawn_ant(self.window.width))
 
             # ===== PESTS WALK =====
             # Pests walk left unless blocked by a good, which they attack instead
@@ -118,7 +128,7 @@ class Game:
                         self.projectiles.remove(projectile)
 
                 # If the projectile goes off the screen, kill it
-                elif projectile.rect.x > self.width:
+                elif projectile.rect.x > self.window.width:
                     projectile.destroy()
                     self.projectiles.remove(projectile)
 
@@ -130,7 +140,7 @@ class Game:
                 if isinstance(obj, Flour):
                     obj.rect.raise_to_top()
 
-            self.root.after(16, update)  # run again in about 16 ms (~60 FPS)
+            self.window.root.after(16, update)  # run again in about 16 ms (~60 FPS)
 
         update()
 
@@ -165,7 +175,7 @@ class Game:
 
                 # Create new good on the tiles
                 tile.good = self.selected_card.create_good(
-                    self.canvas, tile.rect.x + 10, tile.rect.y + 10, tile.rect.w - 20, tile.rect.h - 20
+                    self.window.canvas, tile.rect.x + 10, tile.rect.y + 10, tile.rect.w - 20, tile.rect.h - 20
                 )
 
                 # Take flour amount and reset selected card
@@ -198,12 +208,12 @@ class Game:
                 self.flour += flour.collect()
                 self.flours.remove(flour)
 
-        self.canvas.bind("<Motion>", on_motion)  # Mouse movement
-        self.canvas.bind("<Button-1>", on_click)  # Left mouse click
+        self.window.canvas.bind("<Motion>", on_motion)  # Mouse movement
+        self.window.canvas.bind("<Button-1>", on_click)  # Left mouse click
 
     def run(self) -> None:
         self._create_game_loop()
-        self.root.mainloop()
+        self.window.run()
 
 
 # # ===== TESTS =====
