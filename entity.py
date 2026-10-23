@@ -8,6 +8,10 @@ class Entity:
         self.__rect = Rectangle(canvas, x, y, width, height, colour)
 
     @property
+    def canvas(self):
+        return self.rect.canvas
+
+    @property
     def rect(self) -> Rectangle:
         return self.__rect
 

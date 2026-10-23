@@ -12,6 +12,10 @@ class Rectangle:
         )
         self.__text: int | None = None  # Optional label drawn on top of the rect
 
+    @property
+    def canvas(self):
+        return self.__canvas
+
     def set_text(self, text: str, colour: str = "#3d405b", size: int = 9) -> None:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         self.__text = self.__canvas.create_text(
