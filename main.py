@@ -12,15 +12,6 @@ from good import Good
 from rectangle import Rectangle
 from entity import Living
 
-# Pygame difference to Tkinter
-# Pygame	                    |   Tkinter
-# while running: loop           |   root.mainloop()
-# pygame.event.get()            |   Callbacks like command= or bind()
-# screen.blit() / pygame.draw   |   canvas.create_rectangle(), canvas.create_image()
-# clock.tick(60)	            |   root.after(ms, function)
-# Manual hit detection          |   Widgets handle clicks automatically
-# Rect.x                        |   Calc from points x1, y1, x2, y2 = self.__canvas.coords(self.__rect) where (x1, y1) is top left and (x2, y2) is bottom right
-
 
 class Game:
     def __init__(self) -> None:
@@ -36,7 +27,7 @@ class Game:
         self.canvas.pack()
 
         # === GAME SETTINGS ===
-        self.cards_count: int = 6
+        self.cards_count: int = 2
         self.grid_size: int = 90
         self.rows, self.columns = 5, 9
         self.tile_margins: tuple[int, int] = (40, 120)
@@ -44,7 +35,7 @@ class Game:
         self.card_size = (70, 85)
         self.card_gap = 10
 
-        self.ant_spawn_interval: float = 5  # seconds between ant spawns
+        self.ant_spawn_interval: float = 10  # seconds between ant spawns
         self.last_ant_spawn: float = time.monotonic()
 
         # === INPUT VARIABLES ===
@@ -58,8 +49,8 @@ class Game:
 
         self.card_attributes = [
             # Name, Cost, Class
-            ("The Flour Flower", 25, FlourFlower),
-            ("The Sugar Shooter", 60, SugarShooter),
+            ("The Flour Flower", 50, FlourFlower),
+            ("The Sugar Shooter", 100, SugarShooter),
         ]
         self.pests: list[Pest] = []
         self.flours: list[Flour] = []
@@ -354,9 +345,9 @@ check("flour amount", flour.amount == 25)
 check("flour collect returns amount", flour.collect() == 25)
 
 print("=== Card ===")
-card = Card(canvas, 0, 0, 70, 85, name="The Flour Flower", cost=25, good_class=FlourFlower)
+card = Card(canvas, 0, 0, 70, 85, name="The Flour Flower", cost=50, good_class=FlourFlower)
 check("card name", card.name == "The Flour Flower")
-check("card cost", card.cost == 25)
+check("card cost", card.cost == 50)
 check("card creates FlourFlower", isinstance(card.create_good(canvas, 0, 0, 70, 70), FlourFlower))
 
 print("=== Goods ===")
@@ -369,11 +360,11 @@ shooter = SugarShooter(canvas, 100, 100, 70, 70)
 shooter._Good__last_action = -1000.0
 shot = shooter.act(canvas)
 check("shooter fires Projectile when ready", isinstance(shot, Projectile))
-check("projectile damage is 10", shot.damage == 10)
+check("projectile damage is 20", shot.damage == 20)
 
 print("=== Pests ===")
 ant = Ant(canvas, 800, 100)
-check("ant health is 30", ant.health == 30)
+check("ant health is 200", ant.health == 200)
 ant.move()
 check("ant moves left", ant.rect.x == 800 - ant.speed)
 check("ant off screen", Ant(canvas, -100, 0).has_left_screen())
@@ -388,7 +379,7 @@ ant = Ant(canvas, 150, 110)
 ant._Pest__last_attack = -1000.0  # Start with the attack timer already expired
 ant.attack(victim)
 ant.attack(victim)  # Second hit is inside the attack interval, so it should do nothing
-check("ant attack respects interval", victim.health == 40)
+check("ant attack respects interval", victim.health == 200)
 
 print("=== Projectile ===")
 shot = Projectile(canvas, 200, 200, size=14, colour="#ff8fab", damage=10, speed=6)

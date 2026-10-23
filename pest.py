@@ -14,7 +14,7 @@ class Pest(Living, ABC):
         colour,
         health: int,
         speed: float,
-        damage: int = 10,
+        damage: int = 100,
         attack_interval: float = 1.0
     ) -> None:
         super().__init__(canvas, x, y, size, size, colour, health)
@@ -52,4 +52,4 @@ class Pest(Living, ABC):
 
 class Ant(Pest):
     def __init__(self, canvas, x, y) -> None:
-        super().__init__(canvas, x, y, size=50, colour="#7a4a2b", health=30, speed=0.5)
+        super().__init__(canvas, x, y, size=50, colour="#7a4a2b", health=200, speed=0.35)

@@ -31,11 +31,11 @@ class Good(Living, ABC):
 class FlourFlower(Good):
     def __init__(self, canvas, x, y, width, height) -> None:
         colour = "#FFFF00"
-        health = 50
+        health = 300
         super().__init__(canvas, x, y, width, height, colour, health)
         self.rect.set_text(type(self).__name__)
         self.__production_amount = 25
-        self.__production_interval = 15  # seconds between spawns
+        self.__production_interval = 24  # seconds between spawns
         self.__spawn_distance = 40  # pixels from the flower's centre
 
     def act(self, canvas: tk.Canvas) -> Flour | None:
@@ -53,14 +53,14 @@ class FlourFlower(Good):
 class SugarShooter(Good):
     def __init__(self, canvas, x, y, width, height) -> None:
         colour = "#FFFF00"
-        health = 50
+        health = 300
         super().__init__(canvas, x, y, width, height, colour, health)
         self.rect.set_text(type(self).__name__)
-        self.__shoot_interval = 1.5  # seconds between shots
+        self.__shoot_interval = 1.4  # seconds between shots
         self.__projectile_size = 14
         self.__projectile_speed = 6  # pixels per frame
         self.__projectile_colour = "#ff8fab"
-        self.__projectile_damage = 10
+        self.__projectile_damage = 20
 
     def act(self, canvas: tk.Canvas) -> Projectile | None:
         if not self._ready(self.__shoot_interval):
