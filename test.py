@@ -5,7 +5,7 @@ from flour import Flour
 from garden import Garden
 from good import FlourFlower, SugarShooter
 from inventory import Inventory
-from main import World
+from world import World
 from pest import Ant
 from projectile import Projectile
 from rectangle import Rectangle

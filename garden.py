@@ -1,6 +1,5 @@
 from __future__ import annotations
 import random
-
 from good import Good
 from tile import Tile
 from entity import Entity
