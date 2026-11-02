@@ -1,11 +1,11 @@
 from __future__ import annotations
 import time
 import tkinter as tk
-from pest import Pest
-from flour import Flour
-from projectile import Projectile
-from garden import Garden
-from inventory import Inventory
+from entities.living.pest import Pest
+from entities.flour import Flour
+from entities.projectile import Projectile
+from entities.garden import Garden
+from entities.cardholder import CardHolder
 
 
 class World:
@@ -14,7 +14,7 @@ class World:
         self.canvas = canvas
         self.width = width
         self.garden = Garden(canvas, 40, 120)
-        self.inventory = Inventory(canvas, 120, 20)
+        self.inventory = CardHolder(canvas, 120, 20)
 
         # === PEST SETTINGS ===
         self.ant_spawn_interval: float = 10  # seconds between ant spawns

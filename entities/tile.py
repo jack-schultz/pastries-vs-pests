@@ -1,6 +1,6 @@
 from __future__ import annotations
-from entity import Entity
-from good import Good
+from entities.entity import Entity
+from entities.living.good import Good
 
 
 class Tile(Entity):

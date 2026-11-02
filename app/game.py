@@ -1,9 +1,9 @@
 from __future__ import annotations
 import tkinter as tk
-from card import Card
-from tile import Tile
-from window import Window
-from world import World
+from entities.card import Card
+from entities.tile import Tile
+from app.window import Window
+from app.world import World
 
 
 class Game:

@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
-from entity import Entity
+from entities.entity import Entity
 
 # Only needed for the type hint
 # importing at runtime would create an import loop error
 if TYPE_CHECKING:
-    from pest import Pest
+    from entities.living.pest import Pest
 
 
 class Projectile(Entity):

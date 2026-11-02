@@ -1,9 +1,9 @@
 from __future__ import annotations
 import random
-from good import Good
-from tile import Tile
-from entity import Entity
-from pest import Ant, Pest
+from entities.living.good import Good
+from entities.tile import Tile
+from entities.entity import Entity
+from entities.living.pest import Ant, Pest
 
 
 class Garden(Entity):

@@ -1,16 +1,16 @@
 import tkinter as tk
 import pytest
-from card import Card
-from flour import Flour
-from garden import Garden
-from good import FlourFlower, SugarShooter
-from inventory import Inventory
-from world import World
-from pest import Ant
-from projectile import Projectile
+from entities.card import Card
+from entities.flour import Flour
+from entities.garden import Garden
+from entities.living.good import FlourFlower, SugarShooter
+from entities.cardholder import CardHolder
+from app.game import World
+from entities.living.pest import Ant
+from entities.projectile import Projectile
 from rectangle import Rectangle
-from tile import Tile
-from entity import Living
+from entities.tile import Tile
+from entities.entity import Living
 
 
 @pytest.fixture
@@ -189,7 +189,7 @@ def test_garden_goods_act_collects_products(canvas):
 
 
 def test_inventory_cards_match_attributes(canvas):
-    inventory = Inventory(canvas, 120, 20)
+    inventory = CardHolder(canvas, 120, 20)
     assert [c.name for c in inventory.cards] == [a[0] for a in inventory.card_attributes]
     assert len(inventory.cards) == inventory.cards_count
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Callable
-from entity import Entity
-from good import Good
+from entities.entity import Entity
+from entities.living.good import Good
 from rectangle import Rectangle
 
 

@@ -1,10 +1,10 @@
 from __future__ import annotations
-from good import FlourFlower, SugarShooter
-from card import Card
-from entity import Entity
+from entities.living.good import FlourFlower, SugarShooter
+from entities.card import Card
+from entities.entity import Entity
 
 
-class Inventory(Entity):
+class CardHolder(Entity):
     def __init__(self, canvas, x, y):
         colour = "#FFFF00"
         self.card_location = (120, 20)

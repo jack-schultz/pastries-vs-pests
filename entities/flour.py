@@ -1,5 +1,5 @@
 from __future__ import annotations
-from entity import Entity
+from entities.entity import Entity
 
 
 class Flour(Entity):

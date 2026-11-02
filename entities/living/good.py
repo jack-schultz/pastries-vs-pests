@@ -4,9 +4,9 @@ import random
 import time
 import tkinter as tk
 from abc import ABC, abstractmethod
-from entity import Living
-from flour import Flour
-from projectile import Projectile
+from entities.entity import Living
+from entities.flour import Flour
+from entities.projectile import Projectile
 
 
 class Good(Living, ABC):

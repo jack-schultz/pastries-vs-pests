@@ -1,8 +1,8 @@
 from __future__ import annotations
 import time
 from abc import ABC
-from entity import Living
-from good import Good
+from entities.entity import Living
+from entities.living.good import Good
 
 
 class Pest(Living, ABC):
