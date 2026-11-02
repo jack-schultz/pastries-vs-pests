@@ -14,7 +14,7 @@ class World:
         self.canvas = canvas
         self.width = width
         self.garden = Garden(canvas, 40, 120)
-        self.inventory = CardHolder(canvas, 120, 20)
+        self.card_holder = CardHolder(canvas, 180, 20)
 
         # === PEST SETTINGS ===
         self.ant_spawn_interval: float = 10  # seconds between ant spawns
@@ -30,7 +30,7 @@ class World:
             10, 10,
             text=f"{flour}",  # amount of flour
             anchor="nw",  # top-left of the text sits at (10, 10)
-            font=("Arial", 90, "bold"),
+            font=("Arial", 70, "bold"),
             fill="#3d405b",
         )
 

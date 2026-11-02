@@ -5,15 +5,15 @@ from entities.entity import Entity
 
 
 class CardHolder(Entity):
-    def __init__(self, canvas, x, y):
+    def __init__(self, canvas, x: int = 180, y: int = 20):
         colour = "#FFFF00"
-        self.card_location = (120, 20)
+        self.x, self.y = x, y
         self.card_size = (70, 85)
         self.card_gap = 10
         self.cards_count: int = 2
 
         super().__init__(
-            canvas, x, y,
+            canvas, self.x, self.y,
             self.card_size[0] * self.cards_count + self.card_gap * (self.cards_count - 1),
             self.card_size[1],
             colour
@@ -30,13 +30,12 @@ class CardHolder(Entity):
         """Create the cards displayed along the top of the screen."""
         self.cards: list[Card | None] = [None] * self.cards_count  # Create list of empty bread cards
         positions = []
-        lx, ly = self.card_location
         w, h = self.card_size
         for i in range(self.cards_count):  # columns
             positions.append(
                 (
-                    lx + w * i + self.card_gap * i,
-                    ly,
+                    self.x + w * i + self.card_gap * i,
+                    self.y,
                 )
             )
 

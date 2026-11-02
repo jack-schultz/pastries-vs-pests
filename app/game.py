@@ -7,7 +7,7 @@ from app.world import World
 
 
 class Game:
-    # Holds the game state and rules. Draws onto the window it is given
+    # Holds the game state and rules. Draws onto a window
     def __init__(self) -> None:
         self.window = Window()
 
@@ -84,7 +84,7 @@ class Game:
                 self.flour -= self.selected_card.cost
                 self.selected_card = None
 
-            for card in list(self.world.inventory.cards):
+            for card in list(self.world.card_holder.cards):
                 if not card.rect.collide_point(point=pos):
                     continue
 
