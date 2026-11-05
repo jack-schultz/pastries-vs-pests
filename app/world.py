@@ -1,41 +1,42 @@
 from __future__ import annotations
 import time
-import tkinter as tk
+from app.level_collector import LevelCollector
 from entities.living.pest import Pest
 from entities.flour import Flour
 from entities.projectile import Projectile
 from entities.garden import Garden
 from entities.cardholder import CardHolder
+from app.window import Window
 
 
 class World:
     # Owns the board objects that are drawn on the canvas: the garden, the inventory, the flour counter, pests, flours and projectiles
-    def __init__(self, canvas: tk.Canvas, flour: int, width: int) -> None:
-        self.canvas = canvas
-        self.width = width
-        self.garden = Garden(canvas, 40, 120)
-        self.card_holder = CardHolder(canvas, 180, 20)
+    def __init__(self, window: Window) -> None:
+        self.window = window
+        self.garden = Garden(self.window.canvas, 40, 120)
+        self.card_holder = CardHolder(self.window.canvas, 180, 20)
 
         # === PEST SETTINGS ===
-        self.ant_spawn_interval: float = 10  # seconds between ant spawns
-        self.last_ant_spawn: float = time.monotonic()
+        self.level_collector = LevelCollector
 
         # === GAME OBJECTS ===
         self.pests: list[Pest] = []
         self.flours: list[Flour] = []
         self.projectiles: list[Projectile] = []
 
+        self.flour: int = 500  # This is the currency to make bakery goods
+
         # Text in top left to display flour count
-        self.flour_text = canvas.create_text(
+        self.flour_text = self.window.canvas.create_text(
             10, 10,
-            text=f"{flour}",  # amount of flour
+            text=f"{self.flour}",  # amount of flour
             anchor="nw",  # top-left of the text sits at (10, 10)
             font=("Arial", 70, "bold"),
             fill="#3d405b",
         )
 
-    def update_flour_count(self, flour: int) -> None:
-        self.canvas.itemconfig(self.flour_text, text=f"{flour}")
+    def update_flour_count(self) -> None:
+        self.window.canvas.itemconfig(self.flour_text, text=f"{self.flour}")
 
     def add_goods(self, new_objs) -> None:
         # Routes the flour and projectiles made by goods to their lists
@@ -52,11 +53,11 @@ class World:
                 return pest
         return None
 
-    def spawn_ant_if_due(self) -> None:
+    def spawn_pest_if_due(self) -> None:
         # Spawn an ant on the right edge of a random row
         if time.monotonic() - self.last_ant_spawn >= self.ant_spawn_interval:
             self.last_ant_spawn = time.monotonic()
-            self.pests.append(self.garden.spawn_ant(self.width))
+            self.pests.append(self.garden.spawn_ant(self.window.width))
 
     def update_pests(self) -> None:
         # Pests walk left unless blocked by a good, which they attack instead
@@ -99,7 +100,7 @@ class World:
                     self.projectiles.remove(projectile)
 
             # If the projectile goes off the screen, kill it
-            elif projectile.rect.x > self.width:
+            elif projectile.rect.x > self.window.width:
                 projectile.destroy()
                 self.projectiles.remove(projectile)
 

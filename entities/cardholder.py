@@ -11,6 +11,7 @@ class CardHolder(Entity):
         self.card_size = (70, 85)
         self.card_gap = 10
         self.cards_count: int = 2
+        self.selected_card: Card | None = None
 
         super().__init__(
             canvas, self.x, self.y,

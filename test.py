@@ -213,10 +213,10 @@ def test_world_add_goods_routes_by_type(world, canvas):
 
 
 def test_world_spawn_ant_only_when_due(world):
-    world.spawn_ant_if_due()
+    world.spawn_pest_if_due()
     assert world.pests == []
     world.last_ant_spawn -= world.ant_spawn_interval
-    world.spawn_ant_if_due()
+    world.spawn_pest_if_due()
     assert len(world.pests) == 1
 
 
