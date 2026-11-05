@@ -8,7 +8,7 @@ from entities.cardholder import CardHolder
 from app.game import World
 from entities.living.pest import Ant
 from entities.projectile import Projectile
-from rectangle import Rectangle
+from app.rectangle import Rectangle
 from entities.tile import Tile
 from entities.entity import Living
 

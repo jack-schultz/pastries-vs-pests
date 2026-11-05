@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Callable
 from entities.entity import Entity
 from entities.living.good import Good
-from rectangle import Rectangle
+from app.rectangle import Rectangle
 
 
 class Card(Entity):

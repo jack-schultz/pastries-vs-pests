@@ -1,5 +1,5 @@
 from __future__ import annotations
-from rectangle import Rectangle
+from app.rectangle import Rectangle
 
 
 class Entity:
