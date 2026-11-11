@@ -12,7 +12,13 @@ class CardHolder(Entity):
         self.x, self.y = x, y
         self.card_size = (70, 85)
         self.card_gap = 10
-        self.cards_count: int = 4
+        self.card_attributes = [
+            # Name, Cost, Class, Cooldown (seconds)
+            ("Flour Flower", 50, FlourFlower, 5.0),
+            ("Sugar Shooter", 100, SugarShooter, 5.0),
+            ("Hardtack", 50, Hardtack, 30.0),
+        ]
+        self.cards_count: int = len(self.card_attributes)
         self.selected_card: Card | None = None
 
         super().__init__(
@@ -22,13 +28,11 @@ class CardHolder(Entity):
             colour
         )
 
-        self.card_attributes = [
-            # Name, Cost, Class
-            ("Flour Flower", 50, FlourFlower),
-            ("Sugar Shooter", 100, SugarShooter),
-            ("Hardtack", 50, Hardtack)
-        ]
         self.cards = self._create_cards()  # Holds the cards which are displayed along the top
+
+    def update_cooldowns(self) -> None:
+        for card in self.cards:
+            card.tick_cooldown()
 
     def _create_cards(self):
         """Create the cards displayed along the top of the screen."""
@@ -44,7 +48,7 @@ class CardHolder(Entity):
             )
 
         cards = []
-        for (x, y), (name, cost, good_class) in zip(positions, self.card_attributes):
+        for (x, y), (name, cost, good_class, cooldown) in zip(positions, self.card_attributes):
             cards.append(
                 Card(
                     canvas=self.canvas,
@@ -55,6 +59,7 @@ class CardHolder(Entity):
                     name=name,
                     cost=cost,
                     good_class=good_class,
+                    cooldown=cooldown,
                 )
             )
 

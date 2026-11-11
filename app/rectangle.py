@@ -16,7 +16,14 @@ class Rectangle:
     def canvas(self):
         return self.__canvas
 
+    def set_colour(self, colour: str) -> None:
+        self.__canvas.itemconfig(self.__rect, fill=colour)
+
     def set_text(self, text: str, colour: str = "#3d405b", size: int = 9) -> None:
+        if self.__text is not None:
+            # Label already there, so just update it
+            self.__canvas.itemconfig(self.__text, text=text, fill=colour)
+            return
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         self.__text = self.__canvas.create_text(
             (x1 + x2) / 2, (y1 + y2) / 2,

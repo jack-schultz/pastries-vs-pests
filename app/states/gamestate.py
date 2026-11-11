@@ -15,6 +15,9 @@ class GameState(BaseState):
     def tick(self) -> None:
         self.world.update_flour()
 
+        # ===== RECHARGE CARDS =====
+        self.world.card_holder.update_cooldowns()
+
         # ===== GOODS ACT =====
         self.world.add_goods(self.world.garden.goods_act())
 
@@ -67,8 +70,9 @@ class GameState(BaseState):
                 self.window.canvas, cx, cy
             )
 
-            # Take flour amount and reset selected card
+            # Take flour amount, start the card's cooldown and reset selected card
             self.world.flour -= self.world.card_holder.selected_card.cost
+            self.world.card_holder.selected_card.start_cooldown()
             self.world.card_holder.selected_card = None
 
         for card in list(self.world.card_holder.cards):
@@ -76,6 +80,10 @@ class GameState(BaseState):
                 continue
 
             if not isinstance(card, Card):
+                continue
+
+            # Cards recharging can't be selected
+            if not card.is_ready:
                 continue
 
             # If card is already selected, deselect
