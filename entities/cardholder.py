@@ -1,4 +1,5 @@
 from __future__ import annotations
+from entities.living.goods.hardtack import Hardtack
 from entities.living.goods.sugar_shooter import SugarShooter
 from entities.living.goods.flour_flower import FlourFlower
 from entities.card import Card
@@ -11,7 +12,7 @@ class CardHolder(Entity):
         self.x, self.y = x, y
         self.card_size = (70, 85)
         self.card_gap = 10
-        self.cards_count: int = 2
+        self.cards_count: int = 4
         self.selected_card: Card | None = None
 
         super().__init__(
@@ -23,8 +24,9 @@ class CardHolder(Entity):
 
         self.card_attributes = [
             # Name, Cost, Class
-            ("The Flour Flower", 50, FlourFlower),
-            ("The Sugar Shooter", 100, SugarShooter),
+            ("Flour Flower", 50, FlourFlower),
+            ("Sugar Shooter", 100, SugarShooter),
+            ("Hardtack", 50, Hardtack)
         ]
         self.cards = self._create_cards()  # Holds the cards which are displayed along the top
 

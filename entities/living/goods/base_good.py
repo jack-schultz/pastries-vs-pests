@@ -21,7 +21,6 @@ class BaseGood(Living, ABC):
         self.__last_action = time.monotonic()
         return True
 
-    @abstractmethod
     def act(self, canvas: tk.Canvas) -> Flour | Projectile | None:
         # Called every frame. Returns whatever the good made this frame, if anything
         pass
