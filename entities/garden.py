@@ -56,11 +56,14 @@ class Garden(Entity):
                 return tile
         return None
 
-    def spawn_ant(self, game_width) -> Ant:
+    def spawn_pest(self, pest_class, game_width) -> BasePest:
         row = random.randrange(self.rows)
         # Spawn just off the right edge of the canvas, centred in the row
         centre_y = self.position[1] + self.grid_size * row + self.grid_size // 2
-        return Ant(self.canvas, game_width, centre_y)
+        return pest_class(self.canvas, game_width, centre_y)
+
+    def spawn_ant(self, game_width) -> Ant:
+        return self.spawn_pest(Ant, game_width)
 
     def goods_act(self):
         # Every good acts on its own timer; flour and projectiles it makes are routed to the right list

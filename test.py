@@ -212,12 +212,25 @@ def test_world_add_goods_routes_by_type(world, canvas):
     assert world.projectiles == [shot]
 
 
-def test_world_spawn_ant_only_when_due(world):
-    world.spawn_pest_if_due()
-    assert world.pests == []
-    world.last_ant_spawn -= world.ant_spawn_interval
-    world.spawn_pest_if_due()
-    assert len(world.pests) == 1
+def test_wave_manager_spawns_waves_in_order_then_finishes():
+    from levels.wave_manager import WaveManager
+    waves = WaveManager([{1: 1}, {1: 2}], {1: Ant})
+    assert waves.next_pest(0, 0) is None  # start break first
+    assert waves.next_pest(WaveManager.START_BREAK, 0) is Ant
+    assert waves.wave_number == 1
+    assert waves.next_pest(WaveManager.START_BREAK, 1) is None  # board not clear
+    t = WaveManager.START_BREAK + 100
+    assert waves.next_pest(t, 0) is None  # wave break starts
+    t += WaveManager.WAVE_BREAK
+    assert waves.next_pest(t, 0) is Ant  # wave 2 spawns
+    assert waves.wave_number == 2
+    t += WaveManager.SPAWN_INTERVAL
+    assert waves.next_pest(t, 1) is Ant
+    t += WaveManager.SPAWN_INTERVAL
+    assert waves.next_pest(t, 2) is None  # wave 2 empty, still on board
+    assert not waves.finished
+    assert waves.next_pest(t + 999, 0) is None
+    assert waves.finished
 
 
 def test_world_pest_walks_when_unblocked(world, canvas):

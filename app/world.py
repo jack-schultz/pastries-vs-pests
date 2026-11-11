@@ -1,6 +1,7 @@
 from __future__ import annotations
 import time
-from app.level_collector import LevelCollector
+from levels.level_collector import LevelCollector, pest_ids
+from levels.wave_manager import WaveManager
 from entities.living.pests.base_pest import BasePest
 from entities.flour import Flour
 from entities.projectile import Projectile
@@ -20,8 +21,8 @@ class World:
         self.garden = Garden(self.window.canvas, 40, 120)
         self.card_holder = CardHolder(self.window.canvas, 180, 20)
 
-        # === PEST SETTINGS ===
-        self.level_collector = LevelCollector
+        # === LEVEL SETTINGS ===
+        self.waves = WaveManager(LevelCollector().level_1(), pest_ids)
 
         # === GAME OBJECTS ===
         self.pests: list[BasePest] = []
@@ -30,15 +31,21 @@ class World:
 
         self.flour: int = 500  # This is the currency to make bakery goods
 
-        self.last_ant_spawn = time.monotonic()
-        self.ant_spawn_interval = 1
-
         # Text in top left to display flour count
         self.flour_text = self.window.canvas.create_text(
             10, 20,
             text=f"{self.flour}",  # amount of flour
             anchor="nw",  # top-left of the text sits at (10, 10)
             font=("Arial", 70, "bold"),
+            fill="#3d405b",
+        )
+
+        # Text in top right to display the wave
+        self.wave_text = self.window.canvas.create_text(
+            self.window.width - 10, 20,
+            text="",
+            anchor="ne",
+            font=("Arial", 24, "bold"),
             fill="#3d405b",
         )
 
@@ -67,10 +74,20 @@ class World:
         return None
 
     def spawn_pest_if_due(self) -> None:
-        # Spawn an ant on the right edge of a random row
-        if time.monotonic() - self.last_ant_spawn >= self.ant_spawn_interval:
-            self.last_ant_spawn = time.monotonic()
-            self.pests.append(self.garden.spawn_ant(self.window.width))
+        # The current wave decides which pest spawns on the right edge of a random row
+        pest_class = self.waves.next_pest(time.monotonic(), len(self.pests))
+        if pest_class:
+            self.pests.append(self.garden.spawn_pest(pest_class, self.window.width))
+        self.update_wave_text()
+
+    def update_wave_text(self) -> None:
+        if self.waves.finished:
+            text = "Level complete!"
+        elif self.waves.wave_number == 0:
+            text = "Get ready"
+        else:
+            text = f"Wave {self.waves.wave_number}/{self.waves.total_waves}"
+        self.window.canvas.itemconfig(self.wave_text, text=text)
 
     def update_pests(self) -> None:
         # Pests walk left unless blocked by a good, which they attack instead
