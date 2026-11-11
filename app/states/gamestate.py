@@ -42,6 +42,11 @@ class GameState(BaseState):
     def handle_click(self, event: tk.Event) -> None:
         pos = (event.x, event.y)
 
+        # Next level button
+        if self.world.clicked_next_button(pos):
+            self.world.start_next_level()
+            return
+
         # ===== CHECK CLICK POS =====
         # Loop through all clickable (tile, card & flour) objects to find which was clicked
         for tile in list(self.world.garden.tiles):

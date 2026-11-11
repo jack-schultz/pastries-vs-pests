@@ -1,5 +1,6 @@
 from __future__ import annotations
 import time
+from app.rectangle import Rectangle
 from levels.level_collector import LevelCollector, pest_ids
 from levels.wave_manager import WaveManager
 from entities.living.pests.base_pest import BasePest
@@ -22,7 +23,10 @@ class World:
         self.card_holder = CardHolder(self.window.canvas, 180, 20)
 
         # === LEVEL SETTINGS ===
-        self.waves = WaveManager(LevelCollector().level_1(), pest_ids)
+        self.level_collector = LevelCollector()
+        self.level_number = 1
+        self.waves = WaveManager(self.level_collector.get_level(self.level_number), pest_ids)
+        self.next_button: Rectangle | None = None  # shown once a level is complete
 
         # === GAME OBJECTS ===
         self.pests: list[BasePest] = []
@@ -82,12 +86,36 @@ class World:
 
     def update_wave_text(self) -> None:
         if self.waves.finished:
-            text = "Level complete!"
+            text = "Winner Winner Chicken Dinner!"
         elif self.waves.wave_number == 0:
-            text = "Get ready"
+            text = f"Level {self.level_number} - Get ready"
         else:
-            text = f"Wave {self.waves.wave_number}/{self.waves.total_waves}"
+            text = f"Level {self.level_number} - Wave {self.waves.wave_number}/{self.waves.total_waves}"
         self.window.canvas.itemconfig(self.wave_text, text=text)
+
+        # Offer the next level once this one is complete, if there is one
+        has_next = self.level_number < self.level_collector.level_count()
+        if self.waves.finished and has_next and self.next_button is None:
+            self.next_button = Rectangle(self.window.canvas, 350, 300, 200, 70, "#3d405b")
+            self.next_button.set_text("Next Level", colour="#ffffff", size=16)
+
+    def start_next_level(self) -> None:
+        # Clears the goods off the garden, then loads the next level's waves
+        for tile in self.garden.tiles:
+            if tile.good:
+                tile.good.destroy()
+                tile.clear_good()
+
+        if self.next_button:
+            self.next_button.delete()
+            self.next_button = None
+
+        self.level_number += 1
+        self.waves = WaveManager(self.level_collector.get_level(self.level_number), pest_ids)
+        self.update_wave_text()
+
+    def clicked_next_button(self, pos: tuple[int, int]) -> bool:
+        return self.next_button is not None and self.next_button.collide_point(pos)
 
     def update_pests(self) -> None:
         # Pests walk left unless blocked by a good, which they attack instead
