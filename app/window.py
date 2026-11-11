@@ -1,5 +1,7 @@
 from __future__ import annotations
 import tkinter as tk
+from app.states.gamestate import GameState
+from app.states.statestack import StateStack
 
 
 class Window:
@@ -16,5 +18,26 @@ class Window:
         # Places canvas widget inside parent window as tk is designed for menus so it needs this
         self.canvas.pack()
 
+        self.state_stack = StateStack()
+        self.state_stack.push(GameState(self.state_stack, self))
+
+        # Bind inputs once globally and route to the active state
+        self.canvas.bind("<Button-1>", self.__on_click)
+        self.root.bind("<Key>", self.__on_key)
+
+    def __on_click(self, event: tk.Event) -> None:
+        if self.state_stack.current:
+            self.state_stack.current.handle_click(event)
+
+    def __on_key(self, event: tk.Event) -> None:
+        if self.state_stack.current:
+            self.state_stack.current.handle_key(event)
+
+    def _tick(self) -> None:
+        if self.state_stack.current:
+            self.state_stack.current.tick()
+        self.root.after(16, self._tick)  # ~60 FPS
+
     def run(self) -> None:
+        self._tick()
         self.root.mainloop()

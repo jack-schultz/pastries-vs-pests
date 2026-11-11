@@ -6,7 +6,11 @@ from entities.flour import Flour
 from entities.projectile import Projectile
 from entities.garden import Garden
 from entities.cardholder import CardHolder
-from app.window import Window
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from app.window import Window
 
 
 class World:
@@ -25,6 +29,9 @@ class World:
         self.projectiles: list[Projectile] = []
 
         self.flour: int = 500  # This is the currency to make bakery goods
+
+        self.last_ant_spawn = time.monotonic()
+        self.ant_spawn_interval = 1
 
         # Text in top left to display flour count
         self.flour_text = self.window.canvas.create_text(
@@ -46,7 +53,7 @@ class World:
             elif isinstance(obj, Projectile):
                 self.projectiles.append(obj)
 
-    def _pest_at(self, projectile: Projectile) -> Pest | None:
+    def __pest_at(self, projectile: Projectile) -> Pest | None:
         # Returns the first pest the projectile is overlapping, if any
         for pest in self.pests:
             if projectile.hits(pest):
@@ -90,7 +97,7 @@ class World:
         # projectiles fly right and damage the first pest they touch
         for projectile in list(self.projectiles):
             projectile.move()
-            hit_pest = self._pest_at(projectile)
+            hit_pest = self.__pest_at(projectile)
             if hit_pest:
                 hit_pest.take_damage(projectile.damage)
                 if hit_pest.is_dead:

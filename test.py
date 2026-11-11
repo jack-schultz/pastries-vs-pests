@@ -5,7 +5,7 @@ from entities.flour import Flour
 from entities.garden import Garden
 from entities.living.good import FlourFlower, SugarShooter
 from entities.cardholder import CardHolder
-from app.game import World
+from app.world import World
 from entities.living.pest import Ant
 from entities.projectile import Projectile
 from app.rectangle import Rectangle
@@ -24,8 +24,8 @@ def canvas():
 
 
 @pytest.fixture
-def world(canvas):
-    return World(canvas, 50, 900)
+def world(window):
+    return World(window)
 
 
 def make_flower(canvas, x=100, y=100):

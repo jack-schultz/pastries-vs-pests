@@ -1,14 +1,16 @@
-from app.game import Game
+from app.window import Window
 
 
-def run_tests() -> bool:
-    """
-    Runs the pytest file and returns True when every test passed
-    :return: bool
-    """
-    import pytest
-    return pytest.main(["-v", "test.py"]) == 0
+# def run_tests() -> bool:
+#     """
+#     Runs the pytest file and returns True when every test passed
+#     :return: bool
+#     """
+#     import pytest
+#     return pytest.main(["-v", "test.py"]) == 0
+#
+#
+# if run_tests():
+#     App().run()
 
-
-if run_tests():
-    Game().run()
+Window().run()
