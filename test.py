@@ -284,6 +284,6 @@ def test_world_collect_flour_at(world, canvas):
     near = Flour(canvas, 100, 100, 25)
     far = Flour(canvas, 500, 500, 25)
     world.flours.extend([near, far])
-    assert world.click_flour_at((100, 100)) == 25
+    assert world.collect_flour_at((100, 100)) == 25
     assert world.flours == [far]
-    assert world.click_flour_at((0, 0)) == 0
+    assert world.collect_flour_at((0, 0)) == 0

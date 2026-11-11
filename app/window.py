@@ -23,11 +23,16 @@ class Window:
 
         # Bind inputs once globally and route to the active state
         self.canvas.bind("<Button-1>", self.__on_click)
+        self.canvas.bind("<Motion>", self.__on_motion)
         self.root.bind("<Key>", self.__on_key)
 
     def __on_click(self, event: tk.Event) -> None:
         if self.state_stack.current:
             self.state_stack.current.handle_click(event)
+
+    def __on_motion(self, event: tk.Event) -> None:
+        if self.state_stack.current:
+            self.state_stack.current.handle_motion(event)
 
     def __on_key(self, event: tk.Event) -> None:
         if self.state_stack.current:

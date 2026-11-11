@@ -86,4 +86,6 @@ class GameState(BaseState):
             # Select card
             self.world.card_holder.selected_card = card
 
-        self.world.click_flour_at(pos)
+    def handle_motion(self, event: tk.Event) -> None:
+        # Hovering over flour collects it
+        self.world.collect_flour_at((event.x, event.y))

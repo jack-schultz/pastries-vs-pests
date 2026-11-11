@@ -23,6 +23,10 @@ class BaseState(ABC):
         """Called when the mouse is clicked."""
         pass
 
+    def handle_motion(self, event: tk.Event) -> None:
+        """Called when the mouse moves over the canvas."""
+        pass
+
     def handle_key(self, event: tk.Event) -> None:
         """Called when a key is pressed."""
         pass

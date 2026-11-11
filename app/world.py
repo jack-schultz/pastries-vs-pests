@@ -129,7 +129,7 @@ class World:
             if isinstance(obj, Flour):
                 obj.rect.raise_to_top()
 
-    def click_flour_at(self, pos: tuple[int, int]) -> int:
+    def collect_flour_at(self, pos: tuple[int, int]) -> int:
         # Collects every flour under the click and returns their total amount
         for flour in list(self.flours):
             if not flour.rect.collide_point(point=pos):
