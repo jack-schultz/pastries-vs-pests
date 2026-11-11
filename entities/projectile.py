@@ -13,6 +13,7 @@ class Projectile(Entity):
         super().__init__(canvas, centre_x + 20 - size // 2, centre_y - size // 2, size, size, colour)
         self.__damage = damage
         self.__speed = speed  # pixels moved right each frame
+        self.piercing = 1
 
     @property
     def damage(self) -> int:

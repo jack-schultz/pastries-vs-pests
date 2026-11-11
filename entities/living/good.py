@@ -60,7 +60,7 @@ class SugarShooter(Good):
         self.__projectile_size = 14
         self.__projectile_speed = 6  # pixels per frame
         self.__projectile_colour = "#ff8fab"
-        self.__projectile_damage = 20
+        self.__projectile_damage = 60
 
     def act(self, canvas: tk.Canvas) -> Projectile | None:
         if not self._ready(self.__shoot_interval):

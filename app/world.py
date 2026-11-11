@@ -100,9 +100,13 @@ class World:
             hit_pest = self.__pest_at(projectile)
             if hit_pest:
                 hit_pest.take_damage(projectile.damage)
+                projectile.piercing -= 1
+
                 if hit_pest.is_dead:
                     hit_pest.destroy()
                     self.pests.remove(hit_pest)
+
+                if projectile.piercing <= 0:
                     projectile.destroy()
                     self.projectiles.remove(projectile)
 
