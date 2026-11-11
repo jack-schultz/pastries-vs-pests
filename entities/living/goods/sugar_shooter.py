@@ -5,10 +5,10 @@ from entities.living.goods.base_good import BaseGood
 
 
 class SugarShooter(BaseGood):
-    def __init__(self, canvas, x, y, width, height) -> None:
+    def __init__(self, canvas, x, y) -> None:
         colour = "#FFFF00"
         health = 300
-        super().__init__(canvas, x, y, width, height, colour, health)
+        super().__init__(canvas, x, y, 40, 40, colour, health)
         self.rect.set_text(type(self).__name__)
         self.__shoot_interval = 1.4  # seconds between shots
         self.__projectile_size = 14

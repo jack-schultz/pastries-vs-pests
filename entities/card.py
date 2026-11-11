@@ -23,6 +23,6 @@ class Card(Entity):
     def cost(self) -> int:
         return self.__cost
 
-    def create_good(self, canvas, x, y, width, height) -> BaseGood:
+    def create_good(self, canvas, x, y) -> BaseGood:
         # The card knows which good it sells, so the caller doesn't need to
-        return self.__good_class(canvas, x, y, width, height)
+        return self.__good_class(canvas, x, y)

@@ -62,8 +62,9 @@ class GameState(BaseState):
                 continue
 
             # Create new good on the tiles
+            cx, cy = tile.rect.centre
             tile.good = self.world.card_holder.selected_card.create_good(
-                self.window.canvas, tile.rect.x + 10, tile.rect.y + 10, tile.rect.w - 20, tile.rect.h - 20
+                self.window.canvas, cx, cy
             )
 
             # Take flour amount and reset selected card

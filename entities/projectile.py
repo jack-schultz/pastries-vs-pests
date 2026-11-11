@@ -23,6 +23,10 @@ class Projectile(Entity):
     def piercing(self) -> int:
         return self.__piercing
 
+    @piercing.setter
+    def piercing(self, new_piercing) -> None:
+        self.__piercing = new_piercing
+
     def move(self) -> None:
         self.rect.move((self.__speed, 0))
 

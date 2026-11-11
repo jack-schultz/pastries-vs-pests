@@ -39,6 +39,15 @@ class Rectangle:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         return x1
 
+    @x.setter
+    def x(self, new_x) -> None:
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        self.__canvas.coords(
+            self.__rect,  # rect on canvas to edit
+            new_x, y1,  # top left
+            new_x + self.w, y2  # bottom right
+        )
+
     @property
     def y(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
@@ -110,6 +119,26 @@ class Rectangle:
             cx - half_width,
             cy - half_height,
             cx + half_width,
+            cy + half_height,
+            )
+        self.__centre_text()
+
+    @property
+    def centre_left(self) -> tuple[float, float]:
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        half_height = self.height // 2
+        centreleft = (x1, y1 + half_height)
+        return centreleft  # (cx, cy)
+
+    @centre_left.setter
+    def centre_left(self, centre_left: tuple[float, float]):
+        cx, cy = centre_left
+        half_height = self.height // 2
+        self.__canvas.coords(
+            self.__rect,
+            cx,
+            cy - half_height,
+            cx + self.width,
             cy + half_height,
             )
         self.__centre_text()

@@ -7,10 +7,10 @@ from entities.living.goods.base_good import BaseGood
 
 
 class FlourFlower(BaseGood):
-    def __init__(self, canvas, x, y, width, height) -> None:
+    def __init__(self, canvas, x, y) -> None:
         colour = "#FFFF00"
         health = 300
-        super().__init__(canvas, x, y, width, height, colour, health)
+        super().__init__(canvas, x, y, 70, 70, colour, health)
         self.rect.set_text(type(self).__name__)
         self.__production_amount = 25
         self.__production_interval = 24  # seconds between spawns

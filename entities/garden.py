@@ -7,7 +7,6 @@ from entities.living.pests.ant import Ant
 from entities.living.pests.base_pest import BasePest
 
 
-
 class Garden(Entity):
     def __init__(self, canvas, x, y):
         colour = "#FFFF00"
@@ -55,10 +54,9 @@ class Garden(Entity):
 
     def spawn_ant(self, game_width) -> Ant:
         row = random.randrange(self.rows)
-        _, y_margin = self.position
         # Spawn just off the right edge of the canvas, centred in the row
-        ay = y_margin + self.grid_size * row + 20
-        return Ant(self.canvas, game_width, ay)
+        centre_y = self.position[1] + self.grid_size * row + self.grid_size // 2
+        return Ant(self.canvas, game_width, centre_y)
 
     def goods_act(self):
         # Every good acts on its own timer; flour and projectiles it makes are routed to the right list

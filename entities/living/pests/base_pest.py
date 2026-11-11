@@ -18,6 +18,7 @@ class BasePest(Living, ABC):
             attack_interval: float = 1.0
     ) -> None:
         super().__init__(canvas, x, y, size, size, colour, health)
+        self.rect.centre_left = (x, y)
         self.rect.set_text("Ant", colour="#ffffff")
 
         self.__speed = speed  # pixels moved left each frame
