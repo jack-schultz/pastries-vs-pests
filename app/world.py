@@ -1,7 +1,7 @@
 from __future__ import annotations
 import time
 from app.level_collector import LevelCollector
-from entities.living.pest import Pest
+from entities.living.pests.base_pest import BasePest
 from entities.flour import Flour
 from entities.projectile import Projectile
 from entities.garden import Garden
@@ -24,7 +24,7 @@ class World:
         self.level_collector = LevelCollector
 
         # === GAME OBJECTS ===
-        self.pests: list[Pest] = []
+        self.pests: list[BasePest] = []
         self.flours: list[Flour] = []
         self.projectiles: list[Projectile] = []
 
@@ -53,7 +53,7 @@ class World:
             elif isinstance(obj, Projectile):
                 self.projectiles.append(obj)
 
-    def __pest_at(self, projectile: Projectile) -> Pest | None:
+    def __pest_at(self, projectile: Projectile) -> BasePest | None:
         # Returns the first pest the projectile is overlapping, if any
         for pest in self.pests:
             if projectile.hits(pest):

@@ -2,20 +2,20 @@ from __future__ import annotations
 import time
 from abc import ABC
 from entities.entity import Living
-from entities.living.good import Good
+from entities.living.goods.base_good import BaseGood
 
 
-class Pest(Living, ABC):
+class BasePest(Living, ABC):
     def __init__(
-        self,
-        canvas,
-        x, y,
-        size,
-        colour,
-        health: int,
-        speed: float,
-        damage: int = 100,
-        attack_interval: float = 1.0
+            self,
+            canvas,
+            x, y,
+            size,
+            colour,
+            health: int,
+            speed: float,
+            damage: int = 100,
+            attack_interval: float = 1.0
     ) -> None:
         super().__init__(canvas, x, y, size, size, colour, health)
         self.rect.set_text("Ant", colour="#ffffff")
@@ -32,7 +32,7 @@ class Pest(Living, ABC):
     def move(self) -> None:
         self.rect.move((-self.__speed, 0))
 
-    def is_blocked_by(self, good: Good) -> bool:
+    def is_blocked_by(self, good: BaseGood) -> bool:
         # Blocked when the pest's left edge (at its vertical centre) has reached the good
         px = self.rect.x
         _, py = self.rect.centre
@@ -41,15 +41,10 @@ class Pest(Living, ABC):
     def has_left_screen(self) -> bool:
         return self.rect.x + self.rect.w < 0
 
-    def attack(self, good: Good) -> None:
+    def attack(self, good: BaseGood) -> None:
         # Only hit once per attack interval
         now = time.monotonic()
         if now - self.__last_attack < self.__attack_interval:
             return
         self.__last_attack = now
         good.take_damage(self.__damage)
-
-
-class Ant(Pest):
-    def __init__(self, canvas, x, y) -> None:
-        super().__init__(canvas, x, y, size=50, colour="#7a4a2b", health=200, speed=0.35)

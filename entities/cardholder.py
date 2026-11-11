@@ -1,5 +1,6 @@
 from __future__ import annotations
-from entities.living.good import FlourFlower, SugarShooter
+from entities.living.goods.sugar_shooter import SugarShooter
+from entities.living.goods.flour_flower import FlourFlower
 from entities.card import Card
 from entities.entity import Entity
 

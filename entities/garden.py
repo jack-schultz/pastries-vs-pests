@@ -1,9 +1,11 @@
 from __future__ import annotations
 import random
-from entities.living.good import Good
+from entities.living.goods.base_good import BaseGood
 from entities.tile import Tile
 from entities.entity import Entity
-from entities.living.pest import Ant, Pest
+from entities.living.pests.ant import Ant
+from entities.living.pests.base_pest import BasePest
+
 
 
 class Garden(Entity):
@@ -41,11 +43,13 @@ class Garden(Entity):
             tiles.append(Tile(canvas, x, y, self.grid_size, colour))
         return tiles
 
-    def tile_blocking(self, pest: Pest) -> Tile | None:
+    def tile_blocking(self, pest: BasePest) -> Tile | None:
         # Returns the tile whose good the pest's left edge has reached, if any
         _, py = pest.rect.centre
         for tile in self.tiles:
-            if isinstance(tile, Tile) and isinstance(tile.good, Good) and pest.is_blocked_by(tile.good):
+            if not tile.good:
+                continue
+            if isinstance(tile, Tile) and isinstance(tile.good, BaseGood) and pest.is_blocked_by(tile.good):
                 return tile
         return None
 
