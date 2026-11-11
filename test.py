@@ -84,7 +84,7 @@ def test_tile_clear_good(canvas):
 def test_flour_collect_returns_amount(canvas):
     flour = Flour(canvas, 100, 100, amount=25)
     assert flour.amount == 25
-    assert flour.collect() == 25
+    assert flour.click() == 25
 
 
 # ===== Card =====
@@ -200,7 +200,7 @@ def test_world_starts_empty(world):
 
 
 def test_world_update_flour_count(world):
-    world.update_flour_count(123)
+    world.update_flour(123)
     assert world.canvas.itemcget(world.flour_text, "text") == "123"
 
 
@@ -284,6 +284,6 @@ def test_world_collect_flour_at(world, canvas):
     near = Flour(canvas, 100, 100, 25)
     far = Flour(canvas, 500, 500, 25)
     world.flours.extend([near, far])
-    assert world.collect_flour_at((100, 100)) == 25
+    assert world.click_flour_at((100, 100)) == 25
     assert world.flours == [far]
-    assert world.collect_flour_at((0, 0)) == 0
+    assert world.click_flour_at((0, 0)) == 0

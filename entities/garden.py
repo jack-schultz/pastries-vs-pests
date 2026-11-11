@@ -10,7 +10,7 @@ from entities.living.pests.base_pest import BasePest
 class Garden(Entity):
     def __init__(self, canvas, x, y):
         colour = "#FFFF00"
-        self.position = (x, y)
+        self.__position = (x, y)
         self.rows, self.columns = 5, 9
         self.grid_size: int = 90
         super().__init__(
@@ -20,6 +20,10 @@ class Garden(Entity):
             colour
         )
         self.tiles = self._create_tiles(self.canvas)  # Holds the rects that make up the grid on the floor
+
+    @property
+    def position(self):
+        return self.__position
 
     def _create_tiles(self, canvas):
         positions = []

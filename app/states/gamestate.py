@@ -13,7 +13,7 @@ class GameState(BaseState):
         self.world = World(self.window)
 
     def tick(self) -> None:
-        self.world.update_flour_count()
+        self.world.update_flour()
 
         # ===== GOODS ACT =====
         self.world.add_goods(self.world.garden.goods_act())
@@ -86,4 +86,4 @@ class GameState(BaseState):
             # Select card
             self.world.card_holder.selected_card = card
 
-        self.world.flour += self.world.collect_flour_at(pos)
+        self.world.click_flour_at(pos)

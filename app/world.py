@@ -35,14 +35,20 @@ class World:
 
         # Text in top left to display flour count
         self.flour_text = self.window.canvas.create_text(
-            10, 10,
+            10, 20,
             text=f"{self.flour}",  # amount of flour
             anchor="nw",  # top-left of the text sits at (10, 10)
             font=("Arial", 70, "bold"),
             fill="#3d405b",
         )
 
-    def update_flour_count(self) -> None:
+    def update_flour(self) -> None:
+        for flour in list(self.flours):
+            flour.move()
+            if flour.finished_move():
+                self.flour += flour.amount
+                self.flours.remove(flour)
+        # Update flour counter
         self.window.canvas.itemconfig(self.flour_text, text=f"{self.flour}")
 
     def add_goods(self, new_objs) -> None:
@@ -123,14 +129,12 @@ class World:
             if isinstance(obj, Flour):
                 obj.rect.raise_to_top()
 
-    def collect_flour_at(self, pos: tuple[int, int]) -> int:
+    def click_flour_at(self, pos: tuple[int, int]) -> int:
         # Collects every flour under the click and returns their total amount
-        total = 0
         for flour in list(self.flours):
             if not flour.rect.collide_point(point=pos):
                 continue
 
-            # Collecting removes it from the canvas and returns its amount
-            total += flour.collect()
-            self.flours.remove(flour)
-        return total
+            # Collecting starts it moving to the flour display
+            x1, y1, x2, y2 = self.window.canvas.bbox(self.flour_text)
+            flour.click(((x1 + x2) // 2, (y1 + y2) // 2))

@@ -13,7 +13,7 @@ class FlourFlower(BaseGood):
         super().__init__(canvas, x, y, 70, 70, colour, health)
         self.rect.set_text(type(self).__name__)
         self.__production_amount = 25
-        self.__production_interval = 24  # seconds between spawns
+        self.__production_interval = 3  # seconds between spawns
         self.__spawn_distance = 40  # pixels from the flower's centre
 
     def act(self, canvas: tk.Canvas) -> Flour | None:
