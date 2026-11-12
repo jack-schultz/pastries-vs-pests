@@ -23,10 +23,11 @@ class Entity:
 
 class Living(Entity):
     # Base class for entities with health that can be hurt and die
-    def __init__(self, canvas, x, y, width, height, colour, health: int, armour: BaseArmour | None = None) -> None:
+    def __init__(self, canvas, x, y, width, height, colour, health: int, armour: BaseArmour | None = None, layer_count: int = 1) -> None:
         super().__init__(canvas, x, y, width, height, colour)
         self.__health = health
         self.__armour = armour
+        self.__layer_count = layer_count
 
     @property
     def health(self) -> int:
@@ -35,6 +36,10 @@ class Living(Entity):
     @property
     def armour(self) -> BaseArmour | None:
         return self.__armour
+
+    @property
+    def layer_count(self) -> int:
+        return self.__layer_count
 
     @property
     def is_dead(self) -> bool:

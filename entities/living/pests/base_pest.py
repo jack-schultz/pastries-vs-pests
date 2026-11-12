@@ -18,9 +18,10 @@ class BasePest(Living, ABC):
         speed: float,
         damage: int = 100,
         attack_interval: float = 1.0,
-        armour: BaseArmour | None = None
+        armour: BaseArmour | None = None,
+        layer_count: int = 1
     ) -> None:
-        super().__init__(canvas, x, y, size, size, colour, health, armour)
+        super().__init__(canvas, x, y, size, size, colour, health, armour, layer_count)
         self.rect.centre_left = (x, y)
         self.rect.set_text("Ant", colour="#ffffff")
 

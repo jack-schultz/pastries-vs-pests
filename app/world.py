@@ -160,7 +160,7 @@ class World:
             if hit_pest:
                 hit_pest.take_damage(projectile.damage_to_deal())
                 projectile.add_hit_pest(hit_pest)  # Stores it in a list so it cant hit the same pest twice
-                projectile.piercing -= 1
+                projectile.piercing -= hit_pest.layer_count
 
                 if hit_pest.is_dead:
                     hit_pest.destroy()
