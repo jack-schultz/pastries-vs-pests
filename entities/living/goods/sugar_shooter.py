@@ -1,7 +1,8 @@
 from __future__ import annotations
 import tkinter as tk
 from typing import Sequence
-from entities.projectile import Projectile
+from entities.projectiles.projectile import Projectile
+from entities.projectiles.sugar_cube import SugarCube
 from entities.living.goods.base_good import BaseGood
 
 
@@ -13,11 +14,6 @@ class SugarShooter(BaseGood):
         self.rect.set_text(type(self).__name__)
         self.__delay_pattern = delay_pattern
         self.__pattern_index = 0  # which delay in the pattern the next shot is waiting on
-        self.__projectile_size = 14
-        self.__projectile_speed = 6  # pixels per frame
-        self.__projectile_colour = "#ff8fab"
-        self.__projectile_damage = 60
-        self.__projectile_piercing = 1
 
     @property
     def delay_pattern(self) -> Sequence[float]:
@@ -46,11 +42,4 @@ class SugarShooter(BaseGood):
     def _make_projectile(self, canvas: tk.Canvas) -> Projectile:
         # Fire from the front-right of the shooter, along its row
         x, y = self.rect.centre_right
-        return Projectile(
-            canvas, x, y,
-            size=self.__projectile_size,
-            colour=self.__projectile_colour,
-            damage=self.__projectile_damage,
-            speed=self.__projectile_speed,
-            piercing=self.__projectile_piercing
-        )
+        return SugarCube(canvas, x, y)

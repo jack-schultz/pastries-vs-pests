@@ -5,7 +5,7 @@ from levels.level_collector import LevelCollector, pest_ids
 from levels.wave_manager import WaveManager
 from entities.living.pests.base_pest import BasePest
 from entities.flour import Flour
-from entities.projectile import Projectile
+from entities.projectiles.projectile import Projectile
 from entities.garden import Garden
 from entities.cardholder import CardHolder
 from typing import TYPE_CHECKING

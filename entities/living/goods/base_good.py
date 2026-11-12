@@ -1,11 +1,11 @@
 from __future__ import annotations
 import time
 import tkinter as tk
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import TYPE_CHECKING
 from entities.entity import Living
 from entities.flour import Flour
-from entities.projectile import Projectile
+from entities.projectiles.projectile import Projectile
 
 if TYPE_CHECKING:
     from entities.living.pests.base_pest import BasePest
