@@ -5,11 +5,12 @@ from enum import Enum, auto
 # Affects what armour defends against
 # For example: chainmail doesn't defend against fire
 class DamageType(Enum):
-    PHYSICAL = 1
+    BLUDGEONING = 1
     FIRE = 2
     EXPLOSIVE = 3
     GAS = 4
     ACID = 5
+    PIERCING = 6
 
 
 # Direction attack came from, for example SugarCubes hit from the left, so are blocked by a shield
@@ -26,7 +27,7 @@ class Damage:
     def __init__(
         self,
         amount: float,
-        damage_type: DamageType = DamageType.PHYSICAL,
+        damage_type: DamageType = DamageType.BLUDGEONING,
         direction: Direction = Direction.LEFT
     ) -> None:
         self.__amount = amount

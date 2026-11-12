@@ -10,8 +10,11 @@ if TYPE_CHECKING:
 
 
 class Projectile(Entity):
-    def __init__(self, canvas, centre_x, centre_y, size, colour, damage: int, speed: float, piercing: int,
-                damage_type: DamageType = DamageType.PHYSICAL) -> None:
+    def __init__(
+        self, canvas, centre_x, centre_y, size, colour,
+        damage: int, speed: float, piercing: int,
+        damage_type: DamageType = DamageType.BLUDGEONING
+    ) -> None:
         super().__init__(canvas, centre_x + 20 - size // 2, centre_y - size // 2, size, size, colour)
         self.__damage = damage
         self.__speed = speed  # pixels moved right each frame
