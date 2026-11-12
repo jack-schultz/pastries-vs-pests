@@ -131,11 +131,31 @@ class Rectangle:
         self.__centre_text()
 
     @property
+    def centre_right(self):
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        half_height = self.height // 2
+        centre_right = (x2, y1 + half_height)
+        return centre_right
+
+    @centre_right.setter
+    def centre_right(self, centre_right: tuple[float, float]):
+        cx, cy = centre_right
+        half_height = self.height // 2
+        self.__canvas.coords(
+            self.__rect,
+            cx - self.width,
+            cy - half_height,
+            cx,
+            cy + half_height,
+            )
+        self.__centre_text()
+
+    @property
     def centre_left(self) -> tuple[float, float]:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         half_height = self.height // 2
-        centreleft = (x1, y1 + half_height)
-        return centreleft  # (cx, cy)
+        centre_left = (x1, y1 + half_height)
+        return centre_left
 
     @centre_left.setter
     def centre_left(self, centre_left: tuple[float, float]):

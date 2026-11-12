@@ -32,4 +32,4 @@ class Projectile(Entity):
 
     def hits(self, pest: BasePest) -> bool:
         # A projectile hits a pest when its centre is inside the pest's rect
-        return pest.rect.collide_point(self.rect.centre)
+        return pest.rect.collide_point(self.rect.centre_right)

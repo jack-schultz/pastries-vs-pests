@@ -215,22 +215,31 @@ def test_world_add_goods_routes_by_type(world, canvas):
 def test_wave_manager_spawns_waves_in_order_then_finishes():
     from levels.wave_manager import WaveManager
     waves = WaveManager([{1: 1}, {1: 2}], {1: Ant})
-    assert waves.next_pest(0, 0) is None  # start break first
-    assert waves.next_pest(WaveManager.START_BREAK, 0) is Ant
+    start, gap = waves.start_delay, waves.wave_delay
+    assert waves.next_pest(0, 0) is None  # start delay first
+    assert waves.next_pest(start, 0) is Ant  # wave 1 arrives and its pest spawns
     assert waves.wave_number == 1
-    assert waves.next_pest(WaveManager.START_BREAK, 1) is None  # board not clear
-    t = WaveManager.START_BREAK + 100
-    assert waves.next_pest(t, 0) is None  # wave break starts
-    t += WaveManager.WAVE_BREAK
-    assert waves.next_pest(t, 0) is Ant  # wave 2 spawns
+    assert waves.next_pest(start + gap - 1, 0) is None  # wave 2 not due yet
+    t = start + gap
+    assert waves.next_pest(t, 0) is Ant  # wave 2 arrives on its timer
     assert waves.wave_number == 2
-    t += WaveManager.SPAWN_INTERVAL
-    assert waves.next_pest(t, 1) is Ant
-    t += WaveManager.SPAWN_INTERVAL
-    assert waves.next_pest(t, 2) is None  # wave 2 empty, still on board
+    t += waves.spawn_interval
+    assert waves.next_pest(t, 1) is Ant  # second pest of wave 2
+    t += waves.spawn_interval
+    assert waves.next_pest(t, 2) is None  # all spawned, still on board
     assert not waves.finished
     assert waves.next_pest(t + 999, 0) is None
     assert waves.finished
+
+
+def test_wave_manager_next_wave_arrives_while_board_not_clear():
+    from levels.wave_manager import WaveManager
+    waves = WaveManager([{1: 1}, {1: 1}], {1: Ant})
+    waves.next_pest(0, 0)
+    assert waves.next_pest(waves.start_delay, 0) is Ant
+    # Wave 1's pest is still alive when wave 2 arrives on its timer
+    assert waves.next_pest(waves.start_delay + waves.wave_delay, 1) is Ant
+    assert waves.wave_number == 2
 
 
 def test_world_pest_walks_when_unblocked(world, canvas):

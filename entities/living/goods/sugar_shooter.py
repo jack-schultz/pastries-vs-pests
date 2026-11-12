@@ -22,7 +22,7 @@ class SugarShooter(BaseGood):
             return None
 
         # Fire from the front-right of the shooter, along its row
-        x, y = self.rect.centre
+        x, y = self.rect.centre_right
         return Projectile(
             canvas, x, y,
             size=self.__projectile_size,
