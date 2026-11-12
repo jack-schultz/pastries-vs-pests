@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+from entities.damage import Damage, DamageType, Direction
 from entities.entity import Entity
 
 # Only needed for the type hint
@@ -9,15 +10,25 @@ if TYPE_CHECKING:
 
 
 class Projectile(Entity):
-    def __init__(self, canvas, centre_x, centre_y, size, colour, damage: int, speed: float, piercing: int) -> None:
+    def __init__(self, canvas, centre_x, centre_y, size, colour, damage: int, speed: float, piercing: int,
+                damage_type: DamageType = DamageType.PHYSICAL) -> None:
         super().__init__(canvas, centre_x + 20 - size // 2, centre_y - size // 2, size, size, colour)
         self.__damage = damage
         self.__speed = speed  # pixels moved right each frame
         self.__piercing = piercing
+        self.__damage_type = damage_type
 
     @property
     def damage(self) -> int:
         return self.__damage
+
+    @property
+    def damage_type(self) -> DamageType:
+        return self.__damage_type
+
+    def damage_to_deal(self) -> Damage:
+        # Projectiles fly right, so they deal damage to the left side of pests
+        return Damage(self.__damage, self.__damage_type, Direction.LEFT)
 
     @property
     def piercing(self) -> int:

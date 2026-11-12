@@ -9,9 +9,11 @@ class Chainmail(BaseArmour):
             durability,
             outline_colour="#9a9a9a",
             absorption={
-                DamageType.EXPLOSIVE: 0.5,
-                DamageType.FIRE: 0.0,
-                DamageType.GAS: 0.0,
+                DamageType.EXPLOSIVE: 0.5,  # Blocks half damage
+                DamageType.FIRE: 0.0,  # Blocks no fire
+                DamageType.GAS: 0.0,  # Blocks no gas
             },
-            wear={DamageType.ACID: 3.0},
+            wear={
+                DamageType.ACID: 3.0
+            },
         )

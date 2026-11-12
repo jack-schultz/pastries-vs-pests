@@ -19,6 +19,9 @@ class Rectangle:
     def set_colour(self, colour: str) -> None:
         self.__canvas.itemconfig(self.__rect, fill=colour)
 
+    def set_outline(self, colour: str, width: int = 1) -> None:
+        self.__canvas.itemconfig(self.__rect, outline=colour, width=width)
+
     def set_text(self, text: str, colour: str = "#3d405b", size: int = 9) -> None:
         if self.__text is not None:
             # Label already there, so just update it

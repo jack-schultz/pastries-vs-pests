@@ -158,7 +158,7 @@ class World:
             projectile.move()
             hit_pest = self.__pest_at(projectile)
             if hit_pest:
-                hit_pest.take_damage(projectile.damage)
+                hit_pest.take_damage(projectile.damage_to_deal())
                 projectile.piercing -= 1
 
                 if hit_pest.is_dead:

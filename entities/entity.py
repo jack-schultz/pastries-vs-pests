@@ -1,5 +1,7 @@
 from __future__ import annotations
 from app.rectangle import Rectangle
+from entities.damage import Damage
+from armour.base_armour import BaseArmour
 
 
 class Entity:
@@ -21,17 +23,29 @@ class Entity:
 
 class Living(Entity):
     # Base class for entities with health that can be hurt and die
-    def __init__(self, canvas, x, y, width, height, colour, health: int) -> None:
+    def __init__(self, canvas, x, y, width, height, colour, health: int, armour: BaseArmour | None = None) -> None:
         super().__init__(canvas, x, y, width, height, colour)
         self.__health = health
+        self.__armour = armour
 
     @property
     def health(self) -> int:
         return self.__health
 
     @property
+    def armour(self) -> BaseArmour | None:
+        return self.__armour
+
+    @property
     def is_dead(self) -> bool:
         return self.__health <= 0
 
-    def take_damage(self, amount: int) -> None:
-        self.__health -= amount
+    def take_damage(self, damage: Damage | float) -> None:
+        # If a float comes through, treat it as default damage
+        if not isinstance(damage, Damage):
+            damage = Damage(damage)
+
+        remaining = damage.amount
+        if self.__armour is not None:
+            remaining = self.__armour.absorb(damage)
+        self.__health -= remaining

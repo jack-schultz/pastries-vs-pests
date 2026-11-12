@@ -24,10 +24,10 @@ class Direction(Enum):
 
 class Damage:
     def __init__(
-            self,
-            amount: float,
-            damage_type: DamageType = DamageType.PHYSICAL,
-            direction: Direction = Direction.LEFT
+        self,
+        amount: float,
+        damage_type: DamageType = DamageType.PHYSICAL,
+        direction: Direction = Direction.LEFT
     ) -> None:
         self.__amount = amount
         self.__type = damage_type
