@@ -21,6 +21,8 @@ class Projectile(Entity):
         self.__piercing = piercing
         self.__damage_type = damage_type
 
+        self.__hit_pests: list[BasePest] = []
+
     @property
     def damage(self) -> int:
         return self.__damage
@@ -44,6 +46,14 @@ class Projectile(Entity):
     def move(self) -> None:
         self.rect.move((self.__speed, 0))
 
+    def add_hit_pest(self, pest: BasePest):
+        if pest in self.__hit_pests:
+            return
+        self.__hit_pests.append(pest)
+
     def hits(self, pest: BasePest) -> bool:
+        if pest in self.__hit_pests:
+            return False
+
         # A projectile hits a pest when its centre is inside the pest's rect
         return pest.rect.collide_point(self.rect.centre_right)

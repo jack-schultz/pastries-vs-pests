@@ -159,6 +159,7 @@ class World:
             hit_pest = self.__pest_at(projectile)
             if hit_pest:
                 hit_pest.take_damage(projectile.damage_to_deal())
+                projectile.add_hit_pest(hit_pest)  # Stores it in a list so it cant hit the same pest twice
                 projectile.piercing -= 1
 
                 if hit_pest.is_dead:
