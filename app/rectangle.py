@@ -46,11 +46,6 @@ class Rectangle:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         return x1
 
-    @property
-    def right(self) -> float:
-        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        return x2
-
     @left.setter
     def left(self, new_x) -> None:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
@@ -61,14 +56,78 @@ class Rectangle:
         )
 
     @property
+    def l(self) -> float:
+        return self.left
+
+    @l.setter
+    def l(self, new_x) -> None:
+        self.left = new_x
+
+    @property
+    def right(self) -> float:
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        return x2
+
+    @right.setter
+    def right(self, new_x) -> None:
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        self.__canvas.coords(
+            self.__rect,
+            new_x - self.w, y1,  # top left
+            new_x, y2  # bottom right
+        )
+
+    @property
+    def r(self) -> float:
+        return self.right
+
+    @r.setter
+    def r(self, new_x) -> None:
+        self.right = new_x
+
+    @property
     def top(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         return y1
+
+    @top.setter
+    def top(self, new_y) -> None:
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        self.__canvas.coords(
+            self.__rect,
+            x1, new_y,  # top left
+            x2, new_y + self.h  # bottom right
+        )
+
+    @property
+    def t(self) -> float:
+        return self.top
+
+    @t.setter
+    def t(self, new_y: float) -> None:
+        self.top = new_y
 
     @property
     def bottom(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         return y2
+
+    @bottom.setter
+    def bottom(self, new_y) -> None:
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        self.__canvas.coords(
+            self.__rect,
+            x1, new_y - self.h,  # top left
+            x2, new_y  # bottom right
+        )
+
+    @property
+    def b(self) -> float:
+        return self.bottom
+
+    @b.setter
+    def b(self, new_y: float) -> None:
+        self.bottom = new_y
 
     @property
     def width(self) -> float:
@@ -94,6 +153,10 @@ class Rectangle:
     def w(self) -> float:
         return self.width
 
+    @w.setter
+    def w(self, new_width: float) -> None:
+        self.width = new_width
+
     @property
     def height(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
@@ -118,6 +181,10 @@ class Rectangle:
     def h(self) -> float:
         return self.height
 
+    @h.setter
+    def h(self, new_height: float) -> None:
+        self.height = new_height
+
     @property
     def centre(self) -> tuple[float, float]:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
@@ -137,8 +204,16 @@ class Rectangle:
             cy - half_height,
             cx + half_width,
             cy + half_height,
-            )
+        )
         self.__centre_text()
+
+    @property
+    def c(self) -> tuple[float, float]:
+        return self.centre
+
+    @c.setter
+    def c(self, centre: tuple[float, float]) -> None:
+        self.centre = centre
 
     @property
     def centre_right(self):
@@ -157,8 +232,12 @@ class Rectangle:
             cy - half_height,
             cx,
             cy + half_height,
-            )
+        )
         self.__centre_text()
+
+    @property
+    def cr(self):
+        return self.centre_right
 
     @property
     def centre_left(self) -> tuple[float, float]:
@@ -177,8 +256,12 @@ class Rectangle:
             cy - half_height,
             cx + self.width,
             cy + half_height,
-            )
+        )
         self.__centre_text()
+
+    @property
+    def cl(self):
+        return self.centre_left
 
     def move(self, difference: tuple[float, float]) -> None:
         dx, dy = difference
@@ -187,7 +270,7 @@ class Rectangle:
             self.__rect,
             x1 + dx, y1 + dy,
             x2 + dx, y2 + dy,
-            )
+        )
         self.__centre_text()
 
     def collide_point(self, point: tuple[float, float]) -> bool:
