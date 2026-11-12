@@ -7,7 +7,7 @@ from entities.living.good import FlourFlower, SugarShooter
 from entities.cardholder import CardHolder
 from app.world import World
 from entities.living.pest import Ant
-from entities.projectile import Projectile
+from entities.projectiles.projectile import Projectile
 from app.rectangle import Rectangle
 from entities.tile import Tile
 from entities.entity import Living

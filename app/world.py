@@ -14,6 +14,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from app.window import Window
 
+initial_flour = 500
+
 
 class World:
     # Owns the board objects that are drawn on the canvas: the garden, the inventory, the flour counter, pests, flours and projectiles
@@ -33,7 +35,7 @@ class World:
         self.flours: list[Flour] = []
         self.projectiles: list[Projectile] = []
 
-        self.flour: int = 500  # This is the currency to make bakery goods
+        self.flour: int = initial_flour  # This is the currency to make bakery goods
 
         # Text in top left to display flour count
         self.flour_text = self.window.canvas.create_text(
@@ -105,6 +107,12 @@ class World:
             if tile.good:
                 tile.good.destroy()
                 tile.clear_good()
+
+        # Clear world values
+        self.flour = initial_flour
+        self.flours.clear()
+        self.projectiles.clear()
+        self.pests.clear()
 
         if self.next_button:
             self.next_button.delete()
