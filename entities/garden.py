@@ -65,7 +65,7 @@ class Garden(Entity):
     def spawn_ant(self, game_width) -> Ant:
         return self.spawn_pest(Ant, game_width)
 
-    def goods_act(self):
+    def goods_act(self, pests=None):
         # Every good acts on its own timer; flour and projectiles it makes are routed to the right list
         new_objs = []
         for tile in list(self.tiles):
@@ -75,6 +75,6 @@ class Garden(Entity):
             if not tile.good:
                 continue
 
-            new_objs.append(tile.good.act(self.canvas))
+            new_objs.append(tile.good.act(self.canvas, pests))
 
         return new_objs

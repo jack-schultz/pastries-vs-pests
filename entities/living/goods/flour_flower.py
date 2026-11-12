@@ -16,7 +16,7 @@ class FlourFlower(BaseGood):
         self.__production_interval = 3  # seconds between spawns
         self.__spawn_distance = 40  # pixels from the flower's centre
 
-    def act(self, canvas: tk.Canvas) -> Flour | None:
+    def act(self, canvas: tk.Canvas, pests=None) -> Flour | None:
         if not self._ready(self.__production_interval):
             return None
 

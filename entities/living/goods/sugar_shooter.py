@@ -17,7 +17,21 @@ class SugarShooter(BaseGood):
         self.__projectile_damage = 60
         self.__projectile_piercing = 1
 
-    def act(self, canvas: tk.Canvas) -> Projectile | None:
+    def __pest_in_lane(self, pests) -> bool:
+        # A pest is in the lane when its vertical centre is within this shooter's row and it is ahead of the shooter
+        top = self.rect.y
+        bottom = top + self.rect.h
+        shooter_x = self.rect.centre[0]
+        for pest in pests or []:
+            _, py = pest.rect.centre
+            if top <= py <= bottom and pest.rect.x + pest.rect.w > shooter_x:
+                return True
+        return False
+
+    def act(self, canvas: tk.Canvas, pests=None) -> Projectile | None:
+        # Hold fire (and keep the timer ready) until a pest is in the lane
+        if not self.__pest_in_lane(pests):
+            return None
         if not self._ready(self.__shoot_interval):
             return None
 

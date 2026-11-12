@@ -19,7 +19,7 @@ class GameState(BaseState):
         self.world.card_holder.update_cooldowns()
 
         # ===== GOODS ACT =====
-        self.world.add_goods(self.world.garden.goods_act())
+        self.world.add_goods(self.world.garden.goods_act(self.world.pests))
 
         # ===== SPAWN ANTS =====
         self.world.spawn_pest_if_due()
