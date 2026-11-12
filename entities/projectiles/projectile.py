@@ -11,15 +11,17 @@ if TYPE_CHECKING:
 
 class Projectile(Entity):
     def __init__(
-        self, canvas, centre_x, centre_y, size, colour,
-        damage: int, speed: float, piercing: int,
-        damage_type: DamageType = DamageType.BLUDGEONING
+            self, canvas, centre_x, centre_y, size, colour,
+            damage: int, speed: float, piercing: int,
+            damage_type: DamageType = DamageType.BLUDGEONING
     ) -> None:
         super().__init__(canvas, centre_x + 20 - size // 2, centre_y - size // 2, size, size, colour)
         self.__damage = damage
         self.__speed = speed  # pixels moved right each frame
         self.__piercing = piercing
         self.__damage_type = damage_type
+
+        self.__hit_pests: list[BasePest] = []
 
     @property
     def damage(self) -> int:
@@ -44,6 +46,14 @@ class Projectile(Entity):
     def move(self) -> None:
         self.rect.move((self.__speed, 0))
 
+    def add_hit_pest(self, pest: BasePest):
+        if pest in self.__hit_pests:
+            return
+        self.__hit_pests.append(pest)
+
     def hits(self, pest: BasePest) -> bool:
+        if pest in self.__hit_pests:
+            return False
+
         # A projectile hits a pest when its centre is inside the pest's rect
         return pest.rect.collide_point(self.rect.centre_right)

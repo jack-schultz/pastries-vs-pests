@@ -3,9 +3,9 @@ from armour.base_armour import BaseArmour
 
 
 class Helmet(BaseArmour):
-    def __init__(self, durability: float = 150) -> None:
+    def __init__(self) -> None:
         super().__init__(
-            durability,
+            durability=130,
             outline_colour="#5b7fa6",
             covered_directions={
                 Direction.ABOVE

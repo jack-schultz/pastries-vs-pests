@@ -1,6 +1,7 @@
 from __future__ import annotations
 from armour.base_armour import BaseArmour
 from armour.chainmail import Chainmail
+from armour.platemail import Platemail
 from entities.living.pests.base_pest import BasePest
 
 
@@ -20,7 +21,7 @@ class ArmourAnt(Ant):
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,
-            armour=Chainmail(80)
+            armour=Chainmail()
         )
 
 
@@ -28,5 +29,5 @@ class HeavyArmourAnt(Ant):
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,
-            armour=Platemail(80)
+            armour=Platemail()
         )
