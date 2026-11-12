@@ -22,6 +22,12 @@ class StateStack:
         self._stack.append(state)
         state.enter()
 
+    def replace_all(self, state: BaseState) -> None:
+        """Discard every state and start fresh with a new one (e.g., restart)."""
+        self._stack.clear()
+        self._stack.append(state)
+        state.enter()
+
     def pop(self) -> None:
         """Remove the top state and resume the state underneath."""
         if self.current:

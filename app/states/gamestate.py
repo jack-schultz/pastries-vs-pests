@@ -2,6 +2,7 @@ from __future__ import annotations
 from app.states.basestate import BaseState
 import tkinter as tk
 from app.states.pausestate import PauseState
+from app.states.gameoverstate import GameOverState
 from entities.card import Card
 from entities.tile import Tile
 from app.world import World
@@ -26,6 +27,11 @@ class GameState(BaseState):
 
         # ===== PESTS WALK =====
         self.world.update_pests()
+
+        # ===== LOSE CHECK =====
+        if self.world.game_over:
+            self.state_stack.push(GameOverState(self.state_stack, self.window))
+            return
 
         # ===== MOVE PROJECTILES =====
         self.world.update_projectiles()

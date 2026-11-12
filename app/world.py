@@ -29,6 +29,7 @@ class World:
         self.level_number = 1
         self.waves = WaveManager(self.level_collector.get_level(self.level_number), pest_ids)
         self.next_button: Rectangle | None = None  # shown once a level is complete
+        self.game_over = False  # set when a pest reaches the left of the screen
 
         # === GAME OBJECTS ===
         self.pests: list[BasePest] = []
@@ -143,6 +144,10 @@ class World:
             else:
                 # If not colliding, moves
                 pest.move()
+
+            # A pest touching the left edge of the screen means the player loses
+            if pest.rect.left <= 0:
+                self.game_over = True
 
             # Remove pests that have left the screen
             if pest.has_left_screen():
