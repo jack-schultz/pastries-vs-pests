@@ -20,7 +20,7 @@ class CardHolder(Entity):
             ("Sugar Shooter", 100, SugarShooter, 5.0),
             ("Hardtack", 50, Hardtack, 30.0),
             ("Popping Candy", 25, PoppingCandy, 20.0),
-            ("Cherry Bombe", 150, Profiterole, 30.0),
+            ("Profiterole", 150, Profiterole, 30.0),
         ]
         self.__cards_count: int = len(self.__card_attributes)
         self.__selected_card: Card | None = None

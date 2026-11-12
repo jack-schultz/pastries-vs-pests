@@ -177,7 +177,7 @@ class World:
         return self.__next_button is not None and self.__next_button.collide_point(pos)
 
     def update_bombes(self) -> None:
-        # Cherry Bombes explode on their own once their fuse runs out
+        # Profiterole explode on their own once their fuse runs out
         for tile in self.__garden.tiles:
             good = tile.good
             if isinstance(good, Profiterole) and good.is_primed:
