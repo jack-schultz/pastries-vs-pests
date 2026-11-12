@@ -29,8 +29,8 @@ class World:
         # === LEVEL SETTINGS ===
         self.level_collector = LevelCollector()
         self.level_number = level_number
-        self.waves = WaveManager(self.level_collector.get_level(self.level_number), pest_ids)
-        self.next_button: Rectangle | None = None  # shown once a level is complete
+        self.__waves = WaveManager(self.level_collector.get_level(self.level_number), pest_ids)
+        self.__next_button: Rectangle | None = None  # shown once a level is complete
         self.game_over = False  # set when a pest reaches the left of the screen
 
         # === GAME OBJECTS ===
@@ -50,7 +50,7 @@ class World:
         )
 
         # Text in top right to display the wave
-        self.wave_text = self.window.canvas.create_text(
+        self.__wave_text = self.window.canvas.create_text(
             self.window.width - 10, 20,
             text="",
             anchor="ne",
@@ -108,25 +108,25 @@ class World:
 
     def spawn_pest_if_due(self) -> None:
         # The current wave decides which pest spawns on the right edge of a random row
-        pest_class = self.waves.next_pest(time.monotonic(), len(self.pests))
+        pest_class = self.__waves.next_pest(time.monotonic(), len(self.pests))
         if pest_class:
             self.pests.append(self.garden.spawn_pest(pest_class, self.window.width))
         self.update_wave_text()
 
     def update_wave_text(self) -> None:
-        if self.waves.finished:
+        if self.__waves.finished:
             text = "Winner Winner Chicken Dinner!"
-        elif self.waves.wave_number == 0:
+        elif self.__waves.wave_number == 0:
             text = f"Level {self.level_number} - Get ready"
         else:
-            text = f"Level {self.level_number} - Wave {self.waves.wave_number}/{self.waves.total_waves}"
-        self.window.canvas.itemconfig(self.wave_text, text=text)
+            text = f"Level {self.level_number} - Wave {self.__waves.wave_number}/{self.__waves.total_waves}"
+        self.window.canvas.itemconfig(self.__wave_text, text=text)
 
         # Offer the next level once this one is complete, if there is one
         has_next = self.level_number < self.level_collector.level_count()
-        if self.waves.finished and has_next and self.next_button is None:
-            self.next_button = Rectangle(self.window.canvas, 350, 300, 200, 70, "#3d405b")
-            self.next_button.set_text("Next Level", colour="#ffffff", size=16)
+        if self.__waves.finished and has_next and self.__next_button is None:
+            self.__next_button = Rectangle(self.window.canvas, 350, 300, 200, 70, "#3d405b")
+            self.__next_button.set_text("Next Level", colour="#ffffff", size=16)
 
     def start_next_level(self) -> None:
         # Clears the goods off the garden, then loads the next level's waves
@@ -141,16 +141,16 @@ class World:
         self.projectiles.clear()
         self.pests.clear()
 
-        if self.next_button:
-            self.next_button.delete()
-            self.next_button = None
+        if self.__next_button:
+            self.__next_button.delete()
+            self.__next_button = None
 
         self.level_number += 1
-        self.waves = WaveManager(self.level_collector.get_level(self.level_number), pest_ids)
+        self.__waves = WaveManager(self.level_collector.get_level(self.level_number), pest_ids)
         self.update_wave_text()
 
     def clicked_next_button(self, pos: tuple[int, int]) -> bool:
-        return self.next_button is not None and self.next_button.collide_point(pos)
+        return self.__next_button is not None and self.__next_button.collide_point(pos)
 
     def update_bombes(self) -> None:
         # Cherry Bombes explode on their own once their fuse runs out

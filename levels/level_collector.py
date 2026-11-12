@@ -12,18 +12,18 @@ class LevelCollector():
     # Holds the level data. A level is a list of waves, in order.
     # Each wave maps a pest id (see PEST_TYPES) to how many of that pest spawn in the wave.
     def __init__(self):
-        self.levels = {
+        self.__levels = {
             1: self.level_1,
             2: self.level_2
         }
 
     def level_count(self) -> int:
-        return len(self.levels)
+        return len(self.__levels)
 
     def get_level(self, number: int) -> list[dict[int, int]] | None:
-        if number not in self.levels:
+        if number not in self.__levels:
             return None
-        return self.levels[number]()
+        return self.__levels[number]()
 
     def level_1(self) -> list[dict[int, int]]:
         return [

@@ -7,8 +7,8 @@ from app.rectangle import Rectangle
 class MainMenuState(BaseState):
     def __init__(self, state_stack, window) -> None:
         super().__init__(state_stack, window)
-        self.play_button: Rectangle | None = None
-        self.quit_button: Rectangle | None = None
+        self.__play_button: Rectangle | None = None
+        self.__quit_button: Rectangle | None = None
 
     def enter(self) -> None:
         canvas = self.window.canvas
@@ -17,16 +17,16 @@ class MainMenuState(BaseState):
             self.window.width // 2, 160, text="Pastries vs. Pests",
             font=("Arial", 48, "bold"), fill="#3d405b",
         )
-        self.play_button = Rectangle(canvas, 350, 280, 200, 70, "#3d405b")
-        self.play_button.set_text("Play", colour="#ffffff", size=18)
-        self.quit_button = Rectangle(canvas, 350, 380, 200, 70, "#b00020")
-        self.quit_button.set_text("Quit", colour="#ffffff", size=18)
+        self.__play_button = Rectangle(canvas, 350, 280, 200, 70, "#3d405b")
+        self.__play_button.set_text("Play", colour="#ffffff", size=18)
+        self.__quit_button = Rectangle(canvas, 350, 380, 200, 70, "#b00020")
+        self.__quit_button.set_text("Quit", colour="#ffffff", size=18)
 
     def handle_click(self, event: tk.Event) -> None:
         pos = (event.x, event.y)
-        if self.play_button and self.play_button.collide_point(pos):
+        if self.__play_button and self.__play_button.collide_point(pos):
             self.open_level_select()
-        elif self.quit_button and self.quit_button.collide_point(pos):
+        elif self.__quit_button and self.__quit_button.collide_point(pos):
             self.window.root.destroy()
 
     def handle_key(self, event: tk.Event) -> None:

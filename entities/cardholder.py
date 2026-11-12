@@ -12,8 +12,8 @@ class CardHolder(Entity):
     def __init__(self, canvas, x: int = 180, y: int = 20):
         colour = "#FFFF00"
         self.x, self.y = x, y
-        self.card_size = (70, 85)
-        self.card_gap = 10
+        self.__card_size = (70, 85)
+        self.__card_gap = 10
         self.card_attributes = [
             # Name, Cost, Class, Cooldown (seconds)
             ("Flour Flower", 50, FlourFlower, 5.0),
@@ -27,8 +27,8 @@ class CardHolder(Entity):
 
         super().__init__(
             canvas, self.x, self.y,
-            self.card_size[0] * self.cards_count + self.card_gap * (self.cards_count - 1),
-            self.card_size[1],
+            self.__card_size[0] * self.cards_count + self.__card_gap * (self.cards_count - 1),
+            self.__card_size[1],
             colour
         )
 
@@ -42,11 +42,11 @@ class CardHolder(Entity):
         """Create the cards displayed along the top of the screen."""
         self.cards: list[Card | None] = [None] * self.cards_count  # Create list of empty bread cards
         positions = []
-        w, h = self.card_size
+        w, h = self.__card_size
         for i in range(self.cards_count):  # columns
             positions.append(
                 (
-                    self.x + w * i + self.card_gap * i,
+                    self.x + w * i + self.__card_gap * i,
                     self.y,
                 )
             )
@@ -56,8 +56,8 @@ class CardHolder(Entity):
             cards.append(
                 Card(
                     canvas=self.canvas,
-                    width=self.card_size[0],
-                    height=self.card_size[1],
+                    width=self.__card_size[0],
+                    height=self.__card_size[1],
                     x=x,
                     y=y,
                     name=name,

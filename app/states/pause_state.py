@@ -7,7 +7,7 @@ import tkinter as tk
 class PauseState(BaseState):
     def __init__(self, state_stack, window):
         super().__init__(state_stack, window)
-        self.buttons: dict[str, Rectangle] = {}
+        self.__buttons: dict[str, Rectangle] = {}
 
     def handle_key(self, event: tk.Event) -> None:
         if event.keysym == "Escape":
@@ -28,28 +28,28 @@ class PauseState(BaseState):
         ):
             button = Rectangle(canvas, 350, 230 + i * 85, 200, 70, "#3d405b")
             button.set_text(label, colour="#ffffff", size=16)
-            self.buttons[name] = button
+            self.__buttons[name] = button
 
     def handle_click(self, event: tk.Event) -> None:
         pos = (event.x, event.y)
-        if self.buttons["resume"].collide_point(pos):
+        if self.__buttons["resume"].collide_point(pos):
             self.state_stack.pop()
-        elif self.buttons["restart"].collide_point(pos):
+        elif self.__buttons["restart"].collide_point(pos):
             from app.states.game_state import GameState
             # The game state sits at the bottom of the stack; restart its current level
             level = self.state_stack._stack[0].world.level_number
             self.window.canvas.delete("all")
             self.state_stack.replace_all(GameState(self.state_stack, self.window, level))
-        elif self.buttons["level_select"].collide_point(pos):
+        elif self.__buttons["level_select"].collide_point(pos):
             # Imported here to avoid circular imports between states
             from app.states.levelselect_state import LevelSelectState
             self.state_stack.replace_all(LevelSelectState(self.state_stack, self.window))
-        elif self.buttons["main_menu"].collide_point(pos):
+        elif self.__buttons["main_menu"].collide_point(pos):
             from app.states.mainmenu_state import MainMenuState
             self.state_stack.replace_all(MainMenuState(self.state_stack, self.window))
 
     def exit(self):
         self.window.canvas.delete("pause_ui")
-        for button in self.buttons.values():
+        for button in self.__buttons.values():
             button.delete()
-        self.buttons.clear()
+        self.__buttons.clear()
