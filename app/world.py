@@ -36,7 +36,7 @@ class World:
         self.flours: list[Flour] = []
         self.projectiles: list[Projectile] = []
 
-        self.flour: int = initial_flour  # This is the currency to make bakery goods
+        self.flour: int = initial_flour  # This is the currency to make pastry goods
 
         # Text in top left to display flour count
         self.flour_text = self.window.canvas.create_text(

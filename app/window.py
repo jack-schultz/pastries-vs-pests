@@ -8,7 +8,7 @@ class Window:
     # Holds the Tk window and the canvas everything is drawn on
     def __init__(self) -> None:
         self.root = tk.Tk()
-        self.root.title("Bakery vs. Pests")
+        self.root.title("Pastries vs. Pests")
         self.root.resizable(False, False)
 
         self.width, self.height = (900, 600)
