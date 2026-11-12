@@ -87,6 +87,7 @@ class World:
 
         # ===== RECHARGE CARDS =====
         self.__card_holder.update_cooldowns()
+        self.__card_holder.update_cards(self.__flour)
 
         # ===== GOODS ACT =====
         self.add_goods(self.__garden.goods_act(self.__pests))
@@ -161,8 +162,16 @@ class World:
 
         # Clear world values
         self.__flour = initial_flour
+        for flour in self.__flours:
+            flour.destroy()
         self.__flours.clear()
+
+        for projectile in self.__projectiles:
+            projectile.destroy()
         self.__projectiles.clear()
+
+        for pest in self.__pests:
+            pest.destroy()
         self.__pests.clear()
 
         if self.__next_button:

@@ -79,8 +79,8 @@ class GameState(BaseState):
             if not isinstance(card, Card):
                 continue
 
-            # Cards recharging can't be selected
-            if not card.is_ready:
+            # Cards recharging or too expensive can't be selected
+            if not card.is_usable(self.__world.flour):
                 continue
 
             # If card is already selected, deselect
@@ -94,3 +94,5 @@ class GameState(BaseState):
     def handle_motion(self, event: tk.Event) -> None:
         # Hovering over flour collects it
         self.__world.collect_flour_at((event.x, event.y))
+        # Hovering over a card highlights it
+        self.__world.card_holder.hover_at((event.x, event.y))
