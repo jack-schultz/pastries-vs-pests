@@ -1,0 +1,14 @@
+from entities.damage import DamageType, Direction
+from armour.base_armour import BaseArmour
+
+
+class Shield(BaseArmour):
+    # Only protects the front (left). Very good against physical hits and fire
+    def __init__(self, durability: float = 150) -> None:
+        super().__init__(
+            durability,
+            outline_colour="#5b7fa6",
+            covered_directions={Direction.LEFT},
+            absorption={DamageType.GAS: 0.0, DamageType.EXPLOSIVE: 0.5},
+            wear={DamageType.EXPLOSIVE: 2.0, DamageType.ACID: 2.0, DamageType.FIRE: 0.5},
+        )
