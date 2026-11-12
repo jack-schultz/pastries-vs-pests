@@ -7,6 +7,7 @@ from entities.living.pests.base_pest import BasePest
 from entities.flour import Flour
 from entities.projectiles.projectile import Projectile
 from entities.living.goods.popping_candy import PoppingCandy
+from entities.living.goods.profiterole import Profiterole
 from entities.garden import Garden
 from entities.cardholder import CardHolder
 from typing import TYPE_CHECKING
@@ -150,6 +151,18 @@ class World:
 
     def clicked_next_button(self, pos: tuple[int, int]) -> bool:
         return self.next_button is not None and self.next_button.collide_point(pos)
+
+    def update_bombes(self) -> None:
+        # Cherry Bombes explode on their own once their fuse runs out
+        for tile in self.garden.tiles:
+            good = tile.good
+            if isinstance(good, Profiterole) and good.is_primed:
+                for hit_pest in good.detonate(self.pests):
+                    if hit_pest.is_dead:
+                        hit_pest.destroy()
+                        self.pests.remove(hit_pest)
+                good.destroy()
+                tile.clear_good()
 
     def update_pests(self) -> None:
         # Pests walk left unless blocked by a good, which they attack instead
