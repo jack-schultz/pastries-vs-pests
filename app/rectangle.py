@@ -42,12 +42,17 @@ class Rectangle:
         self.__canvas.coords(self.__text, (x1 + x2) / 2, (y1 + y2) / 2)
 
     @property
-    def x(self) -> float:
+    def left(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         return x1
 
-    @x.setter
-    def x(self, new_x) -> None:
+    @property
+    def right(self) -> float:
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        return x2
+
+    @left.setter
+    def left(self, new_x) -> None:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         self.__canvas.coords(
             self.__rect,  # rect on canvas to edit
@@ -56,9 +61,14 @@ class Rectangle:
         )
 
     @property
-    def y(self) -> float:
+    def top(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         return y1
+
+    @property
+    def bottom(self) -> float:
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        return y2
 
     @property
     def width(self) -> float:

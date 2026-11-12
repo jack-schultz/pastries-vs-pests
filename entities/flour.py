@@ -17,8 +17,8 @@ class Flour(Entity):
 
     def move(self) -> None:
         if self.__destination:
-            dx = (self.__destination[0] - self.rect.x) / 20
-            dy = (self.__destination[1] - self.rect.y) / 20
+            dx = (self.__destination[0] - self.rect.left) / 20
+            dy = (self.__destination[1] - self.rect.top) / 20
 
             # Inside your update/run loop (called 20 times):
             self.rect.move((dx, dy))

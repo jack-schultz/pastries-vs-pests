@@ -162,7 +162,7 @@ class World:
                     self.projectiles.remove(projectile)
 
             # If the projectile goes off the screen, kill it
-            elif projectile.rect.x > self.window.width:
+            elif projectile.rect.left > self.window.width:
                 projectile.destroy()
                 self.projectiles.remove(projectile)
 

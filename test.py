@@ -35,10 +35,10 @@ def make_flower(canvas, x=100, y=100):
 # ===== Rectangle =====
 def test_rectangle_geometry_and_move(canvas):
     rect = Rectangle(canvas, 10, 20, 30, 40, "#000000")
-    assert (rect.x, rect.y, rect.w, rect.h) == (10, 20, 30, 40)
+    assert (rect.left, rect.top, rect.w, rect.h) == (10, 20, 30, 40)
     assert rect.centre == (25, 40)
     rect.move((5, 5))
-    assert (rect.x, rect.y) == (15, 25)
+    assert (rect.left, rect.top) == (15, 25)
 
 
 def test_rectangle_collide_point(canvas):
@@ -121,7 +121,7 @@ def test_ant_stats_and_movement(canvas):
     ant = Ant(canvas, 800, 100)
     assert ant.health == 200
     ant.move()
-    assert ant.rect.x == 800 - ant.speed
+    assert ant.rect.left == 800 - ant.speed
 
 
 def test_ant_screen_bounds(canvas):
@@ -147,9 +147,9 @@ def test_ant_attack_respects_interval(canvas):
 # ===== Projectile =====
 def test_projectile_moves_right(canvas):
     shot = Projectile(canvas, 200, 200, size=14, colour="#ff8fab", damage=10, speed=6)
-    start = shot.rect.x
+    start = shot.rect.left
     shot.move()
-    assert shot.rect.x == start + 6
+    assert shot.rect.left == start + 6
 
 
 def test_projectile_hits(canvas):
@@ -168,8 +168,8 @@ def test_garden_tiles_start_empty(canvas):
 def test_garden_spawn_ant_off_right_edge_in_a_row(canvas):
     garden = Garden(canvas, 40, 120)
     ant = garden.spawn_ant(900)
-    assert ant.rect.x == 900
-    assert 120 <= ant.rect.y < 120 + garden.rows * garden.grid_size
+    assert ant.rect.left == 900
+    assert 120 <= ant.rect.top < 120 + garden.rows * garden.grid_size
 
 
 def test_garden_tile_blocking(canvas):
@@ -246,20 +246,20 @@ def test_world_pest_walks_when_unblocked(world, canvas):
     ant = Ant(canvas, 800, 140)
     world.pests.append(ant)
     world.update_pests()
-    assert ant.rect.x == 800 - ant.speed
+    assert ant.rect.left == 800 - ant.speed
 
 
 def test_world_pest_attacks_and_kills_good(world, canvas):
     tile = world.garden.tiles[0]
-    flower = make_flower(canvas, tile.rect.x + 10, tile.rect.y + 10)
+    flower = make_flower(canvas, tile.rect.left + 10, tile.rect.top + 10)
     tile.good = flower
-    ant = Ant(canvas, flower.rect.x + 20, flower.rect.centre[1] - 25)
+    ant = Ant(canvas, flower.rect.left + 20, flower.rect.centre[1] - 25)
     ant._Pest__last_attack = -1000.0
     world.pests.append(ant)
-    start_x = ant.rect.x
+    start_x = ant.rect.left
 
     world.update_pests()
-    assert ant.rect.x == start_x  # blocked, did not move
+    assert ant.rect.left == start_x  # blocked, did not move
     assert flower.health == 200
 
     flower.take_damage(flower.health)

@@ -19,12 +19,12 @@ class SugarShooter(BaseGood):
 
     def __pest_in_lane(self, pests) -> bool:
         # A pest is in the lane when its vertical centre is within this shooter's row and it is ahead of the shooter
-        top = self.rect.y
+        top = self.rect.top
         bottom = top + self.rect.h
         shooter_x = self.rect.centre[0]
         for pest in pests or []:
             _, py = pest.rect.centre
-            if top <= py <= bottom and pest.rect.x + pest.rect.w > shooter_x:
+            if top <= py <= bottom and pest.rect.left + pest.rect.w > shooter_x:
                 return True
         return False
 

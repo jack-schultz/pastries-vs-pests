@@ -35,12 +35,12 @@ class BasePest(Living, ABC):
 
     def is_blocked_by(self, good: BaseGood) -> bool:
         # Blocked when the pest's left edge (at its vertical centre) has reached the good
-        px = self.rect.x
+        px = self.rect.left
         _, py = self.rect.centre
         return good.rect.collide_point((px, py))
 
     def has_left_screen(self) -> bool:
-        return self.rect.x + self.rect.w < 0
+        return self.rect.left + self.rect.w < 0
 
     def attack(self, good: BaseGood) -> None:
         # Only hit once per attack interval
