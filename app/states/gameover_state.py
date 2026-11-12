@@ -1,6 +1,6 @@
 from __future__ import annotations
 import tkinter as tk
-from app.states.basestate import BaseState
+from app.states.base_state import BaseState
 from app.rectangle import Rectangle
 
 
@@ -29,6 +29,8 @@ class GameOverState(BaseState):
 
     def restart(self) -> None:
         # Imported here to avoid a circular import with GameState
-        from app.states.gamestate import GameState
+        from app.states.game_state import GameState
+        # Restart on the level the player lost on
+        level = self.state_stack._stack[0].world.level_number
         self.window.canvas.delete("all")
-        self.state_stack.replace_all(GameState(self.state_stack, self.window))
+        self.state_stack.replace_all(GameState(self.state_stack, self.window, level))

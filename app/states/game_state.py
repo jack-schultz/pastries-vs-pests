@@ -1,17 +1,17 @@
 from __future__ import annotations
-from app.states.basestate import BaseState
+from app.states.base_state import BaseState
 import tkinter as tk
-from app.states.pausestate import PauseState
-from app.states.gameoverstate import GameOverState
+from app.states.pause_state import PauseState
+from app.states.gameover_state import GameOverState
 from entities.card import Card
 from entities.tile import Tile
 from app.world import World
 
 
 class GameState(BaseState):
-    def __init__(self, state_stack, window) -> None:
+    def __init__(self, state_stack, window, level_number: int = 1) -> None:
         super().__init__(state_stack, window)
-        self.world = World(self.window)
+        self.world = World(self.window, level_number)
 
     def tick(self) -> None:
         self.world.update_flour()

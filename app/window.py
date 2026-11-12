@@ -1,6 +1,6 @@
 from __future__ import annotations
 import tkinter as tk
-from app.states.gamestate import GameState
+from app.states.mainmenu_state import MainMenuState
 from app.states.statestack import StateStack
 
 
@@ -19,7 +19,7 @@ class Window:
         self.canvas.pack()
 
         self.state_stack = StateStack()
-        self.state_stack.push(GameState(self.state_stack, self))
+        self.state_stack.push(MainMenuState(self.state_stack, self))
 
         # Bind inputs once globally and route to the active state
         self.canvas.bind("<Button-1>", self.__on_click)

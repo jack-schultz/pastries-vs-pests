@@ -14,19 +14,19 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from app.window import Window
 
-initial_flour = 500
+initial_flour = 50
 
 
 class World:
     # Owns the board objects that are drawn on the canvas: the garden, the inventory, the flour counter, pests, flours and projectiles
-    def __init__(self, window: Window) -> None:
+    def __init__(self, window: Window, level_number: int = 1) -> None:
         self.window = window
         self.garden = Garden(self.window.canvas, 40, 120)
         self.card_holder = CardHolder(self.window.canvas, 180, 20)
 
         # === LEVEL SETTINGS ===
         self.level_collector = LevelCollector()
-        self.level_number = 1
+        self.level_number = level_number
         self.waves = WaveManager(self.level_collector.get_level(self.level_number), pest_ids)
         self.next_button: Rectangle | None = None  # shown once a level is complete
         self.game_over = False  # set when a pest reaches the left of the screen
