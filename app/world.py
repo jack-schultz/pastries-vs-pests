@@ -16,7 +16,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from app.window import Window
 
-initial_flour = 50
+initial_flour = 75
 
 
 class World:

@@ -11,8 +11,8 @@ class WaveManager:
     The level is complete once every wave has arrived and the board is clear.
     """
     def __init__(self, waves: list[dict[int, int]], pest_types: dict[int, type[BasePest]]) -> None:
-        self.__start_delay = 5.0  # seconds before the first wave
-        self.__wave_delay = 8.0  # seconds from one wave's arrival to the next
+        self.__start_delay = 15.0  # seconds before the first wave
+        self.__wave_delay = 25.0  # seconds from one wave's arrival to the next
         self.__spawn_interval = 1.0  # seconds between pests spawning
 
         # For each wave, create a flat list with one entry per pest to spawn.
