@@ -2,6 +2,7 @@ from __future__ import annotations
 from entities.living.goods.hardtack import Hardtack
 from entities.living.goods.sugar_shooter import SugarShooter
 from entities.living.goods.flour_flower import FlourFlower
+from entities.living.goods.popping_candy import PoppingCandy
 from entities.card import Card
 from entities.entity import Entity
 
@@ -17,6 +18,7 @@ class CardHolder(Entity):
             ("Flour Flower", 50, FlourFlower, 5.0),
             ("Sugar Shooter", 100, SugarShooter, 5.0),
             ("Hardtack", 50, Hardtack, 30.0),
+            ("Popping Candy", 25, PoppingCandy, 20.0),
         ]
         self.cards_count: int = len(self.card_attributes)
         self.selected_card: Card | None = None

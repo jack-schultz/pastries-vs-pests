@@ -6,6 +6,7 @@ from levels.wave_manager import WaveManager
 from entities.living.pests.base_pest import BasePest
 from entities.flour import Flour
 from entities.projectiles.projectile import Projectile
+from entities.living.goods.popping_candy import PoppingCandy
 from entities.garden import Garden
 from entities.cardholder import CardHolder
 from typing import TYPE_CHECKING
@@ -129,6 +130,8 @@ class World:
     def update_pests(self) -> None:
         # Pests walk left unless blocked by a good, which they attack instead
         for pest in list(self.pests):
+            if pest not in self.pests:  # already killed by a mine this frame
+                continue
             blocking_tile = self.garden.tile_blocking(pest)
             # Colliding with a tile which has a good
             if blocking_tile and blocking_tile.good:
@@ -136,6 +139,17 @@ class World:
                 blocking_good = blocking_tile.good
                 if not blocking_good:
                     continue
+
+                # An armed mine goes off instead of being eaten
+                if isinstance(blocking_good, PoppingCandy) and blocking_good.is_armed:
+                    for hit_pest in blocking_good.detonate(self.pests):
+                        if hit_pest.is_dead:
+                            hit_pest.destroy()
+                            self.pests.remove(hit_pest)
+                    blocking_good.destroy()
+                    blocking_tile.clear_good()
+                    continue
+
                 # Pest attacks good till its dead
                 pest.attack(blocking_good)
                 if blocking_good.is_dead:

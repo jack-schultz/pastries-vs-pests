@@ -8,9 +8,12 @@ from entities.living.goods.base_good import BaseGood
 
 class SugarShooter(BaseGood):
     def __init__(self, canvas, x, y, delay_pattern: Sequence[float] = (1.4,)) -> None:
-        colour = "#FFFF00"
-        health = 300
-        super().__init__(canvas, x, y, 40, 40, colour, health)
+        super().__init__(
+            canvas, x, y,
+            width=40, height=40,
+            colour="#FFFF00",
+            health=300
+        )
         self.rect.set_text(type(self).__name__)
         self.__delay_pattern = delay_pattern
         self.__pattern_index = 0  # which delay in the pattern the next shot is waiting on

@@ -21,8 +21,12 @@ class PauseState(BaseState):
             font=("Arial", 36, "bold"), fill="#3d405b", tags="pause_ui"
         )
         for i, (name, label) in enumerate(
-                [("resume", "Resume"), ("level_select", "Level Select"), ("main_menu", "Main Menu")]):
-            button = Rectangle(canvas, 350, 240 + i * 90, 200, 70, "#3d405b")
+            [
+                ("resume", "Resume"), ("restart", "Restart"),
+                ("level_select", "Level Select"), ("main_menu", "Main Menu")
+            ]
+        ):
+            button = Rectangle(canvas, 350, 230 + i * 85, 200, 70, "#3d405b")
             button.set_text(label, colour="#ffffff", size=16)
             self.buttons[name] = button
 
@@ -30,6 +34,12 @@ class PauseState(BaseState):
         pos = (event.x, event.y)
         if self.buttons["resume"].collide_point(pos):
             self.state_stack.pop()
+        elif self.buttons["restart"].collide_point(pos):
+            from app.states.game_state import GameState
+            # The game state sits at the bottom of the stack; restart its current level
+            level = self.state_stack._stack[0].world.level_number
+            self.window.canvas.delete("all")
+            self.state_stack.replace_all(GameState(self.state_stack, self.window, level))
         elif self.buttons["level_select"].collide_point(pos):
             # Imported here to avoid circular imports between states
             from app.states.levelselect_state import LevelSelectState
