@@ -14,30 +14,12 @@ class GameState(BaseState):
         self.world = World(self.window, level_number)
 
     def tick(self) -> None:
-        self.world.update_flour()
+        self.world.tick()
 
-        # ===== RECHARGE CARDS =====
-        self.world.card_holder.update_cooldowns()
-
-        # ===== GOODS ACT =====
-        self.world.add_goods(self.world.garden.goods_act(self.world.pests))
-
-        # ===== SPAWN ANTS =====
-        self.world.spawn_pest_if_due()
-
-        # ===== PESTS WALK =====
-        self.world.update_pests()
-
-        # ===== LOSE CHECK =====
+        # Check for game over
         if self.world.game_over:
             self.state_stack.push(GameOverState(self.state_stack, self.window))
             return
-
-        # ===== MOVE PROJECTILES =====
-        self.world.update_projectiles()
-
-        # ===== DRAW FLOUR ON TOP  =====
-        self.world.raise_flours()
 
     def handle_key(self, event: tk.Event) -> None:
         if event.keysym == "Escape":

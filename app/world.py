@@ -57,6 +57,30 @@ class World:
             fill="#3d405b",
         )
 
+    def tick(self) -> None:
+        self.update_flour()
+
+        # ===== RECHARGE CARDS =====
+        self.card_holder.update_cooldowns()
+
+        # ===== GOODS ACT =====
+        self.add_goods(self.garden.goods_act(self.pests))
+
+        # ===== BOMBES GO OFF =====
+        self.update_bombes()
+
+        # ===== SPAWN ANTS =====
+        self.spawn_pest_if_due()
+
+        # ===== PESTS WALK =====
+        self.update_pests()
+
+        # ===== MOVE PROJECTILES =====
+        self.update_projectiles()
+
+        # ===== DRAW FLOUR ON TOP  =====
+        self.raise_flours()
+
     def update_flour(self) -> None:
         for flour in list(self.flours):
             flour.move()
