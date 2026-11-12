@@ -5,13 +5,15 @@ from entities.living.pests.base_pest import BasePest
 
 class WaveManager:
     """
-    Runs a level's waves. Each wave's pests spawn one at a time
-    The next wave starts once the board is clear and the break between waves is over.
+    Runs a level's waves.
+    First wave after start_delay, then one every wave_delay seconds.
+    Pests from a wave trickle in one at a time, every spawn_interval seconds.
+    The level is complete once every wave has arrived and the board is clear.
     """
     def __init__(self, waves: list[dict[int, int]], pest_types: dict[int, type[BasePest]]) -> None:
-        self.start_delay = 5.0
-        self.wave_delay = 8.0
-        self.spawn_interval = 1.0
+        self.start_delay = 5.0  # seconds before the first wave
+        self.wave_delay = 8.0  # seconds from one wave's arrival to the next
+        self.spawn_interval = 1.0  # seconds between pests spawning
 
         # For each wave, create a flat list with one entry per pest to spawn.
         self.__waves = [
@@ -24,9 +26,9 @@ class WaveManager:
             ]
             for wave in waves  # do this for every wave in the level
         ]
-        self.__queue: list[type[BasePest]] = []  # pests still to spawn in the current wave
-        self.__wave_number = 0  # how many waves have started
-        self.__break_ends_at: float | None = None  # set once the board clears
+        self.__queue: list[type[BasePest]] = []  # pests that have arrived but not spawned yet
+        self.__wave_number = 0  # how many waves have arrived
+        self.__next_wave_at: float | None = None  # set on the first call to next_pest
         self.__next_spawn_at = 0.0
         self.__finished = False
 
@@ -47,29 +49,23 @@ class WaveManager:
         if self.__finished:
             return None
 
-        if self.__queue:
-            if now < self.__next_spawn_at:
-                return None
+        if self.__next_wave_at is None:
+            self.__next_wave_at = now + self.start_delay
+
+        # A wave arrives on its timer, no matter what is still on the board
+        if self.__wave_number < self.total_waves and now >= self.__next_wave_at:
+            self.__wave_number += 1
+            wave = list(self.__waves[self.__wave_number - 1])
+            random.shuffle(wave)
+            self.__queue.extend(wave)
+            self.__next_wave_at = now + self.wave_delay
+
+        # Spawn the next queued pest once the spawn interval has passed
+        if self.__queue and now >= self.__next_spawn_at:
             self.__next_spawn_at = now + self.spawn_interval
             return self.__queue.pop(0)
 
-        if pests_on_board > 0:
-            return None
-
-        # Board is clear. Last wave cleared means the level is complete
-        if self.__wave_number >= self.total_waves:
+        # Level is complete once every wave has arrived, spawned and been cleared
+        if self.__wave_number >= self.total_waves and not self.__queue and pests_on_board == 0:
             self.__finished = True
-            return None
-
-        if self.__break_ends_at is None:
-            self.__break_ends_at = now + (self.wave_delay if self.__wave_number else self.start_delay)
-        if now < self.__break_ends_at:
-            return None
-
-        # Start the next wave
-        self.__break_ends_at = None
-        self.__wave_number += 1
-        self.__queue = list(self.__waves[self.__wave_number - 1])
-        random.shuffle(self.__queue)
-        self.__next_spawn_at = now + self.spawn_interval
-        return self.__queue.pop(0)
+        return None
