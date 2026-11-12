@@ -14,7 +14,7 @@ class LevelSelectState(BaseState):
         self.__level_buttons: dict[int, Rectangle] = {}
         self.__back_button: Rectangle | None = None
 
-        self.columns = 5
+        self.__columns = 5
         self.__button_size = 100
         self.__gap = 30
 
@@ -27,11 +27,11 @@ class LevelSelectState(BaseState):
         )
 
         level_count = LevelCollector().level_count()
-        row_width = self.columns * self.__button_size + (self.columns - 1) * self.__gap
+        row_width = self.__columns * self.__button_size + (self.__columns - 1) * self.__gap
         start_x = (self.window.width - row_width) // 2
         for i in range(level_count):
             level = i + 1
-            col, row = i % self.columns, i // self.columns
+            col, row = i % self.__columns, i // self.__columns
             x_position = start_x + col * (self.__button_size + self.__gap)
             y_position = 180 + row * (self.__button_size + self.__gap)
             button = Rectangle(canvas, x_position, y_position, self.__button_size, self.__button_size, "#3d405e")

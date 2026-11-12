@@ -8,11 +8,11 @@ class GameOverState(BaseState):
     def __init__(self, state_stack, window) -> None:
         super().__init__(state_stack, window)
         self.__restart_button: Rectangle | None = None
-        self.title = None
+        self.__title = None
 
     def enter(self) -> None:
         canvas = self.window.canvas
-        self.title = canvas.create_text(
+        self.__title = canvas.create_text(
             self.window.width // 2, 220, text="GAME OVER\nThe pests got in!",
             font=("Arial", 32, "bold"), fill="#b00020",
         )
@@ -31,6 +31,6 @@ class GameOverState(BaseState):
         # Imported here to avoid a circular import with GameState
         from app.states.game_state import GameState
         # Restart on the level the player lost on
-        level = self.state_stack._stack[0].world.level_number
+        level = self.state_stack.bottom.world.level_number
         self.window.canvas.delete("all")
         self.state_stack.replace_all(GameState(self.state_stack, self.window, level))

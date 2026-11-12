@@ -11,10 +11,10 @@ from entities.entity import Entity
 class CardHolder(Entity):
     def __init__(self, canvas, x: int = 180, y: int = 20):
         colour = "#FFFF00"
-        self.x, self.y = x, y
+        self.__x, self.__y = x, y
         self.__card_size = (70, 85)
         self.__card_gap = 10
-        self.card_attributes = [
+        self.__card_attributes = [
             # Name, Cost, Class, Cooldown (seconds)
             ("Flour Flower", 50, FlourFlower, 5.0),
             ("Sugar Shooter", 100, SugarShooter, 5.0),
@@ -22,37 +22,49 @@ class CardHolder(Entity):
             ("Popping Candy", 25, PoppingCandy, 20.0),
             ("Cherry Bombe", 150, Profiterole, 30.0),
         ]
-        self.cards_count: int = len(self.card_attributes)
-        self.selected_card: Card | None = None
+        self.__cards_count: int = len(self.__card_attributes)
+        self.__selected_card: Card | None = None
 
         super().__init__(
-            canvas, self.x, self.y,
-            self.__card_size[0] * self.cards_count + self.__card_gap * (self.cards_count - 1),
+            canvas, self.__x, self.__y,
+            self.__card_size[0] * self.__cards_count + self.__card_gap * (self.__cards_count - 1),
             self.__card_size[1],
             colour
         )
 
-        self.cards = self._create_cards()  # Holds the cards which are displayed along the top
+        self.__cards = self._create_cards()  # Holds the cards which are displayed along the top
+
+    @property
+    def cards(self) -> list[Card | None]:
+        return self.__cards
+
+    @property
+    def selected_card(self) -> Card | None:
+        return self.__selected_card
+
+    @selected_card.setter
+    def selected_card(self, card: Card | None) -> None:
+        self.__selected_card = card
 
     def update_cooldowns(self) -> None:
-        for card in self.cards:
+        for card in self.__cards:
             card.tick_cooldown()
 
     def _create_cards(self):
         """Create the cards displayed along the top of the screen."""
-        self.cards: list[Card | None] = [None] * self.cards_count  # Create list of empty bread cards
+        self.__cards: list[Card | None] = [None] * self.__cards_count  # Create list of empty bread cards
         positions = []
         w, h = self.__card_size
-        for i in range(self.cards_count):  # columns
+        for i in range(self.__cards_count):  # columns
             positions.append(
                 (
-                    self.x + w * i + self.__card_gap * i,
-                    self.y,
+                    self.__x + w * i + self.__card_gap * i,
+                    self.__y,
                 )
             )
 
         cards = []
-        for (x, y), (name, cost, good_class, cooldown) in zip(positions, self.card_attributes):
+        for (x, y), (name, cost, good_class, cooldown) in zip(positions, self.__card_attributes):
             cards.append(
                 Card(
                     canvas=self.canvas,

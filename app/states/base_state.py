@@ -4,8 +4,16 @@ import tkinter as tk
 
 class BaseState(ABC):
     def __init__(self, state_stack, window):
-        self.state_stack = state_stack
-        self.window = window
+        self.__state_stack = state_stack
+        self.__window = window
+
+    @property
+    def state_stack(self):
+        return self.__state_stack
+
+    @property
+    def window(self):
+        return self.__window
 
     def tick(self) -> None:
         """Called every frame by the main window loop."""

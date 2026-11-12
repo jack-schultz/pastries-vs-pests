@@ -37,7 +37,7 @@ class PauseState(BaseState):
         elif self.__buttons["restart"].collide_point(pos):
             from app.states.game_state import GameState
             # The game state sits at the bottom of the stack; restart its current level
-            level = self.state_stack._stack[0].world.level_number
+            level = self.state_stack.bottom.world.level_number
             self.window.canvas.delete("all")
             self.state_stack.replace_all(GameState(self.state_stack, self.window, level))
         elif self.__buttons["level_select"].collide_point(pos):
