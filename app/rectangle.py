@@ -237,6 +237,22 @@ class Rectangle:
         self.centre = centre
 
     @property
+    def centre_x(self) -> float:
+        return self.centre[0]
+
+    @property
+    def cx(self) -> float:
+        return self.centre_x
+
+    @property
+    def centre_y(self) -> float:
+        return self.centre[1]
+
+    @property
+    def cy(self) -> float:
+        return self.centre_y
+
+    @property
     def centre_right(self):
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         half_height = self.height // 2
