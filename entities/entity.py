@@ -26,12 +26,18 @@ class Living(Entity):
     def __init__(self, canvas, x, y, width, height, colour, health: int, armour: BaseArmour | None = None, layer_count: int = 1) -> None:
         super().__init__(canvas, x, y, width, height, colour)
         self.__health = health
+        self.__max_health = health
         self.__armour = armour
         self.__layer_count = layer_count
+        self.__health_bar: tuple[int, int] | None = None  # (background, fill)
 
     @property
     def health(self) -> int:
         return self.__health
+
+    @property
+    def max_health(self) -> int:
+        return self.__max_health
 
     @property
     def armour(self) -> BaseArmour | None:
@@ -54,3 +60,36 @@ class Living(Entity):
         if self.__armour is not None:
             remaining = self.__armour.absorb(damage)
         self.__health -= remaining
+        self.__update_health_bar()
+        self.__on_damaged()
+
+    def __on_damaged(self) -> None:
+        # Subclasses cam change how they look after being hit
+        # So they can flash red or similar
+        pass
+
+    def __update_health_bar(self) -> None:
+        # A small bar above the entity
+        # Shows once it has been hurt
+        if self.is_dead:
+            return
+
+        l, t = self.rect.left, self.rect.top
+        w = self.rect.w
+        if self.__health_bar is None:
+            # Create the health bar on first hit
+            background = self.rect.draw("rectangle", l, t - 9, l + w, t - 4, fill="#3d405b", outline="")
+            fill = self.rect.draw("rectangle", l, t - 9, l + w, t - 4, fill="#4caf50", outline="")
+            self.__health_bar = (background, fill)
+
+        _, fill = self.__health_bar
+        fraction = max(0.0, self.__health / self.__max_health)
+
+        # Resize fill
+        canvas = self.canvas
+        x1, y1, _, y2 = canvas.coords(self.__health_bar[0])  # get points, _ is what we are updating
+        canvas.coords(fill, x1, y1, x1 + w * fraction, y2)  # update points
+
+        # Set colour based on percentage
+        colour = "#4caf50" if fraction > 0.6 else "#ffb300" if fraction > 0.3 else "#e53935"
+        canvas.itemconfig(fill, fill=colour)
