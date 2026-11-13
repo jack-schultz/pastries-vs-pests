@@ -5,25 +5,30 @@ from entities.living.goods.flour_flower import FlourFlower
 from entities.living.goods.popping_candy import PoppingCandy
 from entities.living.goods.profiterole import Profiterole
 from entities.living.goods.oven_toaster import OvenToaster
-from entities.card import Card
+from entities.card import Card, ToolType
 from entities.entity import Entity
 
 
 class CardHolder(Entity):
-    def __init__(self, canvas, x: int = 175, y: int = 15):
+    def __init__(self, canvas, x: int = 175, y: int = 15, screen_width: int = 900):
         colour = "#8b6c5c"
         self.__x, self.__y = x, y
         self.__margin = 5
         self.__card_size = (70, 85)
         self.__card_gap = 10
         self.__card_attributes = [
-            # Name, Cost, Class, Cooldown (seconds)
-            ("Flour Flower", 50, FlourFlower, 5.0),
-            ("Sugar Shooter", 100, SugarShooter, 5.0),
-            ("Hardtack", 50, Hardtack, 30.0),
-            ("Popping Candy", 25, PoppingCandy, 20.0),
-            ("Profiterole", 150, Profiterole, 30.0),
-            ("Oven Toaster", 125, OvenToaster, 8.0),
+            # Name, Cost, Class, Cooldown (seconds), Tool
+            ("Flour Flower", 50, FlourFlower, 5.0, None),
+            ("Sugar Shooter", 100, SugarShooter, 5.0, None),
+            ("Hardtack", 50, Hardtack, 30.0, None),
+            ("Popping Candy", 25, PoppingCandy, 20.0, None),
+            ("Profiterole", 150, Profiterole, 30.0, None),
+            ("Oven Toaster", 125, OvenToaster, 8.0, None),
+        ]
+        # Tools get their own panel
+        self.__tool_attributes = [
+            ("Glove", 50, None, 5.0, ToolType.GLOVE),
+            ("Bin", 0, None, 3.0, ToolType.BIN),
         ]
         self.__cards_count: int = len(self.__card_attributes)
         self.__selected_card: Card | None = None
@@ -31,12 +36,24 @@ class CardHolder(Entity):
 
         super().__init__(
             canvas, self.__x, self.__y,
-            self.__card_size[0] * self.__cards_count + self.__card_gap * (self.__cards_count - 1) + self.__margin * 2,
+            self.__panel_width(len(self.__card_attributes)),
             self.__card_size[1] + self.__margin * 2,
             colour
         )
 
+        # Tool panel
+        tools_width = self.__panel_width(len(self.__tool_attributes))
+        self.__tools_x = screen_width - 10 - tools_width
+        self.__tools_panel = Entity(
+            canvas, self.__tools_x, self.__y,
+            tools_width, self.__card_size[1] + self.__margin * 2,
+            colour
+        )
+
         self.__cards = self._create_cards()  # Holds the cards which are displayed along the top
+
+    def __panel_width(self, count: int) -> int:
+        return self.__card_size[0] * count + self.__card_gap * (count - 1) + self.__margin * 2
 
     @property
     def cards(self) -> list[Card | None]:
@@ -74,31 +91,29 @@ class CardHolder(Entity):
 
     def _create_cards(self):
         """Create the cards displayed along the top of the screen."""
-        self.__cards: list[Card | None] = [None] * self.__cards_count  # Create list of empty bread cards
-        positions = []
-        w, h = self.__card_size
-        for i in range(self.__cards_count):  # columns
-            positions.append(
-                (
-                    self.__x + w * i + self.__card_gap * i + self.__margin,
-                    self.__y + self.__margin,
-                )
-            )
+        return (
+            self.__build_row(self.__card_attributes, self.__x)
+            + self.__build_row(self.__tool_attributes, self.__tools_x)
+        )
 
+    def __build_row(self, attributes, panel_x: int) -> list[Card]:
+        w, h = self.__card_size
         cards = []
-        for (x, y), (name, cost, good_class, cooldown) in zip(positions, self.__card_attributes):
+        for i, (name, cost, good_class, cooldown, tool) in enumerate(attributes):
+            x = panel_x + w * i + self.__card_gap * i + self.__margin
+            y = self.__y + self.__margin
             cards.append(
                 Card(
                     canvas=self.canvas,
-                    width=self.__card_size[0],
-                    height=self.__card_size[1],
+                    width=w,
+                    height=h,
                     x=x,
                     y=y,
                     name=name,
                     cost=cost,
                     good_class=good_class,
                     cooldown=cooldown,
+                    tool=tool,
                 )
             )
-
         return cards

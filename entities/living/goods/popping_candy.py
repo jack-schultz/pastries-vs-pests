@@ -13,7 +13,7 @@ class PoppingCandy(BaseGood):
             colour="#8d6e63",
             health=200
         )
-        self.__arm_time = 10  # seconds before it can detonate
+        self.__arm_time = 13  # seconds before it can detonate
         self.__planted_at = time.monotonic()
         self.__blast_damage = 1800
         self.__blast_radius = 110  # pixels from the candy's centre

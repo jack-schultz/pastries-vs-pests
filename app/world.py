@@ -10,6 +10,8 @@ from entities.living.goods.popping_candy import PoppingCandy
 from entities.living.goods.profiterole import Profiterole
 from entities.garden import Garden
 from entities.cardholder import CardHolder
+from entities.tile import Tile
+from entities.living.goods.base_good import BaseGood
 from typing import TYPE_CHECKING
 
 
@@ -22,7 +24,9 @@ class World:
     def __init__(self, window: Window, level_number: int = 1) -> None:
         self.__window = window
         self.__garden = Garden(self.__window.canvas, 40, 120)
-        self.__card_holder = CardHolder(self.__window.canvas, 180, 20)
+        self.__card_holder = CardHolder(self.__window.canvas, 180, 20, self.__window.width)
+        # A good lifted by the glove, with the tile it came from. It follows the mouse until it is dropped
+        self.__held: tuple[BaseGood, Tile] | None = None
 
         # === LEVEL SETTINGS ===
         self.__level_collector = LevelCollector()
@@ -47,11 +51,11 @@ class World:
             fill="#3d405b",
         )
 
-        # Text in top right to display the wave
+        # Text in bottom right to display the wave
         self.__wave_text = self.__window.canvas.create_text(
-            self.__window.width - 10, 20,
+            self.__window.width - 10, self.__window.height - 10,
             text="",
-            anchor="ne",
+            anchor="se",
             font=("Arial", 24, "bold"),
             fill="#3d405b",
         )
@@ -149,7 +153,62 @@ class World:
             self.__next_button = Rectangle(self.__window.canvas, 350, 300, 200, 70, "#3d405b")
             self.__next_button.set_text("Next Level", colour="#ffffff", size=16)
 
+    @property
+    def is_holding(self) -> bool:
+        return self.__held is not None
+
+    @property
+    def held_origin(self) -> Tile | None:
+        return self.__held[1] if self.__held else None
+
+    def pick_up(self, tile: Tile) -> bool:
+        # The glove lifts the good off a tile so it can follow the mouse
+        if self.__held or tile.is_empty:
+            return False
+        good = tile.good
+        tile.clear_good()
+        self.__held = (good, tile)
+        return True
+
+    def move_held(self, pos: tuple[int, int]) -> None:
+        # Moves the held good so it is centred on the mouse
+        if not self.__held:
+            return
+        good, _ = self.__held
+        cx, cy = good.rect.centre
+        good.rect.move((pos[0] - cx, pos[1] - cy))
+        good.rect.raise_to_top()
+
+    def drop_held(self, tile: Tile) -> bool:
+        # Places the held good on an empty tile. Returns False if the tile can't take it
+        if not self.__held or not tile.is_empty:
+            return False
+        good, _ = self.__held
+        cx, cy = good.rect.centre
+        tx, ty = tile.rect.centre
+        good.rect.move((tx - cx, ty - cy))
+        tile.good = good
+        self.__held = None
+        return True
+
+    def return_held(self) -> None:
+        # Puts the held good back on the tile it came from, for free
+        if self.__held:
+            self.drop_held(self.__held[1])
+
+    def remove_good(self, tile: Tile) -> None:
+        # The bin takes a good off the garden
+        good = tile.good
+        if good:
+            good.destroy()
+            tile.clear_good()
+
     def start_next_level(self) -> None:
+        # A held good is cleared
+        if self.__held:
+            self.__held[0].destroy()
+            self.__held = None
+
         # Clears the goods off the garden, then loads the next level's waves
         for tile in self.__garden.tiles:
             if tile.good:

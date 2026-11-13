@@ -1,34 +1,42 @@
 from __future__ import annotations
+from enum import Enum
 from typing import Callable
 from entities.entity import Entity
 from entities.living.goods.base_good import BaseGood
 from app.rectangle import Rectangle
 
 
-# Card Colours
-READY_FILL = "#e63946"
-HOVER_FILL = "#f25c68"
-SELECTED_FILL = "#ff8a94"
-DISABLED_FILL = "#8d8d8d"
-RECHARGE_FILL = "#7a1d24"
-OVERLAY_FILL = "#3b0d11"
-SELECTED_OUTLINE = "#ffd166"
-HOVER_OUTLINE = "#ffffff"
-TEXT_COLOUR = "#ffffff"
-MEET_COST_COLOUR = "#ffffff"
-SHORT_COST_COLOUR = "#ffb3b3"
+class CardColour(Enum):
+    READY_FILL = "#e63946"
+    HOVER_FILL = "#f25c68"
+    SELECTED_FILL = "#ff8a94"
+    DISABLED_FILL = "#8d8d8d"
+    RECHARGE_FILL = "#7a1d24"
+    OVERLAY_FILL = "#3b0d11"
+    SELECTED_OUTLINE = "#ffd166"
+    HOVER_OUTLINE = "#ffffff"
+    TEXT_COLOUR = "#ffffff"
+    MEET_COST_COLOUR = "#ffffff"
+    SHORT_COST_COLOUR = "#ffb3b3"
+
+
+class ToolType(Enum):
+    GLOVE = "glove"
+    BIN = "bin"
 
 
 class Card(Entity):
     def __init__(
         self, canvas, x, y,
         width, height, name: str, cost: int,
-        good_class: Callable[[Rectangle], BaseGood], cooldown: float = 5.0
+        good_class: Callable[[Rectangle], BaseGood] | None, cooldown: float = 5.0,
+        tool: ToolType | None = None,
     ) -> None:
-        super().__init__(canvas, x, y, width, height, READY_FILL)
+        super().__init__(canvas, x, y, width, height, CardColour.READY_FILL.value)
         self.__name = name
         self.__cost = cost
         self.__good_class = good_class
+        self.__tool = tool
         self.__cooldown_frames = round(cooldown * 60)
         self.__frames_left = 0  # 0 means ready to select
 
@@ -41,12 +49,12 @@ class Card(Entity):
         # Dark overlay that drains from the top down as the card recharges
         self.__overlay = canvas.create_rectangle(
             x, y, x + width, y,
-            fill=OVERLAY_FILL, outline="", state="hidden",
+            fill=CardColour.OVERLAY_FILL.value, outline="", state="hidden",
         )
         # Name across the top
         self.__name_text = canvas.create_text(
             x + width / 2, y + 16,
-            text=name, fill=TEXT_COLOUR,
+            text=name, fill=CardColour.TEXT_COLOUR.value,
             font=("Arial", 9, "bold"),
             width=width - 6, justify="center",
         )
@@ -63,13 +71,19 @@ class Card(Entity):
         )
         self.__cost_text = canvas.create_text(
             x + width / 2 + 6, y + height - badge_h / 2,
-            text=str(cost), fill=MEET_COST_COLOUR,
+            text=str(cost) if cost else "Free", fill=CardColour.MEET_COST_COLOUR.value,
             font=("Arial", 11, "bold"),
         )
+
+        # Free cards have no flour to show, so centre the word instead
+        if cost == 0:
+            canvas.itemconfig(self.__flour_icon, state="hidden")
+            canvas.coords(self.__cost_text, x + width / 2, y + height - badge_h / 2)
+
         # Reason the card can't be used right now, in the middle of the card
         self.__status_text = canvas.create_text(
             x + width / 2, y + (height - badge_h) / 2 + 12,
-            text="", fill=TEXT_COLOUR,
+            text="", fill=CardColour.TEXT_COLOUR.value,
             font=("Arial", 8, "bold"),
             width=width - 4, justify="center",
         )
@@ -89,6 +103,10 @@ class Card(Entity):
     @property
     def cost(self) -> int:
         return self.__cost
+
+    @property
+    def tool(self) -> ToolType | None:
+        return self.__tool
 
     @property
     def is_ready(self) -> bool:
@@ -136,7 +154,7 @@ class Card(Entity):
 
         # ===== RECHARGING =====
         if recharging:
-            self.rect.set_colour(RECHARGE_FILL)
+            self.rect.set_colour(CardColour.RECHARGE_FILL.value)
             canvas.itemconfig(self.__highlight, outline="", width=0)
             # Overlay covers the fraction of the card still recharging
             fraction = self.__frames_left / self.__cooldown_frames
@@ -148,7 +166,7 @@ class Card(Entity):
             )
             canvas.itemconfig(
                 self.__cost_text,
-                fill=MEET_COST_COLOUR if affordable else SHORT_COST_COLOUR,
+                fill=CardColour.MEET_COST_COLOUR.value if affordable else CardColour.SHORT_COST_COLOUR.value,
             )
             return
 
@@ -156,31 +174,33 @@ class Card(Entity):
 
         # ===== NOT ENOUGH FLOUR =====
         if not affordable:
-            self.rect.set_colour(DISABLED_FILL)
+            self.rect.set_colour(CardColour.DISABLED_FILL.value)
             canvas.itemconfig(self.__highlight, outline="", width=0)
             canvas.itemconfig(
                 self.__status_text,
                 text=f"Need {self.__cost - self.__flour}\nmore flour",
             )
-            canvas.itemconfig(self.__cost_text, fill=SHORT_COST_COLOUR)
+            canvas.itemconfig(self.__cost_text, fill=CardColour.SHORT_COST_COLOUR.value)
             return
 
         # ===== USABLE =====
         canvas.itemconfig(self.__status_text, text="")
-        canvas.itemconfig(self.__cost_text, fill=MEET_COST_COLOUR)
+        canvas.itemconfig(self.__cost_text, fill=CardColour.MEET_COST_COLOUR.value)
         if self.__selected:
-            self.rect.set_colour(SELECTED_FILL)
-            canvas.itemconfig(self.__highlight, outline=SELECTED_OUTLINE, width=4)
+            self.rect.set_colour(CardColour.SELECTED_FILL.value)
+            canvas.itemconfig(self.__highlight, outline=CardColour.SELECTED_OUTLINE.value, width=4)
             canvas.itemconfig(self.__status_text, text="Selected")
         elif self.__hovered:
-            self.rect.set_colour(HOVER_FILL)
-            canvas.itemconfig(self.__highlight, outline=HOVER_OUTLINE, width=2)
+            self.rect.set_colour(CardColour.HOVER_FILL.value)
+            canvas.itemconfig(self.__highlight, outline=CardColour.HOVER_OUTLINE.value, width=2)
         else:
-            self.rect.set_colour(READY_FILL)
+            self.rect.set_colour(CardColour.READY_FILL.value)
             canvas.itemconfig(self.__highlight, outline="", width=0)
 
-    def create_good(self, canvas, x, y) -> BaseGood:
+    def create_good(self, canvas, x, y) -> BaseGood | None:
         # The card knows which good it sells, so the caller doesn't need to
+        if not self.__good_class:
+            return None
         return self.__good_class(canvas, x, y)
 
     def destroy(self) -> None:

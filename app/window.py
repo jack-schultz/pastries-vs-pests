@@ -11,7 +11,7 @@ class Window:
         self.__root.title("Pastries vs. Pests")
         self.__root.resizable(False, False)
 
-        self.__width, self.__height = (900, 600)
+        self.__width, self.__height = (900, 640)
 
         # Create the world canvas to store our rects coordinates
         self.__canvas = tk.Canvas(self.__root, width=self.__width, height=self.__height, bg="#fdf3e1", highlightthickness=0)
@@ -33,6 +33,10 @@ class Window:
     @property
     def width(self) -> int:
         return self.__width
+
+    @property
+    def height(self) -> int:
+        return self.__height
 
     @property
     def canvas(self) -> tk.Canvas:
