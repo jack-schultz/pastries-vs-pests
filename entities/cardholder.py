@@ -4,6 +4,7 @@ from entities.living.goods.sugar_shooter import SugarShooter
 from entities.living.goods.flour_flower import FlourFlower
 from entities.living.goods.popping_candy import PoppingCandy
 from entities.living.goods.profiterole import Profiterole
+from entities.living.goods.oven_toaster import OvenToaster
 from entities.card import Card
 from entities.entity import Entity
 
@@ -22,6 +23,7 @@ class CardHolder(Entity):
             ("Hardtack", 50, Hardtack, 30.0),
             ("Popping Candy", 25, PoppingCandy, 20.0),
             ("Profiterole", 150, Profiterole, 30.0),
+            ("Oven Toaster", 125, OvenToaster, 8.0),
         ]
         self.__cards_count: int = len(self.__card_attributes)
         self.__selected_card: Card | None = None

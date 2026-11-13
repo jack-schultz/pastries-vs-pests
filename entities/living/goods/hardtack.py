@@ -8,6 +8,6 @@ class Hardtack(BaseGood):
             canvas, x, y,
             width=80, height=80,
             colour="#FFFF00",
-            health=3000
+            health=5000
         )
         self.rect.set_text(type(self).__name__)

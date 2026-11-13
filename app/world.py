@@ -122,12 +122,9 @@ class World:
             elif isinstance(obj, Projectile):
                 self.__projectiles.append(obj)
 
-    def __pest_at(self, projectile: Projectile) -> BasePest | None:
-        # Returns the first pest the projectile is overlapping, if any
-        for pest in self.__pests:
-            if projectile.hits(pest):
-                return pest
-        return None
+    def __pests_at(self, projectile: Projectile) -> list[BasePest]:
+        # Returns every pest the projectile is touching, in the order they were spawned
+        return [pest for pest in self.__pests if projectile.hits(pest)]
 
     def spawn_pest_if_due(self) -> None:
         # The current wave decides which pest spawns on the right edge of a random row
@@ -244,8 +241,7 @@ class World:
         # projectiles fly right and damage the first pest they touch
         for projectile in list(self.__projectiles):
             projectile.move()
-            hit_pest = self.__pest_at(projectile)
-            if hit_pest:
+            for hit_pest in self.__pests_at(projectile):
                 hit_pest.take_damage(projectile.damage_to_deal())
                 projectile.add_hit_pest(hit_pest)  # Stores it in a list so it cant hit the same pest twice
                 projectile.piercing -= hit_pest.layer_count
@@ -255,11 +251,10 @@ class World:
                     self.__pests.remove(hit_pest)
 
                 if projectile.piercing <= 0:
-                    projectile.destroy()
-                    self.__projectiles.remove(projectile)
+                    break
 
-            # If the projectile goes off the screen, kill it
-            elif projectile.rect.left > self.__window.width:
+            # Used up after its last hit, finished on its own (like flames), or off the screen
+            if projectile.piercing <= 0 or projectile.is_expired() or projectile.rect.left > self.__window.width:
                 projectile.destroy()
                 self.__projectiles.remove(projectile)
 
