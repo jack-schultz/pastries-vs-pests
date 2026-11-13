@@ -11,6 +11,10 @@ class Rectangle:
             outline="",
         )
         self.__text: int | None = None  # Optional label drawn on top of the rect
+        # Every item drawn for this rect (label and added sprite shapes) shares this tag,
+        # so they can be moved, raise and delete together
+        self.__tag = f"group{self.__rect}"
+        self.__canvas.addtag_withtag(self.__tag, self.__rect)
 
     @property
     def canvas(self):
@@ -35,7 +39,21 @@ class Rectangle:
             font=("Arial", size, "bold"),
             width=(x2 - x1) - 6,  # wrap long names inside the rect
             justify="center",
+            tags=(self.__tag,),
         )
+
+    def hide_hitbox(self) -> None:
+        # Hides the rect itself but keeps it as a hitbox, for entities drawn with shapes instead
+        self.__canvas.itemconfig(self.__rect, fill="", outline="")
+
+    def draw(self, kind: str, *coords: float, **options) -> int:
+        """
+        Draws an extra shape that shares the same tag with this rect.
+        Accepted shapes: ("oval", "rectangle", "polygon", "line", "arc", "text")
+        """
+        # makes sure the string passed in is a valid canvas object
+        create = getattr(self.__canvas, f"create_{kind}")
+        return create(*coords, tags=(self.__tag,), **options)
 
     def __centre_text(self) -> None:
         # Keep the label centred on the rect whenever the rect moves or resizes
@@ -267,14 +285,9 @@ class Rectangle:
         return self.centre_left
 
     def move(self, difference: tuple[float, float]) -> None:
+        # Moves everything with the tag
         dx, dy = difference
-        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        self.__canvas.coords(
-            self.__rect,
-            x1 + dx, y1 + dy,
-            x2 + dx, y2 + dy,
-        )
-        self.__centre_text()
+        self.__canvas.move(self.__tag, dx, dy)
 
     def collide_point(self, point: tuple[float, float]) -> bool:
         px, py = point
@@ -285,11 +298,7 @@ class Rectangle:
             return False
 
     def raise_to_top(self) -> None:
-        self.__canvas.tag_raise(self.__rect)
-        if self.__text is not None:
-            self.__canvas.tag_raise(self.__text)
+        self.__canvas.tag_raise(self.__tag)
 
     def delete(self) -> None:
-        self.__canvas.delete(self.__rect)
-        if self.__text is not None:
-            self.__canvas.delete(self.__text)
+        self.__canvas.delete(self.__tag)
