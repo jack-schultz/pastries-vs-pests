@@ -13,3 +13,7 @@ class SugarCube(Projectile):
             speed=6,  # pixels per frame
             piercing=1
         )
+        # White cube with a pink edge
+        self.rect.set_colour("#ffffff")
+        self.rect.set_outline("#ff8fab", width=2)
+        x1, y1 = self.rect.left, self.rect.top

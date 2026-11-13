@@ -1,7 +1,7 @@
 from __future__ import annotations
 import time
 from app.rectangle import Rectangle
-from levels.level_collector import LevelCollector, pest_ids
+from levels.level_collector import LevelCollector, pest_ids, dev_level_id
 from levels.wave_manager import WaveManager
 from entities.living.pests.base_pest import BasePest
 from entities.flour import Flour
@@ -15,8 +15,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.window import Window
-
-initial_flour = 75
 
 
 class World:
@@ -38,7 +36,7 @@ class World:
         self.__flours: list[Flour] = []
         self.__projectiles: list[Projectile] = []
 
-        self.__flour: int = initial_flour  # This is the currency to make pastry goods
+        self.__flour: int = self.__level_collector.starting_flour(self.__level_number)
 
         # Text in top left to display flour count
         self.__flour_text = self.__window.canvas.create_text(
@@ -139,12 +137,13 @@ class World:
         self.update_wave_text()
 
     def update_wave_text(self) -> None:
+        name = "Dev Level" if self.__level_number == dev_level_id else f"Level {self.__level_number}"
         if self.__waves.finished:
             text = "Winner Winner Chicken Dinner!"
         elif self.__waves.wave_number == 0:
-            text = f"Level {self.__level_number} - Get ready"
+            text = f"{name} - Get ready"
         else:
-            text = f"Level {self.__level_number} - Wave {self.__waves.wave_number}/{self.__waves.total_waves}"
+            text = f"{name} - Wave {self.__waves.wave_number}/{self.__waves.total_waves}"
         self.__window.canvas.itemconfig(self.__wave_text, text=text)
 
         # Offer the next level once this one is complete, if there is one
@@ -161,7 +160,6 @@ class World:
                 tile.clear_good()
 
         # Clear world values
-        self.__flour = initial_flour
         for flour in self.__flours:
             flour.destroy()
         self.__flours.clear()
@@ -179,6 +177,7 @@ class World:
             self.__next_button = None
 
         self.__level_number += 1
+        self.__flour = self.__level_collector.starting_flour(self.__level_number)
         self.__waves = WaveManager(self.__level_collector.get_level(self.__level_number), pest_ids)
         self.update_wave_text()
 

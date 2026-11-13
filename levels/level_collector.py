@@ -7,6 +7,9 @@ pest_ids = {
     3: HeavyArmourAnt,
 }
 
+default_flour = 75  # flour the player starts a level with
+dev_level_id = 0  # hidden testing level, not counted in level_count
+
 
 class LevelCollector():
     # Holds the level data. A level is a list of waves, in order.
@@ -19,14 +22,41 @@ class LevelCollector():
             5: self.level_5,
             6: self.level_6,
         }
+        # Extra levels for dev
+        self.__dev_levels = {
+            dev_level_id: self.dev_level,
+        }
+        # Levels that start with something other than default_flour
+        self.__starting_flour = {
+            dev_level_id: 9000,
+        }
 
     def level_count(self) -> int:
         return len(self.__levels)
 
     def get_level(self, number: int) -> list[dict[int, int]] | None:
+        if number in self.__dev_levels:
+            return self.__dev_levels[number]()
         if number not in self.__levels:
             return None
         return self.__levels[number]()
+
+    def starting_flour(self, number: int) -> int:
+        return self.__starting_flour.get(number, default_flour)
+
+    def dev_level(self) -> list[dict[int, int]]:
+        return [
+            {1: 5, 2: 2},
+            {1: 5, 2: 4},
+            {1: 4, 2: 5, 3: 2},
+            {2: 8, 3: 2},
+            {1: 6, 2: 6, 3: 3},
+            {1: 4, 2: 8, 3: 4},
+            {2: 10, 3: 4},
+            {1: 6, 2: 8, 3: 5},
+            {1: 5, 2: 10, 3: 6},
+            {1: 10, 2: 12, 3: 10},  # finale
+        ]
 
     def level_1(self) -> list[dict[int, int]]:
         # Tutorial: plain ants only

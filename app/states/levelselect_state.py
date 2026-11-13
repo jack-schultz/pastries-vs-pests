@@ -2,7 +2,7 @@ from __future__ import annotations
 import tkinter as tk
 from app.states.base_state import BaseState
 from app.rectangle import Rectangle
-from levels.level_collector import LevelCollector
+from levels.level_collector import LevelCollector, dev_level_id
 
 
 class LevelSelectState(BaseState):
@@ -37,6 +37,11 @@ class LevelSelectState(BaseState):
             button = Rectangle(canvas, x_position, y_position, self.__button_size, self.__button_size, "#3d405e")
             button.set_text(str(level), colour="#ffffff", size=24)
             self.__level_buttons[level] = button
+
+        # Dev level button in the top right
+        dev_button = Rectangle(canvas, self.window.width - 120, 20, 100, 45, "#81796d")
+        dev_button.set_text("Dev", colour="#ffffff", size=12)
+        self.__level_buttons[dev_level_id] = dev_button
 
         self.__back_button = Rectangle(canvas, 20, 20, 100, 45, "#81796d")
         self.__back_button.set_text("Back", colour="#ffffff", size=12)
