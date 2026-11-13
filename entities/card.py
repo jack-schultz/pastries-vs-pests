@@ -1,6 +1,6 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Callable
+from typing import Callable, TypedDict
 from entities.entity import Entity
 from entities.living.goods.base_good import BaseGood
 from app.rectangle import Rectangle
@@ -25,18 +25,27 @@ class ToolType(Enum):
     BIN = "bin"
 
 
+# defiles the keys and type hints them for a dict
+class ReplaceInfo(TypedDict):  # total=false allows a dict with only 1 key
+    replace: Callable[..., BaseGood]
+    cost: int
+
+
 class Card(Entity):
     def __init__(
         self, canvas, x, y,
         width, height, name: str, cost: int,
         good_class: Callable[[Rectangle], BaseGood] | None, cooldown: float = 5.0,
         tool: ToolType | None = None,
+        replaces: dict[BaseGood, ReplaceInfo] | None = None,
     ) -> None:
         super().__init__(canvas, x, y, width, height, CardColour.READY_FILL.value)
         self.__name = name
         self.__cost = cost
         self.__good_class = good_class
         self.__tool = tool
+        # Existing good class -> (good class to spawn in its place, cost of the replacement)
+        self.__replaces: dict[BaseGood, ReplaceInfo] | None = replaces
         self.__cooldown_frames = round(cooldown * 60)
         self.__frames_left = 0  # 0 means ready to select
 
@@ -197,11 +206,45 @@ class Card(Entity):
             self.rect.set_colour(CardColour.READY_FILL.value)
             canvas.itemconfig(self.__highlight, outline="", width=0)
 
-    def create_good(self, canvas, x, y) -> BaseGood | None:
-        # The card knows which good it sells, so the caller doesn't need to
-        if not self.__good_class:
+    def can_place_on(self, existing: BaseGood | None) -> bool:
+        # Empty tile means any card can be placed
+        if existing is None:
+            return True
+
+        # Occupied tile means only allowed if this card has a replace fot that good
+        good_class = type(existing)
+        if good_class in self.__replaces:
+            return True
+
+        return False
+
+    def __rule_for(self, existing_good: BaseGood | None) -> ReplaceInfo | None | None:
+        # The replacement rule for this exact good class, if the card has one
+        if existing_good is None:
             return None
-        return self.__good_class(canvas, x, y)
+        # get replaces item from dict by type of existing good
+        return self.__replaces.get(type(existing_good))
+
+    def good_class_for(self, existing: BaseGood | None) -> Callable[..., BaseGood] | None:
+        # Uses the replacement class when the rule matches, otherwise the card's own good
+        rule: ReplaceInfo = self.__rule_for(existing)
+        if rule:
+            return rule["replace"]  # 0 is good class
+        return self.__good_class
+
+    def cost_for(self, existing_good: BaseGood | None) -> int:
+        # Replacing costs the rule's own price, otherwise the card's normal cost
+        rule: ReplaceInfo = self.__rule_for(existing_good)
+        if rule:
+            return rule["cost"]  # 1 is cost
+        return self.__cost
+
+    def create_good(self, canvas, x, y, existing: BaseGood | None = None) -> BaseGood | None:
+        # The card knows which good it sells, so the caller doesn't need to
+        good_class = self.good_class_for(existing)
+        if not good_class:
+            return None
+        return good_class(canvas, x, y)
 
     def destroy(self) -> None:
         super().destroy()
