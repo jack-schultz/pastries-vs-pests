@@ -14,7 +14,7 @@ class SugarShooter(BaseGood):
             colour="#FFFF00",
             health=300
         )
-        self.rect.set_text(type(self).__name__)
+        self.rect.set_text("Sugar Shooter")
         self.__delay_pattern = delay_pattern
         self.__pattern_index = 0  # which delay in the pattern the next shot is waiting on
 

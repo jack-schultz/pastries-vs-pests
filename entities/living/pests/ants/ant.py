@@ -12,5 +12,6 @@ class Ant(BasePest):
             health=160,
             speed=0.25,
             armour=armour,
-            layer_count=layer_count
+            layer_count=layer_count,
+            label="Ant"
         )

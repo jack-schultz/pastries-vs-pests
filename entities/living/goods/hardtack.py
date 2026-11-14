@@ -10,4 +10,4 @@ class Hardtack(BaseGood):
             colour="#FFFF00",
             health=5000
         )
-        self.rect.set_text(type(self).__name__)
+        self.rect.set_text("Hardtack")

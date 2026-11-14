@@ -19,11 +19,12 @@ class BasePest(Living, ABC):
         damage: int = 100,
         attack_interval: float = 1.0,
         armour: BaseArmour | None = None,
-        layer_count: int = 1
+        layer_count: int = 1,
+        label: str = ""
     ) -> None:
         super().__init__(canvas, x, y, size, size, colour, health, armour, layer_count)
         self.rect.centre_left = (x, y)
-        self.rect.set_text("Ant", colour="#ffffff")
+        self.rect.set_text(label, colour="#ffffff")
 
         self.__update_armour_outline()
 
@@ -47,6 +48,14 @@ class BasePest(Living, ABC):
     def speed(self) -> float:
         return self.__speed
 
+    @speed.setter
+    def speed(self, new_speed: float) -> None:
+        self.__speed = new_speed
+
+    @property
+    def damage(self) -> int:
+        return self.__damage
+
     def move(self) -> None:
         self.rect.move((-self.__speed, 0))
 
@@ -65,4 +74,9 @@ class BasePest(Living, ABC):
         if now - self.__last_attack < self.__attack_interval:
             return
         self.__last_attack = now
+        self._strike(good)
+
+    # Protected instead of private to allow overwrites
+    def _strike(self, good: BaseGood) -> None:
+        # One hit on the good. Subclasses override this to attack in their own way
         good.take_damage(self.__damage)

@@ -17,6 +17,29 @@ class BaseGood(Living, ABC):
         super().__init__(canvas, x, y, width, height, colour, health)
         self.rect.centre = (x, y)
         self.__last_action = time.monotonic()
+        self.__stunned_until = 0.0
+        self.__shown_stunned = False
+
+    @property
+    def is_stunned(self) -> bool:
+        return time.monotonic() < self.__stunned_until
+
+    def stun(self, seconds: float) -> None:
+        # Stops the good acting for a while. A new stun can extend it, never shorten it
+        self.__stunned_until = max(self.__stunned_until, time.monotonic() + seconds)
+        self.__shown_stunned = True
+        self.rect.set_outline("#7e57c2", width=6)
+
+    def can_act(self) -> bool:
+        # False while stunned
+        if self.is_stunned:
+            return False
+
+        # Makes sure to remove stunned outline
+        if self.__shown_stunned:
+            self.__shown_stunned = False
+            self.rect.set_outline("", width=1)
+        return True
 
     def _ready(self, interval: float) -> bool:
         # True once `interval` seconds have passed since the last action, and restarts the timer

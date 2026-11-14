@@ -1,6 +1,6 @@
 from __future__ import annotations
 from armour.platemail import Platemail
-from entities.living.pests.ant import Ant
+from living.pests.ants.ant import Ant
 
 
 class HeavyArmourAnt(Ant):

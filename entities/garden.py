@@ -3,7 +3,6 @@ import random
 from entities.living.goods.base_good import BaseGood
 from entities.tile import Tile
 from entities.entity import Entity
-from entities.living.pests.ant import Ant
 from entities.living.pests.base_pest import BasePest
 
 
@@ -74,6 +73,10 @@ class Garden(Entity):
                 continue
 
             if not tile.good:
+                continue
+
+            # Stunned goods (hit by a Basher) do nothing until it wears off
+            if not tile.good.can_act():
                 continue
 
             new_objs.append(tile.good.act(self.canvas, pests))

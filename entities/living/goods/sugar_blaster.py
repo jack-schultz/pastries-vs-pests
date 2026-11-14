@@ -8,4 +8,4 @@ class SugarBlaster(SugarShooter):
             canvas, x, y,
             delay_pattern=(1.4, 0.25),  # waits 1.4, fires, waits .25, fires repeat
         )
-        self.rect.set_text(type(self).__name__)
+        self.rect.set_text("Sugar Blaster")
