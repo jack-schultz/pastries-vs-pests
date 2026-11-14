@@ -6,7 +6,7 @@ class Platemail(BaseArmour):
     # Covers all sides. Strong against physical hits, weak to fire/gas/piercing, and acid eats it
     def __init__(self) -> None:
         super().__init__(
-            durability=160,
+            durability=450,
             outline_colour="#9a9a9a",
             absorption={
                 DamageType.EXPLOSIVE: 0.75,
