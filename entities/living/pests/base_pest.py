@@ -20,11 +20,10 @@ class BasePest(Living, ABC):
         attack_interval: float = 1.0,
         armour: BaseArmour | None = None,
         layer_count: int = 1,
-        label: str = ""
     ) -> None:
         super().__init__(canvas, x, y, size, size, colour, health, armour, layer_count)
         self.rect.centre_left = (x, y)
-        self.rect.set_text(label, colour="#ffffff")
+        self.rect.set_text("BasePest", colour="#ffffff")
 
         self.__update_armour_outline()
 

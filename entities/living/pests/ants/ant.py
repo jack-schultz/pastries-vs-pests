@@ -4,7 +4,7 @@ from entities.living.pests.base_pest import BasePest
 
 
 class Ant(BasePest):
-    def __init__(self, canvas, x, y, armour: BaseArmour | None = None, layer_count: int = 1) -> None:
+    def __init__(self, canvas, x, y, armour: BaseArmour | None = None) -> None:
         super().__init__(
             canvas, x, y,
             size=30,
@@ -12,6 +12,5 @@ class Ant(BasePest):
             health=160,
             speed=0.25,
             armour=armour,
-            layer_count=layer_count,
-            label="Ant"
         )
+        self.rect.set_text("Ant", colour="#ffffff")

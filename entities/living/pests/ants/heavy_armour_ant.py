@@ -8,5 +8,4 @@ class HeavyArmourAnt(Ant):
         super().__init__(
             canvas, x, y,
             armour=Platemail(),
-            layer_count=2,
         )

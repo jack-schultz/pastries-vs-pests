@@ -8,5 +8,4 @@ class ArmourAnt(Ant):
         super().__init__(
             canvas, x, y,
             armour=Chainmail(),
-            layer_count=2,
         )
