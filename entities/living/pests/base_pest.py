@@ -9,13 +9,10 @@ from entities.living.goods.base_good import BaseGood
 
 class BasePest(Living, ABC):
     def __init__(
-        self,
-        canvas,
-        x, y,
-        size,
-        colour,
-        health: int,
-        speed: float,
+        self, canvas, x, y,
+        size, colour,
+        health: int = 160,
+        speed: float = 0.25,
         damage: int = 100,
         attack_interval: float = 1.0,
         armour: BaseArmour | None = None,
