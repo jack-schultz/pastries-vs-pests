@@ -12,7 +12,7 @@ class Platemail(BaseArmour):
                 DamageType.EXPLOSIVE: 0.75,
                 DamageType.FIRE: 0.1,
                 DamageType.GAS: 0.0,
-                DamageType.PIERCING: 1,
+                DamageType.PIERCING: 0.75,
             },
             wear={
                 DamageType.ACID: 3.0,
