@@ -65,6 +65,11 @@ class Rectangle:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         self.__canvas.coords(self.__text, (x1 + x2) / 2, (y1 + y2) / 2)
 
+    def __move_top_left_to(self, new_x1: float, new_y1: float) -> None:
+        # Moves the rect tagged items to new location
+        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
+        self.move((new_x1 - x1, new_y1 - y1))
+
     @property
     def left(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
@@ -72,12 +77,7 @@ class Rectangle:
 
     @left.setter
     def left(self, new_x) -> None:
-        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        self.__canvas.coords(
-            self.__rect,  # rect on canvas to edit
-            new_x, y1,  # top left
-            new_x + self.w, y2  # bottom right
-        )
+        self.__move_top_left_to(new_x, self.top)
 
     @property
     def l(self) -> float:
@@ -94,12 +94,7 @@ class Rectangle:
 
     @right.setter
     def right(self, new_x) -> None:
-        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        self.__canvas.coords(
-            self.__rect,
-            new_x - self.w, y1,  # top left
-            new_x, y2  # bottom right
-        )
+        self.__move_top_left_to(new_x - self.w, self.top)
 
     @property
     def r(self) -> float:
@@ -116,12 +111,7 @@ class Rectangle:
 
     @top.setter
     def top(self, new_y) -> None:
-        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        self.__canvas.coords(
-            self.__rect,
-            x1, new_y,  # top left
-            x2, new_y + self.h  # bottom right
-        )
+        self.__move_top_left_to(self.left, new_y)
 
     @property
     def t(self) -> float:
@@ -138,12 +128,7 @@ class Rectangle:
 
     @bottom.setter
     def bottom(self, new_y) -> None:
-        x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        self.__canvas.coords(
-            self.__rect,
-            x1, new_y - self.h,  # top left
-            x2, new_y  # bottom right
-        )
+        self.__move_top_left_to(self.left, new_y - self.h)
 
     @property
     def b(self) -> float:
@@ -222,14 +207,7 @@ class Rectangle:
         cx, cy = centre
         half_width = self.width // 2
         half_height = self.height // 2
-        self.__canvas.coords(
-            self.__rect,
-            cx - half_width,
-            cy - half_height,
-            cx + half_width,
-            cy + half_height,
-        )
-        self.__centre_text()
+        self.__move_top_left_to(cx - half_width, cy - half_height)
 
     @property
     def c(self) -> tuple[float, float]:
@@ -266,14 +244,7 @@ class Rectangle:
     def centre_right(self, centre_right: tuple[float, float]):
         cx, cy = centre_right
         half_height = self.height // 2
-        self.__canvas.coords(
-            self.__rect,
-            cx - self.width,
-            cy - half_height,
-            cx,
-            cy + half_height,
-        )
-        self.__centre_text()
+        self.__move_top_left_to(cx - self.width, cy - half_height)
 
     @property
     def cr(self):
@@ -290,14 +261,7 @@ class Rectangle:
     def centre_left(self, centre_left: tuple[float, float]):
         cx, cy = centre_left
         half_height = self.height // 2
-        self.__canvas.coords(
-            self.__rect,
-            cx,
-            cy - half_height,
-            cx + self.width,
-            cy + half_height,
-        )
-        self.__centre_text()
+        self.__move_top_left_to(cx, cy - half_height)
 
     @property
     def cl(self):
