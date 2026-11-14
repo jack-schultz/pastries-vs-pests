@@ -124,3 +124,36 @@ def test_act_does_nothing_by_default(canvas):
     good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
     assert good.act(canvas) is None
     assert good.act(canvas, []) is None
+
+
+# Stun
+
+def test_can_act_when_not_stunned(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    assert not good.is_stunned
+    assert good.can_act()
+
+
+def test_stun_stops_acting_until_it_wears_off(canvas, monkeypatch):
+    now = [1000.0]
+    monkeypatch.setattr("time.monotonic", lambda: now[0])
+
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    good.stun(3.0)
+    assert good.is_stunned
+    assert not good.can_act()
+    now[0] += 2.9
+    assert not good.can_act()
+    now[0] += 0.2
+    assert good.can_act()
+
+
+def test_shorter_stun_does_not_cut_a_longer_one(canvas, monkeypatch):
+    now = [1000.0]
+    monkeypatch.setattr("time.monotonic", lambda: now[0])
+
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    good.stun(5.0)
+    good.stun(1.0)
+    now[0] += 2.0
+    assert good.is_stunned
