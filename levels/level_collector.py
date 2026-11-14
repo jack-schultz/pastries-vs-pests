@@ -14,6 +14,7 @@ class LevelCollector():
             4: self.level_4,
             5: self.level_5,
             6: self.level_6,
+            7: self.level_7,
         }
         # Extra levels for dev
         self.__dev_levels = {
@@ -37,94 +38,110 @@ class LevelCollector():
     def starting_flour(self, number: int) -> int:
         return self.__starting_flour.get(number, default_flour)
 
-    def dev_level(self) -> list[dict[int, int]]:
+    def dev_level(self) -> list[dict[PestType, int]]:
         return [
-            {1: 5, 2: 2},
-            {1: 5, 2: 4},
-            {1: 4, 2: 5, 3: 2},
-            {2: 8, 3: 2},
-            {1: 6, 2: 6, 3: 3},
-            {1: 4, 2: 8, 3: 4},
-            {2: 10, 3: 4},
-            {1: 6, 2: 8, 3: 5},
-            {1: 5, 2: 10, 3: 6},
-            {1: 10, 2: 12, 3: 10},  # finale
+            {PestType.SPRINGTAIL: 2, PestType.MEALWORM: 1, PestType.RHINO_BEETLE: 1, PestType.STINKBUG: 1},  # one of every new pest first
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 2, PestType.SPRINGTAIL: 2},
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 4, PestType.MEALWORM: 2},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 5, PestType.HEAVY_ARMOUR_ANT: 2, PestType.RHINO_BEETLE: 2},
+            {PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 2, PestType.STINKBUG: 2},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 3, PestType.SPRINGTAIL: 3},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 4, PestType.MEALWORM: 2, PestType.RHINO_BEETLE: 2},
+            {PestType.ARMOUR_ANT: 10, PestType.HEAVY_ARMOUR_ANT: 4, PestType.STINKBUG: 3},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 5, PestType.SPRINGTAIL: 4, PestType.RHINO_BEETLE: 3},
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 10, PestType.HEAVY_ARMOUR_ANT: 6, PestType.MEALWORM: 3, PestType.STINKBUG: 3},
+            {PestType.ANT: 10, PestType.ARMOUR_ANT: 12, PestType.HEAVY_ARMOUR_ANT: 10, PestType.SPRINGTAIL: 5, PestType.MEALWORM: 4, PestType.RHINO_BEETLE: 4, PestType.STINKBUG: 4},  # finale
         ]
 
-    def level_1(self) -> list[dict[int, int]]:
+    def level_1(self) -> list[dict[PestType, int]]:
         # Tutorial: plain ants only
         return [
-            {1: 1},
-            {1: 2},
-            {1: 3},
-            {1: 4},
-            {1: 5},
-            {1: 8},  # finale
+            {PestType.ANT: 1},
+            {PestType.ANT: 2},
+            {PestType.ANT: 3},
+            {PestType.ANT: 4},
+            {PestType.ANT: 5},
+            {PestType.ANT: 8},  # finale
         ]
 
-    def level_2(self) -> list[dict[int, int]]:
+    def level_2(self) -> list[dict[PestType, int]]:
         # Armour Ants arrive
         return [
-            {1: 2},
-            {1: 3},
-            {1: 3, 2: 1},
-            {1: 4, 2: 2},
-            {1: 4, 2: 3},
-            {1: 5, 2: 3},
-            {1: 6, 2: 5},  # finale
+            {PestType.ANT: 2},
+            {PestType.ANT: 3},
+            {PestType.ANT: 3, PestType.ARMOUR_ANT: 1},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 2},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 3},
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 3},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 5},  # finale
         ]
 
-    def level_3(self) -> list[dict[int, int]]:
+    def level_3(self) -> list[dict[PestType, int]]:
         # First Heavy Armour Ants
         return [
-            {1: 3},
-            {1: 4, 2: 1},
-            {1: 4, 2: 2},
-            {1: 3, 2: 4},
-            {1: 4, 2: 4},
-            {1: 4, 2: 5, 3: 1},
-            {1: 5, 2: 5},
-            {1: 6, 2: 7, 3: 2},  # finale
+            {PestType.ANT: 3},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 1},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 2},
+            {PestType.ANT: 3, PestType.ARMOUR_ANT: 4},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 4},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 5, PestType.HEAVY_ARMOUR_ANT: 1},
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 5},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 7, PestType.HEAVY_ARMOUR_ANT: 2},  # finale
         ]
 
-    def level_4(self) -> list[dict[int, int]]:
-        # Heavies become common
+    def level_4(self) -> list[dict[PestType, int]]:
+        # Armour become common
         return [
-            {1: 4},
-            {1: 5, 2: 2},
-            {1: 4, 2: 4},
-            {2: 6, 3: 1},
-            {1: 6, 2: 4, 3: 1},
-            {1: 4, 2: 6, 3: 2},
-            {1: 6, 2: 6, 3: 2},
-            {1: 8, 2: 8, 3: 4},  # finale
+            {PestType.ANT: 4},
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 2},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 4},
+            {PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 1},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 4, PestType.HEAVY_ARMOUR_ANT: 1},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 2},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 2},
+            {PestType.ANT: 8, PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 4},  # finale
         ]
 
-    def level_5(self) -> list[dict[int, int]]:
-        # Siege: long level with heavy pressure
+    def level_5(self) -> list[dict[PestType, int]]:
+        # long level with constant pressure
         return [
-            {1: 4, 2: 1},
-            {1: 4, 2: 3},
-            {2: 6, 3: 1},
-            {1: 5, 2: 5, 3: 1},
-            {1: 4, 2: 6, 3: 2},
-            {2: 8, 3: 3},
-            {1: 6, 2: 6, 3: 3},
-            {1: 4, 2: 8, 3: 4},
-            {1: 8, 2: 10, 3: 6},  # finale
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 1},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 3},
+            {PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 1},
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 5, PestType.HEAVY_ARMOUR_ANT: 1},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 2},
+            {PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 3},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 3},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 4},
+            {PestType.ANT: 8, PestType.ARMOUR_ANT: 10, PestType.HEAVY_ARMOUR_ANT: 6},  # finale
         ]
 
-    def level_6(self) -> list[dict[int, int]]:
-        # Finale: the hardest level, with a big opening and a huge last wave
+    def level_6(self) -> list[dict[PestType, int]]:
+        # very hard level, with a big opening and a huge last wave
         return [
-            {1: 5, 2: 2},
-            {1: 5, 2: 4},
-            {1: 4, 2: 5, 3: 2},
-            {2: 8, 3: 2},
-            {1: 6, 2: 6, 3: 3},
-            {1: 4, 2: 8, 3: 4},
-            {2: 10, 3: 4},
-            {1: 6, 2: 8, 3: 5},
-            {1: 5, 2: 10, 3: 6},
-            {1: 10, 2: 12, 3: 10},  # finale
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 2},
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 4},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 5, PestType.HEAVY_ARMOUR_ANT: 2},
+            {PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 2},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 3},
+            {PestType.ANT: 4, PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 4},
+            {PestType.ARMOUR_ANT: 10, PestType.HEAVY_ARMOUR_ANT: 4},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 5},
+            {PestType.ANT: 5, PestType.ARMOUR_ANT: 10, PestType.HEAVY_ARMOUR_ANT: 6},
+            {PestType.ANT: 10, PestType.ARMOUR_ANT: 12, PestType.HEAVY_ARMOUR_ANT: 10},  # finale
+        ]
+
+    def level_7(self) -> list[dict[PestType, int]]:
+        # Bug infestation: each new pest is brought in one at a time, then they all come at once
+        return [
+            {PestType.ANT: 3, PestType.SPRINGTAIL: 1},  # first Springtail
+            {PestType.ANT: 3, PestType.SPRINGTAIL: 3},
+            {PestType.ANT: 3, PestType.ARMOUR_ANT: 2, PestType.MEALWORM: 1},  # first Mealworm
+            {PestType.ARMOUR_ANT: 3, PestType.SPRINGTAIL: 2, PestType.MEALWORM: 2},
+            {PestType.ANT: 4, PestType.RHINO_BEETLE: 2},  # first Rhino Beetles
+            {PestType.ARMOUR_ANT: 3, PestType.SPRINGTAIL: 3, PestType.RHINO_BEETLE: 3},
+            {PestType.ANT: 3, PestType.ARMOUR_ANT: 3, PestType.STINKBUG: 2},  # first Stinkbugs
+            {PestType.HEAVY_ARMOUR_ANT: 2, PestType.MEALWORM: 2, PestType.STINKBUG: 3},
+            {PestType.ARMOUR_ANT: 4, PestType.SPRINGTAIL: 4, PestType.RHINO_BEETLE: 3, PestType.STINKBUG: 3},
+            {PestType.ANT: 6, PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 4, PestType.SPRINGTAIL: 5, PestType.MEALWORM: 4, PestType.RHINO_BEETLE: 4, PestType.STINKBUG: 4},  # finale
         ]
