@@ -1,6 +1,6 @@
-from living.pests.ants.ant import Ant
-from living.pests.ants.armour_ant import ArmourAnt
-from living.pests.ants.heavy_armour_ant import HeavyArmourAnt
+from entities.living.pests.ants.ant import Ant
+from entities.living.pests.ants.armour_ant import ArmourAnt
+from entities.living.pests.ants.heavy_armour_ant import HeavyArmourAnt
 
 # Maps the pest ids used in the level data to the pest classes they spawn
 pest_ids = {

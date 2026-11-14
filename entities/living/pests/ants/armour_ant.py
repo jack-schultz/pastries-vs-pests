@@ -1,6 +1,6 @@
 from __future__ import annotations
 from armour.chainmail import Chainmail
-from living.pests.ants.ant import Ant
+from entities.living.pests.ants.ant import Ant
 
 
 class ArmourAnt(Ant):
