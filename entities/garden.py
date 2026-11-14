@@ -66,9 +66,6 @@ class Garden(Entity):
         centre_y = self.position[1] + self.__grid_size * row + self.__grid_size // 2
         return pest_class(self.canvas, game_width, centre_y)
 
-    def spawn_ant(self, game_width) -> Ant:
-        return self.spawn_pest(Ant, game_width)
-
     def goods_act(self, pests=None):
         # Every good acts on its own timer; flour and projectiles it makes are routed to the right list
         new_objs = []
