@@ -10,6 +10,10 @@ class Damage:
         damage_type: DamageType = DamageType.BLUDGEONING,
         direction: Direction = Direction.LEFT
     ) -> None:
+        # Negative damage would heal the target, cant be having that.
+        if amount < 0:
+            raise ValueError(f"Damage amount can't be negative, got {amount}")
+
         self.__amount = amount
         self.__type = damage_type
         self.__direction = direction

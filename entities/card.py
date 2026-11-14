@@ -16,6 +16,12 @@ class Card(Entity):
         tool: ToolType | None = None,
         replaces: dict[type[BaseGood], ReplaceInfo] | None = None,
     ) -> None:
+        # A zero would divide by zero when drawing
+        if cost < 0:
+            raise ValueError(f"Card cost can't be negative, got {cost}")
+        if cooldown <= 0:
+            raise ValueError(f"Card cooldown must be positive, got {cooldown}")
+
         super().__init__(canvas, x, y, width, height, CardColour.READY_FILL.value)
         self.__name = name
         self.__cost = cost
