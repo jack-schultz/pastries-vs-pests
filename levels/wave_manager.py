@@ -1,5 +1,6 @@
 from __future__ import annotations
 import random
+from collections import deque
 from entities.living.pests.base_pest import BasePest
 
 
@@ -16,6 +17,7 @@ class WaveManager:
         self.__spawn_interval = 1.0  # seconds between pests spawning
 
         # For each wave, create a flat list with one entry per pest to spawn.
+        # A list keeps the waves indexed by wave number.
         self.__waves = [
             # Inside a wave: turn each pest id and count into that many pest classes.
             # {1: 2, 2: 1} -> [Ant, Ant, ArmourAnt]
@@ -26,7 +28,8 @@ class WaveManager:
             ]
             for wave in waves  # do this for every wave in the level
         ]
-        self.__queue: list[type[BasePest]] = []  # pests that have arrived but not spawned yet
+        # Pests that have arrived but not spawned yet.
+        self.__queue: deque[type[BasePest]] = deque()
         self.__wave_number = 0  # how many waves have arrived
         self.__next_wave_at: float | None = None  # set on the first call to next_pest
         self.__next_spawn_at = 0.0
@@ -63,7 +66,7 @@ class WaveManager:
         # Spawn the next queued pest once the spawn interval has passed
         if self.__queue and now >= self.__next_spawn_at:
             self.__next_spawn_at = now + self.__spawn_interval
-            return self.__queue.pop(0)
+            return self.__queue.popleft()
 
         # Level is complete once every wave has arrived, spawned and been cleared
         if self.__wave_number >= self.total_waves and not self.__queue and pests_on_board == 0:
