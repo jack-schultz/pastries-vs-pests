@@ -17,4 +17,5 @@ class Platemail(BaseArmour):
             wear={
                 DamageType.ACID: 3.0,
             },
+            layer_count=2
         )

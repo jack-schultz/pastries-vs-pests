@@ -23,4 +23,5 @@ class Shield(BaseArmour):
                 DamageType.FIRE: 0.5,
                 DamageType.PIERCING: 1.5
             },
+            layer_count=2
         )
