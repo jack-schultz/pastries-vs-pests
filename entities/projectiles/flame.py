@@ -41,7 +41,7 @@ class Flame(Projectile):
     def is_expired(self) -> bool:
         return self.__frames_full >= self.__linger_frames
 
-    def __touches(self, pest) -> bool:
+    def touches(self, pest) -> bool:
         # The flame's whole body counts, not just its tip
         flame, body = self.rect, pest.rect
         return (
