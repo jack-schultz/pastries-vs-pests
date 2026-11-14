@@ -18,16 +18,20 @@ class WaveManager:
 
         # For each wave, create a flat list with one entry per pest to spawn.
         # A list keeps the waves indexed by wave number.
-        self.__waves = [
-            # Inside a wave: turn each pest id and count into that many pest classes.
-            # {1: 2, 2: 1} -> [Ant, Ant, ArmourAnt]
-            [
-                pest_types[pest_id]  # look up the pest class for this id
-                for pest_id, count in wave.items()  # each pest id and how many to spawn
-                for _ in range(count)  # repeat it count times
+        try:
+            self.__waves = [
+                # Inside a wave: turn each pest id and count into that many pest classes.
+                # {1: 2, 2: 1} -> [Ant, Ant, ArmourAnt]
+                [
+                    pest_types[pest_id]  # look up the pest class for this id
+                    for pest_id, count in wave.items()  # each pest id and how many to spawn
+                    for _ in range(count)  # repeat it count times
+                ]
+                for wave in waves  # do this for every wave in the level
             ]
-            for wave in waves  # do this for every wave in the level
-        ]
+        except KeyError as error:
+            # Level data used an undefined pest id
+            raise ValueError(f"Unknown pest id {error.args[0]}") from error
         # Pests that have arrived but not spawned yet.
         self.__queue: deque[type[BasePest]] = deque()
         self.__wave_number = 0  # how many waves have arrived
