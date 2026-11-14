@@ -11,6 +11,8 @@ class RhinoBeetle(BasePest):
         self.__tired_speed = 0.2
         super().__init__(
             canvas, x, y,
+            size=45,  # biggest
+            colour="#3b2a20",
             armour=Helmet(),
             speed=0.9,
             damage=40,

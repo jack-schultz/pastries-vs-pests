@@ -12,10 +12,13 @@ class Mealworm(BasePest):
         self.__max_bite = 200
         super().__init__(
             canvas, x, y,
+            size=35,
+            colour="#b5813a",
             armour=Chainmail(),
             speed=0.22,
             damage=self.__first_bite,
         )
+        self.rect.set_text("Mealworm", colour="#ffffff")
         self.__target: BaseGood | None = None
         self.__bite = self.__first_bite
 
