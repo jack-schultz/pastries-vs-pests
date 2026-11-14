@@ -11,7 +11,7 @@ class SugarCube(Projectile):
             colour="#ff8fab",
             damage=35,
             speed=6,  # pixels per frame
-            piercing=1
+            piercing=2
         )
         # White cube with a pink edge
         self.rect.set_colour("#ffffff")
