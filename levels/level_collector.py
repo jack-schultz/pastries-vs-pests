@@ -79,7 +79,8 @@ class LevelCollector():
     def level_3(self) -> list[dict[PestType, int]]:
         # First Heavy Armour Ants
         return [
-            {PestType.ANT: 3},
+            {PestType.ANT: 1},
+            {PestType.ANT: 4},
             {PestType.ANT: 4, PestType.ARMOUR_ANT: 1},
             {PestType.ANT: 4, PestType.ARMOUR_ANT: 2},
             {PestType.ANT: 3, PestType.ARMOUR_ANT: 4},
@@ -92,7 +93,8 @@ class LevelCollector():
     def level_4(self) -> list[dict[PestType, int]]:
         # Armour become common
         return [
-            {PestType.ANT: 4},
+            {PestType.ANT: 2},
+            {PestType.ANT: 5},
             {PestType.ANT: 5, PestType.ARMOUR_ANT: 2},
             {PestType.ANT: 4, PestType.ARMOUR_ANT: 4},
             {PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 1},
@@ -105,6 +107,8 @@ class LevelCollector():
     def level_5(self) -> list[dict[PestType, int]]:
         # long level with constant pressure
         return [
+            {PestType.ANT: 2},
+            {PestType.ANT: 5},
             {PestType.ANT: 4, PestType.ARMOUR_ANT: 1},
             {PestType.ANT: 4, PestType.ARMOUR_ANT: 3},
             {PestType.ARMOUR_ANT: 6, PestType.HEAVY_ARMOUR_ANT: 1},
@@ -119,6 +123,8 @@ class LevelCollector():
     def level_6(self) -> list[dict[PestType, int]]:
         # very hard level, with a big opening and a huge last wave
         return [
+            {PestType.ANT: 2},
+            {PestType.ANT: 5},
             {PestType.ANT: 5, PestType.ARMOUR_ANT: 2},
             {PestType.ANT: 5, PestType.ARMOUR_ANT: 4},
             {PestType.ANT: 4, PestType.ARMOUR_ANT: 5, PestType.HEAVY_ARMOUR_ANT: 2},
@@ -134,6 +140,8 @@ class LevelCollector():
     def level_7(self) -> list[dict[PestType, int]]:
         # Bug infestation: each new pest is brought in one at a time, then they all come at once
         return [
+            {PestType.ANT: 2},
+            {PestType.ANT: 5},
             {PestType.ANT: 3, PestType.SPRINGTAIL: 1},  # first Springtail
             {PestType.ANT: 3, PestType.SPRINGTAIL: 3},
             {PestType.ANT: 3, PestType.ARMOUR_ANT: 2, PestType.MEALWORM: 1},  # first Mealworm

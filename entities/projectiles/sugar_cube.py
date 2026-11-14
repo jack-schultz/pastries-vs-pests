@@ -9,7 +9,7 @@ class SugarCube(Projectile):
             canvas, centre_x, centre_y,
             size=14,
             colour="#ff8fab",
-            damage=35,
+            damage=22,
             speed=6,  # pixels per frame
             piercing=2
         )
