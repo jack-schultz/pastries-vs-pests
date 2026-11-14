@@ -6,7 +6,7 @@ class Shield(BaseArmour):
     # Only protects the front (left). Very good against physical hits and fire
     def __init__(self) -> None:
         super().__init__(
-            durability= 500,
+            durability=500,
             outline_colour="#5b7fa6",
             covered_directions={
                 Direction.LEFT
