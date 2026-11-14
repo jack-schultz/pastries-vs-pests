@@ -1,0 +1,126 @@
+import pytest
+from entities.living.goods.base_good import BaseGood
+from entities.living.living import Living
+
+
+# Construction
+
+def test_is_a_living(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    assert isinstance(good, Living)
+
+
+def test_starts_at_full_health(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    assert good.health == 10
+    assert good.max_health == 10
+    assert not good.is_dead
+
+
+def test_has_no_armour(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    assert good.armour is None
+
+
+def test_is_centred_on_given_point(canvas):
+    # Unlike other entities, x and y are the centre, not the top left
+    good = BaseGood(canvas, 100, 200, 40, 60, "red", 10)
+    assert good.rect.centre == (100, 200)
+
+
+def test_keeps_its_size(canvas):
+    good = BaseGood(canvas, 100, 200, 40, 60, "red", 10)
+    assert good.rect.w == 40
+    assert good.rect.h == 60
+
+
+def test_is_drawn_on_canvas(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    assert good.canvas is canvas
+    assert len(canvas.find_all()) == 1
+
+
+# Damage
+
+def test_take_damage_lowers_health(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    good.take_damage(3)
+    assert good.health == 7
+    assert good.max_health == 10
+
+
+def test_dies_when_health_reaches_zero(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    good.take_damage(10)
+    assert good.is_dead
+
+
+def test_negative_damage_raises(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    with pytest.raises(ValueError):
+        good.take_damage(-5)
+    assert good.health == 10
+
+
+def test_destroy_removes_from_canvas(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    good.destroy()
+    assert canvas.find_all() == ()
+
+
+# Action timer
+
+def test_not_ready_straight_away(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    assert not good._ready(1.0)
+
+
+def test_ready_with_zero_interval(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    assert good._ready(0)
+
+
+def test_ready_after_interval_passes(canvas, monkeypatch):
+    # Fake clock so tests can run instantly
+    now = [1000.0]
+    monkeypatch.setattr("time.monotonic", lambda: now[0])
+
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+
+    now[0] += 0.5
+    assert not good._ready(1.0)
+    now[0] += 0.5
+    assert good._ready(1.0)
+
+
+def test_ready_restarts_timer(canvas, monkeypatch):
+    now = [1000.0]
+    monkeypatch.setattr("time.monotonic", lambda: now[0])
+
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+
+    now[0] += 1.0
+    assert good._ready(1.0)
+    assert not good._ready(1.0)  # Same moment, so the timer has just restarted
+    now[0] += 1.0
+    assert good._ready(1.0)
+
+
+def test_not_ready_does_not_restart_timer(canvas, monkeypatch):
+    now = [1000.0]
+    monkeypatch.setattr("time.monotonic", lambda: now[0])
+
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+
+    now[0] += 0.6
+    assert not good._ready(1.0)
+    now[0] += 0.6
+    assert good._ready(1.0)
+
+
+# Acting
+
+def test_act_does_nothing_by_default(canvas):
+    good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
+    assert good.act(canvas) is None
+    assert good.act(canvas, []) is None
