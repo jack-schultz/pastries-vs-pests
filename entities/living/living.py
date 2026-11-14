@@ -22,6 +22,12 @@ class Living(Entity):
     def max_health(self) -> int:
         return self.__max_health
 
+    @max_health.setter
+    def max_health(self, new_max_health):
+        health_percentage = self.__health // self.__max_health
+        self.__max_health = new_max_health
+        self.__health = health_percentage * health_percentage
+
     @property
     def armour(self) -> BaseArmour | None:
         return self.__armour
