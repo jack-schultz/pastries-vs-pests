@@ -14,7 +14,8 @@ class BaseArmour:
             outline_colour: str = "#9a9a9a",
             covered_directions: set[Direction] | None = None,
             absorption: dict[DamageType, float] | None = None,
-            wear: dict[DamageType, float] | None = None
+            wear: dict[DamageType, float] | None = None,
+            layer_count: int = 1
     ) -> None:
         self.__durability = durability
         self.__outline_colour = outline_colour
@@ -24,6 +25,8 @@ class BaseArmour:
         self.__absorption = absorption or {}  # If a damage type isn't in the list, it does 1.0
         # Durability lost per point absorbed (>1 is a weakness, <1 is a strength)
         self.__wear = wear or {}  # If a damage type isn't in the list, it does 1.0
+        # Extra layers affects projectile's piercing value
+        self.__layer_count = layer_count
 
     @property
     def durability(self) -> float:
@@ -32,6 +35,10 @@ class BaseArmour:
     @property
     def outline_colour(self) -> str:
         return self.__outline_colour
+
+    @property
+    def layer_count(self) -> int:
+        return self.__layer_count
 
     @property
     def is_broken(self) -> bool:

@@ -28,6 +28,9 @@ class Living(Entity):
 
     @property
     def layer_count(self) -> int:
+        # Pests and armour have layers. Sum both (exclude broken armour) and remove from piercing value
+        if self.__armour is not None and not self.__armour.is_broken:
+            return self.__layer_count + self.__armour.layer_count
         return self.__layer_count
 
     @property
