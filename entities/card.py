@@ -37,7 +37,7 @@ class Card(Entity):
         width, height, name: str, cost: int,
         good_class: Callable[[Rectangle], BaseGood] | None, cooldown: float = 5.0,
         tool: ToolType | None = None,
-        replaces: dict[BaseGood, ReplaceInfo] | None = None,
+        replaces: dict[type[BaseGood], ReplaceInfo] | None = None,
     ) -> None:
         super().__init__(canvas, x, y, width, height, CardColour.READY_FILL.value)
         self.__name = name
@@ -45,7 +45,7 @@ class Card(Entity):
         self.__good_class = good_class
         self.__tool = tool
         # Existing good class -> (good class to spawn in its place, cost of the replacement)
-        self.__replaces: dict[BaseGood, ReplaceInfo] | None = replaces
+        self.__replaces: dict[type[BaseGood], ReplaceInfo] = replaces or {}
         self.__cooldown_frames = round(cooldown * 60)
         self.__frames_left = 0  # 0 means ready to select
 
@@ -218,7 +218,7 @@ class Card(Entity):
 
         return False
 
-    def __rule_for(self, existing_good: BaseGood | None) -> ReplaceInfo | None | None:
+    def __rule_for(self, existing_good: BaseGood | None) -> ReplaceInfo | None:
         # The replacement rule for this exact good class, if the card has one
         if existing_good is None:
             return None
@@ -227,14 +227,14 @@ class Card(Entity):
 
     def good_class_for(self, existing: BaseGood | None) -> Callable[..., BaseGood] | None:
         # Uses the replacement class when the rule matches, otherwise the card's own good
-        rule: ReplaceInfo = self.__rule_for(existing)
+        rule: ReplaceInfo | None = self.__rule_for(existing)
         if rule:
             return rule["replace"]  # 0 is good class
         return self.__good_class
 
     def cost_for(self, existing_good: BaseGood | None) -> int:
         # Replacing costs the rule's own price, otherwise the card's normal cost
-        rule: ReplaceInfo = self.__rule_for(existing_good)
+        rule: ReplaceInfo | None = self.__rule_for(existing_good)
         if rule:
             return rule["cost"]  # 1 is cost
         return self.__cost
