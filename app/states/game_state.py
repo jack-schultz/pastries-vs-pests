@@ -106,7 +106,15 @@ class GameState(BaseState):
         if existing is not None:
             existing.destroy()
             tile.clear_good()
-        tile.good = new_good
+
+        try:
+            tile.good = new_good
+        except ValueError:
+            # Remove good and deselect the card
+            if new_good is not None:
+                new_good.destroy()
+            holder.selected_card = None
+            return
 
         # Take flour amount, start the card's cooldown and reset selected card
         self.__world.flour -= cost

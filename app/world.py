@@ -30,8 +30,14 @@ class World:
 
         # === LEVEL SETTINGS ===
         self.__level_collector = LevelCollector()
+        try:
+            waves = self.__level_collector.get_level(level_number)
+        except KeyError:
+            # Unknown level fall back to 1
+            level_number = 1
+            waves = self.__level_collector.get_level(level_number)
         self.__level_number = level_number
-        self.__waves = WaveManager(self.__level_collector.get_level(self.__level_number), pest_ids)
+        self.__waves = WaveManager(waves, pest_ids)
         self.__next_button: Rectangle | None = None  # shown once a level is complete
         self.__game_over = False  # set when a pest reaches the left of the screen
 
@@ -181,13 +187,17 @@ class World:
 
     def drop_held(self, tile: Tile) -> bool:
         # Places the held good on an empty tile. Returns False if the tile can't take it
-        if not self.__held or not tile.is_empty:
+        if not self.__held:
             return False
         good, _ = self.__held
+        try:
+            tile.good = good
+        except ValueError:
+            # The tile is occupied, so the good stays held
+            return False
         cx, cy = good.rect.centre
         tx, ty = tile.rect.centre
         good.rect.move((tx - cx, ty - cy))
-        tile.good = good
         self.__held = None
         return True
 
@@ -204,6 +214,12 @@ class World:
             tile.clear_good()
 
     def start_next_level(self) -> None:
+        # Look up the next level first, so nothing is cleared if it doesn't exist
+        try:
+            waves = self.__level_collector.get_level(self.__level_number + 1)
+        except KeyError:
+            return
+
         # A held good is cleared
         if self.__held:
             self.__held[0].destroy()
@@ -234,7 +250,7 @@ class World:
 
         self.__level_number += 1
         self.__flour = self.__level_collector.starting_flour(self.__level_number)
-        self.__waves = WaveManager(self.__level_collector.get_level(self.__level_number), pest_ids)
+        self.__waves = WaveManager(waves, pest_ids)
         self.update_wave_text()
 
     def clicked_next_button(self, pos: tuple[int, int]) -> bool:
