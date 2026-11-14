@@ -36,11 +36,11 @@ class LevelCollector():
     def level_count(self) -> int:
         return len(self.__levels)
 
-    def get_level(self, number: int) -> list[dict[int, int]] | None:
+    def get_level(self, number: int) -> list[dict[int, int]]:
         if number in self.__dev_levels:
             return self.__dev_levels[number]()
         if number not in self.__levels:
-            return None
+            raise KeyError(f"There is no level {number}")
         return self.__levels[number]()
 
     def starting_flour(self, number: int) -> int:
