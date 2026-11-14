@@ -52,7 +52,10 @@ class Rectangle:
         Accepted shapes: ("oval", "rectangle", "polygon", "line", "arc", "text")
         """
         # makes sure the string passed in is a valid canvas object
-        create = getattr(self.__canvas, f"create_{kind}")
+        try:
+            create = getattr(self.__canvas, f"create_{kind}")
+        except AttributeError as error:
+            raise ValueError(f"Unknown shape kind '{kind}'") from error
         return create(*coords, tags=(self.__tag,), **options)
 
     def __centre_text(self) -> None:
