@@ -41,6 +41,17 @@ class BasePest(Living, ABC):
         self.__update_armour_outline()
 
     @property
+    def attack_interval(self):
+        return self.__attack_interval
+
+    @attack_interval.setter
+    def attack_interval(self, new_attack_interval):
+        if isinstance(new_attack_interval, float):
+            self.__attack_interval = new_attack_interval
+        else:
+            raise ValueError(f"Expected float, got {type(new_attack_interval)}")
+
+    @property
     def speed(self) -> float:
         return self.__speed
 
