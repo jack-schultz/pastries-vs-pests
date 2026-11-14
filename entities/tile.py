@@ -13,16 +13,15 @@ class Tile(Entity):
         return self.__good
 
     @good.setter
-    def good(self, good: BaseGood) -> bool:
-        # Skip is tile already has a good
-        if self.__good:
-            return False
+    def good(self, good: BaseGood) -> None:
+        # Tile holds 1 good, an occupied tile must be cleared first
+        if self.__good is not None:
+            raise ValueError("Tile already has a good")
 
         if not isinstance(good, BaseGood):
-            return False
+            raise ValueError(f"Only a BaseGood can go on a tile, got {type(good).__name__}")
 
         self.__good = good
-        return True
 
     @property
     def is_empty(self) -> bool:
