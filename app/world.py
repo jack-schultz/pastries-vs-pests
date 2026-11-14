@@ -1,7 +1,7 @@
 from __future__ import annotations
 import time
 from app.rectangle import Rectangle
-from levels.level_collector import LevelCollector, pest_ids, dev_level_id
+from levels.level_collector import LevelCollector, dev_level_id
 from levels.wave_manager import WaveManager
 from entities.living.pests.base_pest import BasePest
 from entities.flour import Flour
@@ -37,7 +37,7 @@ class World:
             level_number = 1
             waves = self.__level_collector.get_level(level_number)
         self.__level_number = level_number
-        self.__waves = WaveManager(waves, pest_ids)
+        self.__waves = WaveManager(waves)
         self.__next_button: Rectangle | None = None  # shown once a level is complete
         self.__game_over = False  # set when a pest reaches the left of the screen
 
@@ -250,7 +250,7 @@ class World:
 
         self.__level_number += 1
         self.__flour = self.__level_collector.starting_flour(self.__level_number)
-        self.__waves = WaveManager(waves, pest_ids)
+        self.__waves = WaveManager(waves)
         self.update_wave_text()
 
     def clicked_next_button(self, pos: tuple[int, int]) -> bool:

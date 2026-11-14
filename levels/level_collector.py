@@ -1,13 +1,4 @@
-from entities.living.pests.ants.ant import Ant
-from entities.living.pests.ants.armour_ant import ArmourAnt
-from entities.living.pests.ants.heavy_armour_ant import HeavyArmourAnt
-
-# Maps the pest ids used in the level data to the pest classes they spawn
-pest_ids = {
-    1: Ant,
-    2: ArmourAnt,
-    3: HeavyArmourAnt,
-}
+from entities.living.pests.pest_type import PestType
 
 default_flour = 75  # flour the player starts a level with
 dev_level_id = 0  # hidden testing level, not counted in level_count
@@ -36,7 +27,7 @@ class LevelCollector():
     def level_count(self) -> int:
         return len(self.__levels)
 
-    def get_level(self, number: int) -> list[dict[int, int]]:
+    def get_level(self, number: int) -> list[dict[PestType, int]]:
         if number in self.__dev_levels:
             return self.__dev_levels[number]()
         if number not in self.__levels:
