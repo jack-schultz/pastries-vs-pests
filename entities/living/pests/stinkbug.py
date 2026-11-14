@@ -14,7 +14,7 @@ class Stinkbug(Ant):
             canvas, x, y,
             armour=Shield(),
         )
-        self.attack_interval = 1.5,
+        self.attack_interval = 1.5
         self.rect.set_text("Stinkbug", colour="#ffffff")
 
     @property
