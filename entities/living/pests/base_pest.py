@@ -2,7 +2,7 @@ from __future__ import annotations
 import time
 from abc import ABC
 from entities.damage import Damage
-from entities.entity import Living
+from entities.living.living import Living
 from armour.base_armour import BaseArmour
 from entities.living.goods.base_good import BaseGood
 

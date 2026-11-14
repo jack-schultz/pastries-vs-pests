@@ -3,7 +3,7 @@ import time
 import tkinter as tk
 from abc import ABC
 from typing import TYPE_CHECKING
-from entities.entity import Living
+from entities.living.living import Living
 from entities.flour import Flour
 from entities.projectiles.projectile import Projectile
 
