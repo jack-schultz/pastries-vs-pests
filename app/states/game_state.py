@@ -3,7 +3,8 @@ from app.states.base_state import BaseState
 import tkinter as tk
 from app.states.pause_state import PauseState
 from app.states.gameover_state import GameOverState
-from entities.card import Card, ToolType
+from entities.card import Card
+from entities.tool_type import ToolType
 from entities.tile import Tile
 from app.world import World
 

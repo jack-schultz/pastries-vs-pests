@@ -1,5 +1,7 @@
 from __future__ import annotations
-from entities.damage import Damage, DamageType, Direction
+from entities.damage import Damage
+from entities.damage_type import DamageType
+from entities.direction import Direction
 
 
 class BaseArmour:

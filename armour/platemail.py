@@ -1,4 +1,4 @@
-from entities.damage import DamageType
+from entities.damage_type import DamageType
 from armour.base_armour import BaseArmour
 
 

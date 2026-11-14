@@ -6,7 +6,8 @@ from entities.living.goods.flour_flower import FlourFlower
 from entities.living.goods.popping_candy import PoppingCandy
 from entities.living.goods.profiterole import Profiterole
 from entities.living.goods.oven_toaster import OvenToaster
-from entities.card import Card, ToolType
+from entities.card import Card
+from entities.tool_type import ToolType
 from entities.entity import Entity
 
 

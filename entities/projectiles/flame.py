@@ -1,5 +1,5 @@
 from __future__ import annotations
-from entities.damage import DamageType
+from entities.damage_type import DamageType
 from entities.projectiles.projectile import Projectile
 
 

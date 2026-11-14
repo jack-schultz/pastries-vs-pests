@@ -1,26 +1,6 @@
 from __future__ import annotations
-from enum import Enum, auto
-
-
-# Affects what armour defends against
-# For example: chainmail doesn't defend against fire
-class DamageType(Enum):
-    BLUDGEONING = 1
-    FIRE = 2
-    EXPLOSIVE = 3
-    GAS = 4
-    ACID = 5
-    PIERCING = 6
-
-
-# Direction attack came from, for example SugarCubes hit from the left, so are blocked by a shield
-# But a shield would not defend an explosion from behind
-class Direction(Enum):
-    LEFT = 1
-    RIGHT = 2
-    ABOVE = 3
-    BELOW = 4
-    AMBIENT = 5  # like explosions or poison gas
+from entities.damage_type import DamageType
+from entities.direction import Direction
 
 
 class Damage:

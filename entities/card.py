@@ -1,34 +1,11 @@
 from __future__ import annotations
-from enum import Enum
-from typing import Callable, TypedDict
+from typing import Callable
 from entities.entity import Entity
 from entities.living.goods.base_good import BaseGood
 from app.rectangle import Rectangle
-
-
-class CardColour(Enum):
-    READY_FILL = "#e63946"
-    HOVER_FILL = "#f25c68"
-    SELECTED_FILL = "#ff8a94"
-    DISABLED_FILL = "#8d8d8d"
-    RECHARGE_FILL = "#7a1d24"
-    OVERLAY_FILL = "#3b0d11"
-    SELECTED_OUTLINE = "#ffd166"
-    HOVER_OUTLINE = "#ffffff"
-    TEXT_COLOUR = "#ffffff"
-    MEET_COST_COLOUR = "#ffffff"
-    SHORT_COST_COLOUR = "#ffb3b3"
-
-
-class ToolType(Enum):
-    GLOVE = "glove"
-    BIN = "bin"
-
-
-# defiles the keys and type hints them for a dict
-class ReplaceInfo(TypedDict):  # total=false allows a dict with only 1 key
-    replace: Callable[..., BaseGood]
-    cost: int
+from entities.card_colour import CardColour
+from entities.tool_type import ToolType
+from entities.replace_info import ReplaceInfo
 
 
 class Card(Entity):
