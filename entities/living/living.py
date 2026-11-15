@@ -65,9 +65,9 @@ class Living(Entity):
             remaining = self.__armour.absorb(damage)
         self.__health -= remaining
         self.__update_health_bar()
-        self.__on_damaged()
+        self._on_damaged()
 
-    def __on_damaged(self) -> None:
+    def _on_damaged(self) -> None:
         # Subclasses cam change how they look after being hit
         # So they can flash red or similar
         pass
