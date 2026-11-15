@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 import pytest
 
@@ -10,3 +11,12 @@ def canvas():
     canvas.pack()
     yield canvas
     root.destroy()
+
+
+@pytest.fixture
+def fast_forward(monkeypatch):
+    # Returns a function that jumps the clock so timers have run out.
+    def jump(seconds=1000):
+        later = time.monotonic() + seconds
+        monkeypatch.setattr(time, "monotonic", lambda: later)
+    return jump
