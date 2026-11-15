@@ -52,7 +52,8 @@ def test_set_text_creates_label_at_centre(canvas, rect):
 def test_set_text_again_updates_existing_label(canvas, rect):
     rect.set_text("Flour")
     rect.set_text("Sugar", colour="white")
-    texts = [i for i in canvas.find_withtag(rect._Rectangle__tag) if canvas.type(i) == "text"]
+    texts = [i for i in canvas.find_withtag(
+        rect._Rectangle__tag) if canvas.type(i) == "text"]
     assert len(texts) == 1
     assert canvas.itemcget(texts[0], "text") == "Sugar"
     assert canvas.itemcget(texts[0], "fill") == "white"
@@ -61,14 +62,16 @@ def test_set_text_again_updates_existing_label(canvas, rect):
 def test_label_follows_rect_when_moved(canvas, rect):
     rect.set_text("Flour")
     rect.move((5, 5))
-    text = [i for i in canvas.find_withtag(rect._Rectangle__tag) if canvas.type(i) == "text"][0]
+    text = [i for i in canvas.find_withtag(
+        rect._Rectangle__tag) if canvas.type(i) == "text"][0]
     assert canvas.coords(text) == [65.0, 50.0]
 
 
 def test_label_recentres_when_width_changes(canvas, rect):
     rect.set_text("Flour")
     rect.width = 200
-    text = [i for i in canvas.find_withtag(rect._Rectangle__tag) if canvas.type(i) == "text"][0]
+    text = [i for i in canvas.find_withtag(
+        rect._Rectangle__tag) if canvas.type(i) == "text"][0]
     assert canvas.coords(text) == [110.0, 45.0]
 
 

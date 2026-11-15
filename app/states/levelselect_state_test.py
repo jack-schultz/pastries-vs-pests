@@ -9,7 +9,8 @@ from app.states.statestack import StateStack
 @pytest.fixture
 def state(canvas):
     stack = StateStack()
-    level_select = LevelSelectState(stack, SimpleNamespace(canvas=canvas, width=900, height=640))
+    level_select = LevelSelectState(
+        stack, SimpleNamespace(canvas=canvas, width=900, height=640))
     stack.push(level_select)
     return level_select
 

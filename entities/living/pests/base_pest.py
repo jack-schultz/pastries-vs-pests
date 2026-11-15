@@ -9,6 +9,7 @@ from entities.living.goods.base_good import BaseGood
 
 class BasePest(Living, ABC):
     """Base class for all pests."""
+
     def __init__(
         self, canvas, x, y,
         size, colour,
@@ -50,7 +51,8 @@ class BasePest(Living, ABC):
         if isinstance(new_attack_interval, float):
             self.__attack_interval = new_attack_interval
         else:
-            raise ValueError(f"Expected float, got {type(new_attack_interval)}")
+            raise ValueError(
+                f"Expected float, got {type(new_attack_interval)}")
 
     @property
     def speed(self) -> float:

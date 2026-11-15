@@ -8,6 +8,7 @@ from entities.living.goods.base_good import BaseGood
 
 class SugarShooter(BaseGood):
     """A good that shoots sugar cubes at pests."""
+
     def __init__(self, canvas, x, y, delay_pattern: Sequence[float] = (1.4,)) -> None:
         super().__init__(
             canvas, x, y,
@@ -40,7 +41,8 @@ class SugarShooter(BaseGood):
             return None
         if not self._ready(self.__delay_pattern[self.__pattern_index]):
             return None
-        self.__pattern_index = (self.__pattern_index + 1) % len(self.__delay_pattern)
+        self.__pattern_index = (self.__pattern_index +
+                                1) % len(self.__delay_pattern)
         return self._make_projectile(canvas)
 
     def _make_projectile(self, canvas: tk.Canvas) -> Projectile:

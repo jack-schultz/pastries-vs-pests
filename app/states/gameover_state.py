@@ -6,6 +6,7 @@ from app.rectangle import Rectangle
 
 class GameOverState(BaseState):
     """The screen shown when the player loses."""
+
     def __init__(self, state_stack, window) -> None:
         super().__init__(state_stack, window)
         self.__restart_button: Rectangle | None = None
@@ -34,4 +35,5 @@ class GameOverState(BaseState):
         # Restart on the level the player lost on
         level = self.state_stack.bottom.world.level_number
         self.window.canvas.delete("all")
-        self.state_stack.replace_all(GameState(self.state_stack, self.window, level))
+        self.state_stack.replace_all(
+            GameState(self.state_stack, self.window, level))

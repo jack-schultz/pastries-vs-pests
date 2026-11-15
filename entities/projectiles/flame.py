@@ -5,6 +5,7 @@ from entities.projectiles.projectile import Projectile
 
 class Flame(Projectile):
     """burns every pest it touches, and disappears after it has fully stretched"""
+
     def __init__(self, canvas, left: float, centre_y: float, range_px: float) -> None:
         super().__init__(
             canvas, left, centre_y,
@@ -31,7 +32,8 @@ class Flame(Projectile):
     def move(self) -> None:
         # Stretch to the right until at full range, then linger a few frames
         if self.__length < self.__range:
-            self.__length = min(self.__length + self.__grow_speed, self.__range)
+            self.__length = min(
+                self.__length + self.__grow_speed, self.__range)
             self.rect.w = self.__length
         else:
             self.__frames_full += 1

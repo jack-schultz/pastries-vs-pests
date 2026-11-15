@@ -6,6 +6,7 @@ from armour.base_armour import BaseArmour
 
 class Living(Entity):
     """Base class for entities with health that can be hurt and die"""
+
     def __init__(self, canvas, x, y, width, height, colour, health: int, armour: BaseArmour | None = None, layer_count: int = 1) -> None:
         super().__init__(canvas, x, y, width, height, colour)
         self.__health = health
@@ -70,8 +71,10 @@ class Living(Entity):
         w = self.rect.w
         if self.__health_bar is None:
             # Create the health bar on first hit
-            background = self.rect.draw("rectangle", l, t - 9, l + w, t - 4, fill="#3d405b", outline="")
-            fill = self.rect.draw("rectangle", l, t - 9, l + w, t - 4, fill="#4caf50", outline="")
+            background = self.rect.draw(
+                "rectangle", l, t - 9, l + w, t - 4, fill="#3d405b", outline="")
+            fill = self.rect.draw("rectangle", l, t - 9,
+                                  l + w, t - 4, fill="#4caf50", outline="")
             self.__health_bar = (background, fill)
 
         _, fill = self.__health_bar
@@ -79,7 +82,8 @@ class Living(Entity):
 
         # Resize fill
         canvas = self.canvas
-        x1, y1, _, y2 = canvas.coords(self.__health_bar[0])  # get points, _ is what we are updating
+        # get points, _ is what we are updating
+        x1, y1, _, y2 = canvas.coords(self.__health_bar[0])
         canvas.coords(fill, x1, y1, x1 + w * fraction, y2)  # update points
 
         # Set colour based on percentage

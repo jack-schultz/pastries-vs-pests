@@ -10,5 +10,6 @@ def test_has_two_layers():
 
 def test_blocks_three_quarters_of_an_explosion():
     platemail = Platemail()
-    assert platemail.absorb(Damage(100, DamageType.EXPLOSIVE, Direction.AMBIENT)) == 25
+    assert platemail.absorb(
+        Damage(100, DamageType.EXPLOSIVE, Direction.AMBIENT)) == 25
     assert platemail.durability == 350

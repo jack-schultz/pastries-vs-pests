@@ -6,6 +6,7 @@ from entities.living.pests.base_pest import BasePest
 
 class Mealworm(BasePest):
     """Each bite into the same good does more and more damage."""
+
     def __init__(self, canvas, x, y) -> None:
         self.__first_bite = 40
         self.__bite_growth = 25
@@ -28,7 +29,8 @@ class Mealworm(BasePest):
 
     def _strike(self, good: BaseGood) -> None:
         if good is self.__target:
-            self.__bite = min(self.__bite + self.__bite_growth, self.__max_bite)
+            self.__bite = min(
+                self.__bite + self.__bite_growth, self.__max_bite)
         else:
             self.__target = good
             self.__bite = self.__first_bite

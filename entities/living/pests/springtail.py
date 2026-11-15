@@ -7,6 +7,7 @@ from entities.living.pests.base_pest import BasePest
 
 class Springtail(Ant):
     """like an ant, but jumps over first good"""
+
     def __init__(
         self,
         canvas, x, y,

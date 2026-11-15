@@ -6,6 +6,7 @@ import tkinter as tk
 
 class PauseState(BaseState):
     """The pause screen shown over the game."""
+
     def __init__(self, state_stack, window):
         super().__init__(state_stack, window)
         self.__buttons: dict[str, Rectangle] = {}
@@ -40,14 +41,17 @@ class PauseState(BaseState):
             # The game state sits at the bottom of the stack; restart its current level
             level = self.state_stack.bottom.world.level_number
             self.window.canvas.delete("all")
-            self.state_stack.replace_all(GameState(self.state_stack, self.window, level))
+            self.state_stack.replace_all(
+                GameState(self.state_stack, self.window, level))
         elif self.__buttons["level_select"].collide_point(pos):
             # Imported here to avoid circular imports between states
             from app.states.levelselect_state import LevelSelectState
-            self.state_stack.replace_all(LevelSelectState(self.state_stack, self.window))
+            self.state_stack.replace_all(
+                LevelSelectState(self.state_stack, self.window))
         elif self.__buttons["main_menu"].collide_point(pos):
             from app.states.mainmenu_state import MainMenuState
-            self.state_stack.replace_all(MainMenuState(self.state_stack, self.window))
+            self.state_stack.replace_all(
+                MainMenuState(self.state_stack, self.window))
 
     def exit(self):
         self.window.canvas.delete("pause_ui")

@@ -9,4 +9,5 @@ def blaster(canvas):
 
 
 def test_is_a_shooter_that_fires_faster(blaster, canvas):
-    assert isinstance(blaster, SugarShooter) and blaster.delay_pattern == (1.4, 0.25)
+    assert isinstance(
+        blaster, SugarShooter) and blaster.delay_pattern == (1.4, 0.25)

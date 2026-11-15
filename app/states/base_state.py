@@ -4,6 +4,7 @@ import tkinter as tk
 
 class BaseState(ABC):
     """Base class for all game states (menu, game, pause)."""
+
     def __init__(self, state_stack, window):
         self.__state_stack = state_stack
         self.__window = window

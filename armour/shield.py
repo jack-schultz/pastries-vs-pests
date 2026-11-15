@@ -5,6 +5,7 @@ from armour.base_armour import BaseArmour
 
 class Shield(BaseArmour):
     """Only protects the front (left). Very good against physical hits and fire"""
+
     def __init__(self) -> None:
         super().__init__(
             durability=500,

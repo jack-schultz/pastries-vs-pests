@@ -4,6 +4,7 @@ from entities.living.goods.base_good import BaseGood
 
 class Hardtack(BaseGood):
     """A tough good that blocks pests."""
+
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,

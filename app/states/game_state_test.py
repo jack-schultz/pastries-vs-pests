@@ -9,7 +9,8 @@ from entities.flour import Flour
 def make_state(canvas):
     stack = StateStack()
     # Only the parts of the window a state uses.
-    state = GameState(stack, SimpleNamespace(canvas=canvas, width=900, height=640))
+    state = GameState(stack, SimpleNamespace(
+        canvas=canvas, width=900, height=640))
     stack.push(state)
     return state
 

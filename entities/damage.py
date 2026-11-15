@@ -5,6 +5,7 @@ from entities.direction import Direction
 
 class Damage:
     """An amount of damage together with its type."""
+
     def __init__(
         self,
         amount: float,

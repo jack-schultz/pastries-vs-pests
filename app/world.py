@@ -21,10 +21,12 @@ if TYPE_CHECKING:
 
 class World:
     """Owns the board objects that are drawn on the canvas: the garden, the inventory, the flour counter, pests, flours and projectiles"""
+
     def __init__(self, window: Window, level_number: int = 1) -> None:
         self.__window = window
         self.__garden = Garden(self.__window.canvas, 40, 120)
-        self.__card_holder = CardHolder(self.__window.canvas, 180, 20, self.__window.width)
+        self.__card_holder = CardHolder(
+            self.__window.canvas, 180, 20, self.__window.width)
         # A good lifted by the glove, with the tile it came from. It follows the mouse until it is dropped
         self.__held: tuple[BaseGood, Tile] | None = None
 
@@ -46,7 +48,8 @@ class World:
         self.__flours: list[Flour] = []
         self.__projectiles: list[Projectile] = []
 
-        self.__flour: int = self.__level_collector.starting_flour(self.__level_number)
+        self.__flour: int = self.__level_collector.starting_flour(
+            self.__level_number)
 
         # Text in top left to display flour count
         self.__flour_text = self.__window.canvas.create_text(
@@ -122,7 +125,8 @@ class World:
                 self.__flour += flour.amount
                 self.__flours.remove(flour)
         # Update flour counter
-        self.__window.canvas.itemconfig(self.__flour_text, text=f"{self.__flour}")
+        self.__window.canvas.itemconfig(
+            self.__flour_text, text=f"{self.__flour}")
 
     def add_goods(self, new_objs) -> None:
         # Routes the flour and projectiles made by goods to their lists
@@ -138,9 +142,11 @@ class World:
 
     def spawn_pest_if_due(self) -> None:
         # The current wave decides which pest spawns on the right edge of a random row
-        pest_class = self.__waves.next_pest(time.monotonic(), len(self.__pests))
+        pest_class = self.__waves.next_pest(
+            time.monotonic(), len(self.__pests))
         if pest_class:
-            self.__pests.append(self.__garden.spawn_pest(pest_class, self.__window.width))
+            self.__pests.append(self.__garden.spawn_pest(
+                pest_class, self.__window.width))
         self.update_wave_text()
 
     def update_wave_text(self) -> None:
@@ -156,8 +162,10 @@ class World:
         # Offer the next level once this one is complete, if there is one
         has_next = self.__level_number < self.__level_collector.level_count()
         if self.__waves.finished and has_next and self.__next_button is None:
-            self.__next_button = Rectangle(self.__window.canvas, 350, 300, 200, 70, "#3d405b")
-            self.__next_button.set_text("Next Level", colour="#ffffff", size=16)
+            self.__next_button = Rectangle(
+                self.__window.canvas, 350, 300, 200, 70, "#3d405b")
+            self.__next_button.set_text(
+                "Next Level", colour="#ffffff", size=16)
 
     @property
     def is_holding(self) -> bool:
@@ -249,7 +257,8 @@ class World:
             self.__next_button = None
 
         self.__level_number += 1
-        self.__flour = self.__level_collector.starting_flour(self.__level_number)
+        self.__flour = self.__level_collector.starting_flour(
+            self.__level_number)
         self.__waves = WaveManager(waves)
         self.update_wave_text()
 
@@ -318,7 +327,8 @@ class World:
             projectile.move()
             for hit_pest in self.__pests_at(projectile):
                 hit_pest.take_damage(projectile.damage_to_deal())
-                projectile.add_hit_pest(hit_pest)  # Stores it in a list so it cant hit the same pest twice
+                # Stores it in a list so it cant hit the same pest twice
+                projectile.add_hit_pest(hit_pest)
                 projectile.piercing -= hit_pest.layer_count
 
                 if hit_pest.is_dead:

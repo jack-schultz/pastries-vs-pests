@@ -12,6 +12,7 @@ class WaveManager:
     Pests from a wave trickle in one at a time, every spawn_interval seconds.
     The level is complete once every wave has arrived and the board is clear.
     """
+
     def __init__(self, waves: list[dict[PestType, int]]) -> None:
         self.__start_delay = 25.0  # seconds before the first wave
         self.__wave_delay = 30.0  # seconds from one wave's arrival to the next
@@ -30,7 +31,8 @@ class WaveManager:
             # {PestType.ANT: 2, PestType.ARMOUR_ANT: 1} -> [Ant, Ant, ArmourAnt]
             [
                 pest_type.value
-                for pest_type, count in wave.items()  # each pest type and how many to spawn
+                # each pest type and how many to spawn
+                for pest_type, count in wave.items()
                 for _ in range(count)  # repeat it count times
             ]
             for wave in waves  # do this for every wave in the level

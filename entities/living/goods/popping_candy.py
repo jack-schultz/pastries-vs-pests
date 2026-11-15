@@ -8,6 +8,7 @@ from entities.living.goods.base_good import BaseGood
 
 class PoppingCandy(BaseGood):
     """Buried and harmless while arming, then explodes when a pest reaches it"""
+
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,
@@ -49,7 +50,8 @@ class PoppingCandy(BaseGood):
         for pest in pests:
             px, py = pest.rect.centre
             if abs(py - cy) <= self.__row_tolerance and abs(px - cx) <= self.__blast_radius:
-                pest.take_damage(Damage(self.__blast_damage, DamageType.EXPLOSIVE, Direction.AMBIENT))
+                pest.take_damage(Damage(self.__blast_damage,
+                                 DamageType.EXPLOSIVE, Direction.AMBIENT))
                 hit.append(pest)
         self.take_damage(self.health)  # the candy is used up
         return hit

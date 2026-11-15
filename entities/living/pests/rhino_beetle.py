@@ -6,6 +6,7 @@ from entities.living.pests.base_pest import BasePest
 
 class RhinoBeetle(BasePest):
     """Charges in fast and headbutts the first good it reaches with a big first hit."""
+
     def __init__(self, canvas, x, y) -> None:
         self.__ram_damage = 450
         self.__tired_speed = 0.2

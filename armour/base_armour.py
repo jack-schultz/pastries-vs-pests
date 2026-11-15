@@ -10,6 +10,7 @@ class BaseArmour:
     Subclasses configure it through __init__, and can override absorb()
     for different functionality.
     """
+
     def __init__(
             self,
             durability: float,
@@ -22,9 +23,11 @@ class BaseArmour:
         self.__durability = durability
         self.__outline_colour = outline_colour
         # Directions this armour protects. Anything else hits the wearer directly
-        self.__covered_directions = set(Direction) if covered_directions is None else covered_directions
+        self.__covered_directions = set(
+            Direction) if covered_directions is None else covered_directions
         # Fraction of a damage type the armour takes (1.0 = all, 0.0 = none, passes through)
-        self.__absorption = absorption or {}  # If a damage type isn't in the list, it does 1.0
+        # If a damage type isn't in the list, it does 1.0
+        self.__absorption = absorption or {}
         # Durability lost per point absorbed (>1 is a weakness, <1 is a strength)
         self.__wear = wear or {}  # If a damage type isn't in the list, it does 1.0
         # Extra layers affects projectile's piercing value

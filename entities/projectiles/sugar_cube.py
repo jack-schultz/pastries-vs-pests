@@ -4,6 +4,7 @@ from entities.projectiles.projectile import Projectile
 
 class SugarCube(Projectile):
     """The projectile fired by SugarShooter and SugarBlaster"""
+
     def __init__(self, canvas, centre_x, centre_y) -> None:
         super().__init__(
             canvas, centre_x, centre_y,

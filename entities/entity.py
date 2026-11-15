@@ -4,6 +4,7 @@ from app.rectangle import Rectangle
 
 class Entity:
     """Base class for everything drawn on the canvas. Every entity owns one rect"""
+
     def __init__(self, canvas, x, y, width, height, colour) -> None:
         self.__rect = Rectangle(canvas, x, y, width, height, colour)
 

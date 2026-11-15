@@ -4,6 +4,7 @@ from entities.entity import Entity
 
 class Flour(Entity):
     """A flour pickup that adds to the player's flour amount."""
+
     def __init__(self, canvas, x, y, amount: int) -> None:
         colour = "#ffffff"
         width, height = 30, 30

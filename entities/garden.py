@@ -8,6 +8,7 @@ from entities.living.pests.base_pest import BasePest
 
 class Garden(Entity):
     """The grid of tiles that goods are placed on."""
+
     def __init__(self, canvas, x, y):
         colour = "#FFFF00"
         self.__position = (x, y)
@@ -19,7 +20,8 @@ class Garden(Entity):
             self.__rows * self.__grid_size,
             colour
         )
-        self.__tiles = self._create_tiles(self.canvas)  # Holds the rects that make up the grid on the floor
+        # Holds the rects that make up the grid on the floor
+        self.__tiles = self._create_tiles(self.canvas)
 
     @property
     def position(self):
@@ -63,7 +65,8 @@ class Garden(Entity):
     def spawn_pest(self, pest_class, game_width) -> BasePest:
         row = random.randrange(self.__rows)
         # Spawn just off the right edge of the canvas, centred in the row
-        centre_y = self.position[1] + self.__grid_size * row + self.__grid_size // 2
+        centre_y = self.position[1] + \
+            self.__grid_size * row + self.__grid_size // 2
         return pest_class(self.canvas, game_width, centre_y)
 
     def goods_act(self, pests=None):

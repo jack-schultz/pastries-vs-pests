@@ -6,6 +6,7 @@ from app.states.statestack import StateStack
 
 class Window:
     """Holds the Tk window and the canvas everything is drawn on"""
+
     def __init__(self) -> None:
         self.__root = tk.Tk()
         self.__root.title("Pastries vs. Pests")
@@ -14,7 +15,8 @@ class Window:
         self.__width, self.__height = (900, 640)
 
         # Create the world canvas to store our rects coordinates
-        self.__canvas = tk.Canvas(self.__root, width=self.__width, height=self.__height, bg="#fdf3e1", highlightthickness=0)
+        self.__canvas = tk.Canvas(self.__root, width=self.__width,
+                                  height=self.__height, bg="#fdf3e1", highlightthickness=0)
         # Places canvas widget inside parent window as tk is designed for menus so it needs this
         self.__canvas.pack()
 

@@ -10,6 +10,7 @@ from entities.replace_info import ReplaceInfo
 
 class Card(Entity):
     """A card the player clicks to choose a good to place."""
+
     def __init__(
         self, canvas, x, y,
         width, height, name: str, cost: int,
@@ -71,7 +72,8 @@ class Card(Entity):
         # Free cards have no flour to show, so centre the word instead
         if cost == 0:
             canvas.itemconfig(self.__flour_icon, state="hidden")
-            canvas.coords(self.__cost_text, x + width / 2, y + height - badge_h / 2)
+            canvas.coords(self.__cost_text, x + width /
+                          2, y + height - badge_h / 2)
 
         # Reason the card can't be used right now, in the middle of the card
         self.__status_text = canvas.create_text(
@@ -151,7 +153,8 @@ class Card(Entity):
             canvas.itemconfig(self.__highlight, outline="", width=0)
             # Overlay covers the fraction of the card still recharging
             fraction = self.__frames_left / self.__cooldown_frames
-            canvas.coords(self.__overlay, x1, y1, x2, y1 + (y2 - y1) * fraction)
+            canvas.coords(self.__overlay, x1, y1, x2,
+                          y1 + (y2 - y1) * fraction)
             canvas.itemconfig(self.__overlay, state="normal")
             canvas.itemconfig(
                 self.__status_text,
@@ -173,19 +176,23 @@ class Card(Entity):
                 self.__status_text,
                 text=f"Need {self.__cost - self.__flour}\nmore flour",
             )
-            canvas.itemconfig(self.__cost_text, fill=CardColour.SHORT_COST_COLOUR.value)
+            canvas.itemconfig(self.__cost_text,
+                              fill=CardColour.SHORT_COST_COLOUR.value)
             return
 
         # ===== USABLE =====
         canvas.itemconfig(self.__status_text, text="")
-        canvas.itemconfig(self.__cost_text, fill=CardColour.MEET_COST_COLOUR.value)
+        canvas.itemconfig(self.__cost_text,
+                          fill=CardColour.MEET_COST_COLOUR.value)
         if self.__selected:
             self.rect.set_colour(CardColour.SELECTED_FILL.value)
-            canvas.itemconfig(self.__highlight, outline=CardColour.SELECTED_OUTLINE.value, width=4)
+            canvas.itemconfig(
+                self.__highlight, outline=CardColour.SELECTED_OUTLINE.value, width=4)
             canvas.itemconfig(self.__status_text, text="Selected")
         elif self.__hovered:
             self.rect.set_colour(CardColour.HOVER_FILL.value)
-            canvas.itemconfig(self.__highlight, outline=CardColour.HOVER_OUTLINE.value, width=2)
+            canvas.itemconfig(self.__highlight,
+                              outline=CardColour.HOVER_OUTLINE.value, width=2)
         else:
             self.rect.set_colour(CardColour.READY_FILL.value)
             canvas.itemconfig(self.__highlight, outline="", width=0)

@@ -5,7 +5,8 @@ from app.states.statestack import StateStack
 
 
 def test_escape_resumes_the_game(canvas):
-    stack, window = StateStack(), SimpleNamespace(canvas=canvas, width=900, height=640)
+    stack, window = StateStack(), SimpleNamespace(
+        canvas=canvas, width=900, height=640)
     game = GameState(stack, window)
     stack.push(game)
     stack.push(PauseState(stack, window))

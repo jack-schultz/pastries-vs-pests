@@ -11,6 +11,7 @@ from app.world import World
 
 class GameState(BaseState):
     """The main gameplay state for a single level."""
+
     def __init__(self, state_stack, window, level_number: int = 1) -> None:
         super().__init__(state_stack, window)
         self.__world = World(self.window, level_number)
@@ -199,6 +200,7 @@ class GameState(BaseState):
         cost = selected.cost_for(tile.good)
         # Red when the player can't pay for it
         colour = "#ffffff" if self.__world.flour >= cost else "#ffb3b3"
-        canvas.itemconfig(self.__cost_preview, text=f"-{cost}", fill=colour, state="normal")
+        canvas.itemconfig(self.__cost_preview,
+                          text=f"-{cost}", fill=colour, state="normal")
         canvas.coords(self.__cost_preview, pos[0] + 16, pos[1] - 16)
         canvas.tag_raise(self.__cost_preview)

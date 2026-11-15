@@ -6,6 +6,7 @@ from app.rectangle import Rectangle
 
 class MainMenuState(BaseState):
     """The main menu screen."""
+
     def __init__(self, state_stack, window) -> None:
         super().__init__(state_stack, window)
         self.__play_button: Rectangle | None = None
@@ -37,4 +38,5 @@ class MainMenuState(BaseState):
     def open_level_select(self) -> None:
         # Imported here to avoid circular imports between states
         from app.states.levelselect_state import LevelSelectState
-        self.state_stack.replace_all(LevelSelectState(self.state_stack, self.window))
+        self.state_stack.replace_all(
+            LevelSelectState(self.state_stack, self.window))

@@ -5,6 +5,7 @@ from entities.living.goods.base_good import BaseGood
 
 class Tile(Entity):
     """A single square on the garden grid."""
+
     def __init__(self, canvas, x, y, size, colour) -> None:
         super().__init__(canvas, x, y, size, size, colour)
         self.__good: BaseGood | None = None
@@ -20,7 +21,8 @@ class Tile(Entity):
             raise ValueError("Tile already has a good")
 
         if not isinstance(good, BaseGood):
-            raise ValueError(f"Only a BaseGood can go on a tile, got {type(good).__name__}")
+            raise ValueError(
+                f"Only a BaseGood can go on a tile, got {type(good).__name__}")
 
         self.__good = good
 

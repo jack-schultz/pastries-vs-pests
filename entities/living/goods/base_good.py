@@ -16,6 +16,7 @@ class BaseGood(Living, ABC):
     Base class for goods placed on tiles.
     Each good acts on its own timer
     """
+
     def __init__(self, canvas, x, y, width, height, colour, health: int) -> None:
         super().__init__(canvas, x, y, width, height, colour, health)
         self.rect.centre = (x, y)
@@ -29,7 +30,8 @@ class BaseGood(Living, ABC):
 
     def stun(self, seconds: float) -> None:
         # Stops the good acting for a while. A new stun can extend it, never shorten it
-        self.__stunned_until = max(self.__stunned_until, time.monotonic() + seconds)
+        self.__stunned_until = max(
+            self.__stunned_until, time.monotonic() + seconds)
         self.__shown_stunned = True
         self.rect.set_outline("#7e57c2", width=6)
 

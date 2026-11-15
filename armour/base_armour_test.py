@@ -20,7 +20,8 @@ def test_unarmoured_pest_has_one_layer(canvas):
 
 def test_armour_adds_its_layers_to_the_pest(canvas):
     assert ArmourAnt(canvas, 800, 100).layer_count == 2
-    thick = Ant(canvas, 800, 100, armour=BaseArmour(durability=100, layer_count=3))
+    thick = Ant(canvas, 800, 100, armour=BaseArmour(
+        durability=100, layer_count=3))
     assert thick.layer_count == 4
 
 

@@ -13,6 +13,7 @@ from entities.entity import Entity
 
 class CardHolder(Entity):
     """The bar that holds the player's cards."""
+
     def __init__(self, canvas, x: int = 175, y: int = 15, screen_width: int = 900):
         colour = "#8b6c5c"
         self.__x, self.__y = x, y
@@ -22,7 +23,8 @@ class CardHolder(Entity):
         self.__card_attributes = [
             # Name, Cost, Class, Cooldown (seconds), Tool, Replaces (existing good class -> (class to spawn, replace cost))
             ("Flour Flower", 50, FlourFlower, 5.0, None, {}),
-            ("Sugar Shooter", 100, SugarShooter, 5.0, None, {SugarShooter: {"replace": SugarBlaster, "cost": 200}}),
+            ("Sugar Shooter", 100, SugarShooter, 5.0, None, {
+             SugarShooter: {"replace": SugarBlaster, "cost": 200}}),
             ("Hardtack", 50, Hardtack, 30.0, None, {}),
             ("Popping Candy", 25, PoppingCandy, 20.0, None, {}),
             ("Profiterole", 150, Profiterole, 30.0, None, {}),
@@ -53,7 +55,8 @@ class CardHolder(Entity):
             colour
         )
 
-        self.__cards = self._create_cards()  # Holds the cards which are displayed along the top
+        # Holds the cards which are displayed along the top
+        self.__cards = self._create_cards()
 
     def __panel_width(self, count: int) -> int:
         return self.__card_size[0] * count + self.__card_gap * (count - 1) + self.__margin * 2

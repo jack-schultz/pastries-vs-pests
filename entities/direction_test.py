@@ -6,4 +6,5 @@ def test_has_five_distinct_directions():
 
 
 def test_ambient_is_not_a_side():
-    assert Direction.AMBIENT not in (Direction.LEFT, Direction.RIGHT, Direction.ABOVE, Direction.BELOW)
+    assert Direction.AMBIENT not in (
+        Direction.LEFT, Direction.RIGHT, Direction.ABOVE, Direction.BELOW)

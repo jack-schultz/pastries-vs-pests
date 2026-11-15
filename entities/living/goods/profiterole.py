@@ -8,6 +8,7 @@ from entities.living.goods.base_good import BaseGood
 
 class Profiterole(BaseGood):
     """An explosive good that goes off a moment after being planted, hurting nearby pests."""
+
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,
@@ -32,7 +33,8 @@ class Profiterole(BaseGood):
         for pest in pests:
             px, py = pest.rect.centre
             if abs(px - cx) <= self.__blast_radius and abs(py - cy) <= self.__blast_radius:
-                pest.take_damage(Damage(self.__blast_damage, DamageType.EXPLOSIVE, Direction.AMBIENT))
+                pest.take_damage(Damage(self.__blast_damage,
+                                 DamageType.EXPLOSIVE, Direction.AMBIENT))
                 hit.append(pest)
         self.take_damage(self.health)  # the bombe is used up
         return hit
