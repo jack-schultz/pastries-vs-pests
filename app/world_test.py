@@ -90,3 +90,15 @@ def test_tick_resolves_combat(world, canvas, monkeypatch):
     assert world.game_over
     assert len(pests) == 1
     assert tiles[0].is_empty and tiles[10].is_empty and tiles[20].is_empty
+
+
+def test_add_pest_puts_it_on_the_board(world, canvas):
+    ant = Ant(canvas, 500, 200)
+    world.add_pest(ant)
+    assert world.pests == [ant]
+
+
+def test_pests_property_is_a_copy(world, canvas):
+    world.add_pest(Ant(canvas, 500, 200))
+    world.pests.clear()
+    assert len(world.pests) == 1
