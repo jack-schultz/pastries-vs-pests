@@ -19,9 +19,11 @@ class Rectangle:
             fill=colour,
             outline="",
         )
-        self.__text: int | None = None  # Optional label drawn on top of the rect
-        # Every item drawn for this rect (label and added sprite shapes) shares this tag,
-        # so they can be moved, raise and delete together
+        # Optional label drawn on top of the rect.
+        self.__text: int | None = None
+        # Every item drawn for this rect (label and added sprite shapes)
+        # shares this tag, so they can be moved, raise and delete
+        # together.
         self.__tag = f"group{self.__rect}"
         self.__canvas.addtag_withtag(self.__tag, self.__rect)
 
@@ -41,7 +43,7 @@ class Rectangle:
             colour: str = "#3d405b",
             size: int = 9) -> None:
         if self.__text is not None:
-            # Label already there, so just update it
+            # Label already there, so just update it.
             self.__canvas.itemconfig(self.__text, text=text, fill=colour)
             return
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
@@ -50,22 +52,23 @@ class Rectangle:
             text=text,
             fill=colour,
             font=("Arial", size, "bold"),
-            width=(x2 - x1) - 6,  # wrap long names inside the rect
+            width=(x2 - x1) - 6,  # Wrap long names inside the rect.
             justify="center",
             tags=(self.__tag,),
         )
 
     def hide_hitbox(self) -> None:
-        # Hides the rect itself but keeps it as a hitbox, for entities drawn
-        # with shapes instead
+        # Hides the rect itself but keeps it as a hitbox, for entities
+        # drawn with shapes instead.
         self.__canvas.itemconfig(self.__rect, fill="", outline="")
 
     def draw(self, kind: str, *coords: float, **options) -> int:
         """
         Draws an extra shape that shares the same tag with this rect.
-        Accepted shapes: ("oval", "rectangle", "polygon", "line", "arc", "text")
+        Accepted shapes: ("oval", "rectangle", "polygon", "line", "arc",
+        "text").
         """
-        # makes sure the string passed in is a valid canvas object
+        # Makes sure the string passed in is a valid canvas object.
         try:
             create = getattr(self.__canvas, f"create_{kind}")
         except AttributeError as error:
@@ -73,14 +76,15 @@ class Rectangle:
         return create(*coords, tags=(self.__tag,), **options)
 
     def __centre_text(self) -> None:
-        # Keep the label centred on the rect whenever the rect moves or resizes
+        # Keep the label centred on the rect whenever the rect moves or
+        # resizes.
         if self.__text is None:
             return
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         self.__canvas.coords(self.__text, (x1 + x2) / 2, (y1 + y2) / 2)
 
     def __move_top_left_to(self, new_x1: float, new_y1: float) -> None:
-        # Moves the rect tagged items to new location
+        # Moves the rect tagged items to new location.
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
         self.move((new_x1 - x1, new_y1 - y1))
 
@@ -92,14 +96,6 @@ class Rectangle:
     @left.setter
     def left(self, new_x) -> None:
         self.__move_top_left_to(new_x, self.top)
-
-    @property
-    def l(self) -> float:
-        return self.left
-
-    @l.setter
-    def l(self, new_x) -> None:
-        self.left = new_x
 
     @property
     def right(self) -> float:
@@ -155,20 +151,18 @@ class Rectangle:
     @property
     def width(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        # x1, y1 is top left
-        # x2, y2 is bottom right
-        width = x2 - x1  # Calculate difference between points
+        # The coordinates are the top-left and bottom-right corners.
+        width = x2 - x1
         return width
 
     @width.setter
     def width(self, new_width: float):
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        # x1, y1 is top left
-        # x2, y2 is bottom right
+        # The coordinates are the top-left and bottom-right corners.
         self.__canvas.coords(
-            self.__rect,  # rect on canvas to edit
-            x1, y1,  # top left
-            x1 + new_width, y2  # bottom right
+            self.__rect,
+            x1, y1,
+            x1 + new_width, y2
         )
         self.__centre_text()
 
@@ -183,20 +177,18 @@ class Rectangle:
     @property
     def height(self) -> float:
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        # x1, y1 is top left
-        # x2, y2 is bottom right
-        height = y2 - y1  # Calculate difference between points
+        # The coordinates are the top-left and bottom-right corners.
+        height = y2 - y1
         return height
 
     @height.setter
     def height(self, new_height: float):
         x1, y1, x2, y2 = self.__canvas.coords(self.__rect)
-        # x1, y1 is top left
-        # x2, y2 is bottom right
+        # The coordinates are the top-left and bottom-right corners.
         self.__canvas.coords(
-            self.__rect,  # rect on canvas to edit
-            x1, y1,  # top left
-            x2, y1 + new_height  # bottom right
+            self.__rect,
+            x1, y1,
+            x2, y1 + new_height
         )
         self.__centre_text()
 
@@ -214,7 +206,7 @@ class Rectangle:
         half_width = self.width // 2
         half_height = self.height // 2
         centre = (x1 + half_width, y1 + half_height)
-        return centre  # (cx, cy)
+        return centre
 
     @centre.setter
     def centre(self, centre: tuple[float, float]):
@@ -282,7 +274,7 @@ class Rectangle:
         return self.centre_left
 
     def move(self, difference: tuple[float, float]) -> None:
-        # Moves everything with the tag
+        # Moves everything with the tag.
         dx, dy = difference
         self.__canvas.move(self.__tag, dx, dy)
 

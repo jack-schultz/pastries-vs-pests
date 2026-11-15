@@ -17,13 +17,13 @@ def labels(canvas):
             for i in canvas.find_all() if canvas.type(i) == "text"]
 
 
-# Construction
+# These tests cover construction.
 
 def test_is_an_ant_with_a_shield(canvas):
     stinkbug = Stinkbug(canvas, 800, 100)
     assert isinstance(stinkbug, Ant)
     assert isinstance(stinkbug.armour, Shield)
-    assert stinkbug.layer_count == 3  # its own layer plus the shield's two
+    assert stinkbug.layer_count == 3  # Its own layer plus the shield's two.
 
 
 def test_attacks_slower_than_an_ant(canvas):
@@ -37,7 +37,7 @@ def test_label_is_stinkbug(canvas):
     assert "Stinkbug" in labels(canvas)
 
 
-# Stinking
+# These tests cover stunning goods.
 
 def test_hit_damages_and_stuns_good(canvas, monkeypatch):
     now = [1000.0]
@@ -65,7 +65,8 @@ def test_stun_wears_off(canvas, monkeypatch):
 
 
 def test_keeps_good_stunned_while_attacking(canvas, monkeypatch):
-    # It hits again before the stun runs out, so the good never gets a turn
+    # It hits again before the stun runs out, so the good never gets a
+    # turn.
     now = [1000.0]
     monkeypatch.setattr("time.monotonic", lambda: now[0])
     stinkbug = Stinkbug(canvas, 800, 100)
@@ -82,12 +83,12 @@ def test_does_not_hit_faster_than_attack_interval(canvas, monkeypatch):
     stinkbug = Stinkbug(canvas, 800, 100)
     good = make_good(canvas)
     stinkbug.attack(good)
-    now[0] += 1.0  # enough for an ant, not for a stinkbug
+    now[0] += 1.0  # Enough for an ant, not for a stinkbug.
     stinkbug.attack(good)
     assert good.health == 1000 - stinkbug.damage
 
 
-# Shield
+# These tests cover the shield.
 
 def test_shield_blocks_sugar_cube_from_the_front(canvas):
     stinkbug = Stinkbug(canvas, 800, 100)

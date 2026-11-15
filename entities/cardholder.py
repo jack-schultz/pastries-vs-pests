@@ -26,8 +26,8 @@ class CardHolder(Entity):
         self.__card_size = (70, 85)
         self.__card_gap = 10
         self.__card_attributes = [
-            # Name, Cost, Class, Cooldown (seconds), Tool, Replaces (existing
-            # good class -> (class to spawn, replace cost))
+            # Name, Cost, Class, Cooldown (seconds), Tool, Replaces
+            # (existing good class -> (class to spawn, replace cost)).
             ("Flour Flower", 50, FlourFlower, 5.0, None, {}),
             ("Sugar Shooter", 100, SugarShooter, 5.0, None, {
              SugarShooter: {"replace": SugarBlaster, "cost": 200}}),
@@ -36,7 +36,7 @@ class CardHolder(Entity):
             ("Profiterole", 150, Profiterole, 30.0, None, {}),
             ("Oven Toaster", 125, OvenToaster, 8.0, None, {}),
         ]
-        # Tools get their own panel
+        # Tools get their own panel.
         self.__tool_attributes = [
             ("Glove", 50, None, 5.0, ToolType.GLOVE, {}),
             ("Bin", 0, None, 3.0, ToolType.BIN, {}),
@@ -52,7 +52,7 @@ class CardHolder(Entity):
             colour
         )
 
-        # Tool panel
+        # The tool panel holds the glove and the bin.
         tools_width = self.__panel_width(len(self.__tool_attributes))
         self.__tools_x = screen_width - 10 - tools_width
         self.__tools_panel = Entity(
@@ -61,7 +61,7 @@ class CardHolder(Entity):
             colour
         )
 
-        # Holds the cards which are displayed along the top
+        # Holds the cards which are displayed along the top.
         self.__cards = self._create_cards()
 
     def __panel_width(self, count: int) -> int:
@@ -85,7 +85,7 @@ class CardHolder(Entity):
             card.tick_cooldown()
 
     def update_cards(self, flour: int) -> None:
-        # Drop the selection if the card can no longer be used
+        # Drop the selection if the card can no longer be used.
         if self.__selected_card and not self.__selected_card.is_usable(flour):
             self.__selected_card = None
         for card in self.__cards:
@@ -96,7 +96,8 @@ class CardHolder(Entity):
             )
 
     def hover_at(self, pos: tuple[int, int]) -> None:
-        # Remembers which card the mouse is over so it can be highlighted
+        # Remembers which card the mouse is over so it can be
+        # highlighted.
         self.__hovered_card = None
         for card in self.__cards:
             if card.rect.collide_point(pos):

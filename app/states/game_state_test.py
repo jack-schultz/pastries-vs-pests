@@ -62,7 +62,8 @@ def test_click_selected_card_deselects_it(canvas):
 
 def test_cannot_select_a_card_that_costs_too_much(canvas):
     state = make_state(canvas)
-    select(state, "Profiterole")  # 150 with only 75 flour
+    # It costs 150 but the player has only 75 flour.
+    select(state, "Profiterole")
     assert state.world.card_holder.selected_card is None
 
 

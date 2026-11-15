@@ -7,7 +7,9 @@ from entities.living.goods.base_good import BaseGood
 
 
 class PoppingCandy(BaseGood):
-    """Buried and harmless while arming, then explodes when a pest reaches it"""
+    """Buried and harmless while arming, then explodes when a pest
+    reaches it.
+    """
 
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
@@ -16,11 +18,11 @@ class PoppingCandy(BaseGood):
             colour="#8d6e63",
             health=200
         )
-        self.__arm_time = 13  # seconds before it can detonate
+        self.__arm_time = 13  # Seconds before it can detonate.
         self.__planted_at = time.monotonic()
         self.__blast_damage = 1800
-        self.__blast_radius = 110  # pixels from the candy's centre
-        self.__row_tolerance = 45  # pests must be in the same row
+        self.__blast_radius = 110  # Pixels from the candy's centre.
+        self.__row_tolerance = 45  # Pests must be in the same row.
         self.__shown_armed = False
         self.__refresh_display()
 
@@ -37,15 +39,16 @@ class PoppingCandy(BaseGood):
             self.rect.set_text("Arming...", colour="#ffffff")
 
     def act(self, canvas, pests=None) -> None:
-        # Switch to the armed look once, the moment the arming time is up
+        # Switch to the armed look once, the moment the arming time is
+        # up.
         if not self.__shown_armed and self.is_armed:
             self.__shown_armed = True
             self.__refresh_display()
         return None
 
     def detonate(self, pests) -> list:
-        # Hurts every pest in this row within the blast radius, then destroys
-        # itself. Returns the pests hit
+        # Hurts every pest in this row within the blast radius, then
+        # destroys itself. Returns the pests hit.
         cx, cy = self.rect.centre
         hit = []
         for pest in pests:
@@ -58,5 +61,5 @@ class PoppingCandy(BaseGood):
                 pest.take_damage(Damage(self.__blast_damage,
                                  DamageType.EXPLOSIVE, Direction.AMBIENT))
                 hit.append(pest)
-        self.take_damage(self.health)  # the candy is used up
+        self.take_damage(self.health)  # The candy is used up.
         return hit

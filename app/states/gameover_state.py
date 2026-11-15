@@ -31,9 +31,9 @@ class GameOverState(BaseState):
             self.restart()
 
     def restart(self) -> None:
-        # Imported here to avoid a circular import with GameState
+        # Imported here to avoid a circular import with GameState.
         from app.states.game_state import GameState
-        # Restart on the level the player lost on
+        # Restart on the level the player lost on.
         level = self.state_stack.bottom.world.level_number
         self.window.canvas.delete("all")
         self.state_stack.replace_all(

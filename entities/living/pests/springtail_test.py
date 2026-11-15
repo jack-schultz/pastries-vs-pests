@@ -8,7 +8,7 @@ def make_good(canvas, x=300):
 
 
 def walk_into(pest, good):
-    # Move the pest so its front is just inside the good
+    # Move the pest so its front is just inside the good.
     pest.rect.move((good.rect.right - 5 - pest.rect.left, 0))
     assert pest.is_blocked_by(good)
 
@@ -18,7 +18,7 @@ def labels(canvas):
             for i in canvas.find_all() if canvas.type(i) == "text"]
 
 
-# Construction
+# These tests cover construction.
 
 def test_is_an_ant_with_no_armour(canvas):
     springtail = Springtail(canvas, 800, 100)
@@ -44,7 +44,7 @@ def test_label_is_springtail(canvas):
     assert "Springtail" in labels(canvas)
 
 
-# Leaping
+# These tests cover leaping.
 
 def test_has_not_leapt_at_start(canvas):
     assert not Springtail(canvas, 800, 100).has_leapt
@@ -79,10 +79,11 @@ def test_only_leaps_once(canvas, monkeypatch):
 
     first, second = make_good(canvas), make_good(canvas, x=150)
     springtail = Springtail(canvas, 800, 100)
-    springtail.attack(first)  # leap
+    springtail.attack(first)  # The springtail leaps over the good.
 
     walk_into(springtail, second)
     x_before = springtail.rect.left
     springtail.attack(second)
-    assert springtail.rect.left == x_before  # no second leap
-    assert second.health == 1000 - springtail.damage  # bites like an ant
+    assert springtail.rect.left == x_before  # It cannot leap a second time.
+    # It then bites like an ant.
+    assert second.health == 1000 - springtail.damage

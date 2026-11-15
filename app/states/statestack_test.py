@@ -3,7 +3,8 @@ from app.states.statestack import StateStack
 
 
 def test_pop_resumes_the_state_underneath():
-    stack, first, second = StateStack(), BaseState(None, None), BaseState(None, None)
+    stack = StateStack()
+    first, second = BaseState(None, None), BaseState(None, None)
     stack.push(first)
     stack.push(second)
     assert stack.current is second

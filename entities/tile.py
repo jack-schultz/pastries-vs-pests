@@ -16,7 +16,7 @@ class Tile(Entity):
 
     @good.setter
     def good(self, good: BaseGood) -> None:
-        # Tile holds 1 good, an occupied tile must be cleared first
+        # Tile holds 1 good, an occupied tile must be cleared first.
         if self.__good is not None:
             raise ValueError("Tile already has a good")
 

@@ -5,8 +5,8 @@ from entities.damage_type import DamageType
 from entities.direction import Direction
 from entities.entity import Entity
 
-# Only needed for the type hint
-# importing at runtime would create an import loop error
+# This import is only needed for the type hint. Importing it at runtime
+# would create an import loop.
 if TYPE_CHECKING:
     from entities.living.pests.base_pest import BasePest
 
@@ -22,7 +22,7 @@ class Projectile(Entity):
         super().__init__(canvas, centre_x + 20 - size //
                          2, centre_y - size // 2, size, size, colour)
         self.__damage = damage
-        self.__speed = speed  # pixels moved right each frame
+        self.__speed = speed  # Pixels moved right each frame.
         self.__piercing = piercing
         self.__damage_type = damage_type
 
@@ -37,7 +37,8 @@ class Projectile(Entity):
         return self.__damage_type
 
     def damage_to_deal(self) -> Damage:
-        # Projectiles fly right, so they deal damage to the left side of pests
+        # Projectiles fly right, so they deal damage to the left side of
+        # pests.
         return Damage(self.__damage, self.__damage_type, Direction.LEFT)
 
     @property
@@ -62,13 +63,14 @@ class Projectile(Entity):
 
         return self.touches(pest)
 
-    # Split from .hits to allow override for different behaviours
-    # Ex: flame defines touching as anywhere along the projectile's length
+    # Split from .hits to allow override for different behaviours Ex:
+    # flame defines touching as anywhere along the projectile's length.
     def touches(self, pest: BasePest) -> bool:
-        # A projectile hits a pest when its centre right is inside the pest's
-        # rect
+        # A projectile hits a pest when its centre right is inside the
+        # pest's rect.
         return pest.rect.collide_point(self.rect.centre_right)
 
     def is_expired(self) -> bool:
-        # Projectiles have limited lifespan use this, like flames or gas clouds
+        # Projectiles have limited lifespan use this, like flames or gas
+        # clouds.
         return False

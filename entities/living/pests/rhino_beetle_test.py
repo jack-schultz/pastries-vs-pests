@@ -14,13 +14,13 @@ def labels(canvas):
             for i in canvas.find_all() if canvas.type(i) == "text"]
 
 
-# Construction
+# These tests cover construction.
 
 def test_is_a_pest_wearing_a_helmet(canvas):
     beetle = RhinoBeetle(canvas, 800, 100)
     assert isinstance(beetle, BasePest)
     assert isinstance(beetle.armour, Helmet)
-    assert beetle.layer_count == 3  # two of its own plus the helmet
+    assert beetle.layer_count == 3  # Two of its own plus the helmet.
 
 
 def test_charges_in_fast(canvas):
@@ -35,14 +35,14 @@ def test_label_is_rhino_beetle(canvas):
 
 
 def test_helmet_does_not_block_hits_from_the_front(canvas):
-    # The helmet only covers above, so sugar cubes hit it full on
+    # The helmet only covers above, so sugar cubes hit it full on.
     beetle = RhinoBeetle(canvas, 800, 100)
     cube = SugarCube(canvas, 100, 100)
     beetle.take_damage(cube.damage_to_deal())
     assert beetle.health == beetle.max_health - cube.damage
 
 
-# Ramming
+# These tests cover the charge.
 
 def test_first_hit_is_a_big_headbutt_then_slows(canvas):
     beetle = RhinoBeetle(canvas, 800, 100)
@@ -65,7 +65,7 @@ def test_later_hits_are_weak(canvas, monkeypatch):
 
 
 def test_only_one_charge_per_life(canvas, monkeypatch):
-    # A new good after the first doesn't get a second headbutt
+    # A new good after the first doesn't get a second headbutt.
     now = [1000.0]
     monkeypatch.setattr("time.monotonic", lambda: now[0])
     beetle = RhinoBeetle(canvas, 800, 100)
@@ -83,5 +83,6 @@ def test_headbutt_respects_attack_interval(canvas, monkeypatch):
     beetle = RhinoBeetle(canvas, 800, 100)
     good = make_good(canvas)
     beetle.attack(good)
-    beetle.attack(good)  # same moment, so ignored
+    # The second attack is at the same moment, so it is ignored.
+    beetle.attack(good)
     assert good.health == 5000 - 450

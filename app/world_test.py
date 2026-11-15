@@ -23,7 +23,8 @@ def world(window):
 
 
 def fast_forward(monkeypatch):
-    # Jumps the clock so fuses, arming times and wave timers have all run out.
+    # Jumps the clock so fuses, arming times and wave timers have all
+    # run out.
     later = time.monotonic() + 1000
     monkeypatch.setattr(time, "monotonic", lambda: later)
 

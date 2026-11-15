@@ -9,12 +9,12 @@ def make_good(canvas, health=5000, x=300):
 
 
 def bite(mealworm, good, now):
-    # Step past the attack interval, then attack
+    # Step past the attack interval, then attack.
     now[0] += mealworm.attack_interval
     mealworm.attack(good)
 
 
-# Construction
+# These tests cover construction.
 
 def test_is_a_pest_wearing_chainmail(canvas):
     mealworm = Mealworm(canvas, 800, 100)
@@ -35,7 +35,7 @@ def test_first_bite_is_small(canvas):
     assert good.health == 5000 - 40
 
 
-# Boring in
+# These tests cover the bite ramping up.
 
 def test_bites_get_harder_on_same_good(canvas, monkeypatch):
     now = [1000.0]
@@ -76,6 +76,7 @@ def test_does_not_bite_faster_than_attack_interval(canvas, monkeypatch):
     mealworm = Mealworm(canvas, 800, 100)
     good = make_good(canvas)
     mealworm.attack(good)
-    mealworm.attack(good)  # same moment, so ignored
+    # the second attack is at the same moment, so it is ignored.
+    mealworm.attack(good)
     assert good.health == 5000 - 40
     assert mealworm.bite == 40

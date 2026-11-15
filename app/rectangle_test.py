@@ -115,12 +115,6 @@ def test_setting_left_moves_rect_keeping_size(rect):
     assert rect.top == 20
 
 
-def test_setting_l_alias_moves_left(rect):
-    rect.l = 40
-    assert rect.left == 40
-    assert rect.l == 40
-
-
 def test_setting_right_moves_rect_keeping_size(rect):
     rect.right = 200
     assert rect.right == 200

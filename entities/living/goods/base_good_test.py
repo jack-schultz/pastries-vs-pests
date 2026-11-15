@@ -3,7 +3,7 @@ from entities.living.goods.base_good import BaseGood
 from entities.living.living import Living
 
 
-# Construction
+# These tests cover construction.
 
 def test_is_a_living(canvas):
     good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
@@ -23,7 +23,7 @@ def test_has_no_armour(canvas):
 
 
 def test_is_centred_on_given_point(canvas):
-    # Unlike other entities, x and y are the centre, not the top left
+    # Unlike other entities, x and y are the centre, not the top left.
     good = BaseGood(canvas, 100, 200, 40, 60, "red", 10)
     assert good.rect.centre == (100, 200)
 
@@ -40,7 +40,7 @@ def test_is_drawn_on_canvas(canvas):
     assert len(canvas.find_all()) == 1
 
 
-# Damage
+# These tests cover taking damage.
 
 def test_take_damage_lowers_health(canvas):
     good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
@@ -68,7 +68,7 @@ def test_destroy_removes_from_canvas(canvas):
     assert canvas.find_all() == ()
 
 
-# Action timer
+# These tests cover the action timer.
 
 def test_not_ready_straight_away(canvas):
     good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
@@ -81,7 +81,7 @@ def test_ready_with_zero_interval(canvas):
 
 
 def test_ready_after_interval_passes(canvas, monkeypatch):
-    # Fake clock so tests can run instantly
+    # Fake clock so tests can run instantly.
     now = [1000.0]
     monkeypatch.setattr("time.monotonic", lambda: now[0])
 
@@ -101,7 +101,8 @@ def test_ready_restarts_timer(canvas, monkeypatch):
 
     now[0] += 1.0
     assert good._ready(1.0)
-    assert not good._ready(1.0)  # Same moment, so the timer has just restarted
+    # Same moment, so the timer has just restarted.
+    assert not good._ready(1.0)
     now[0] += 1.0
     assert good._ready(1.0)
 
@@ -118,7 +119,7 @@ def test_not_ready_does_not_restart_timer(canvas, monkeypatch):
     assert good._ready(1.0)
 
 
-# Acting
+# These tests cover acting.
 
 def test_act_does_nothing_by_default(canvas):
     good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)
@@ -126,7 +127,7 @@ def test_act_does_nothing_by_default(canvas):
     assert good.act(canvas, []) is None
 
 
-# Stun
+# These tests cover stunning.
 
 def test_can_act_when_not_stunned(canvas):
     good = BaseGood(canvas, 100, 100, 40, 40, "red", 10)

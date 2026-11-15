@@ -17,7 +17,7 @@ class PauseState(BaseState):
 
     def enter(self) -> None:
         canvas = self.window.canvas
-        # Draw pause text with a tag for deletion on exit
+        # Draw pause text with a tag for deletion on exit.
         canvas.create_text(
             self.window.width // 2, 170, text="PAUSED",
             font=("Arial", 36, "bold"), fill="#3d405b", tags="pause_ui"
@@ -38,14 +38,14 @@ class PauseState(BaseState):
             self.state_stack.pop()
         elif self.__buttons["restart"].collide_point(pos):
             from app.states.game_state import GameState
-            # The game state sits at the bottom of the stack; restart its
-            # current level
+            # The game state sits at the bottom of the stack; restart
+            # its current level.
             level = self.state_stack.bottom.world.level_number
             self.window.canvas.delete("all")
             self.state_stack.replace_all(
                 GameState(self.state_stack, self.window, level))
         elif self.__buttons["level_select"].collide_point(pos):
-            # Imported here to avoid circular imports between states
+            # Imported here to avoid circular imports between states.
             from app.states.levelselect_state import LevelSelectState
             self.state_stack.replace_all(
                 LevelSelectState(self.state_stack, self.window))

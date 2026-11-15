@@ -25,7 +25,8 @@ class SugarShooter(BaseGood):
         )
         self.rect.set_text("Sugar Shooter")
         self.__delay_pattern = delay_pattern
-        self.__pattern_index = 0  # which delay in the pattern the next shot is waiting on
+        # Which delay in the pattern the next shot is waiting on.
+        self.__pattern_index = 0
 
     @property
     def delay_pattern(self) -> Sequence[float]:
@@ -33,18 +34,20 @@ class SugarShooter(BaseGood):
 
     def __pest_in_lane(self, pests) -> bool:
         # A pest is in the lane when its vertical centre is within this
-        # shooter's row and it is ahead of the shooter
+        # shooter's row and it is ahead of the shooter.
         top = self.rect.top
         bottom = top + self.rect.h
         shooter_x = self.rect.centre[0]
         for pest in pests or []:
             _, py = pest.rect.centre
-            if top <= py <= bottom and pest.rect.left + pest.rect.w > shooter_x:
+            pest_right = pest.rect.left + pest.rect.w
+            if top <= py <= bottom and pest_right > shooter_x:
                 return True
         return False
 
     def act(self, canvas: tk.Canvas, pests=None) -> Projectile | None:
-        # Hold fire (and keep the timer ready) until a pest is in the lane
+        # Hold fire (and keep the timer ready) until a pest is in the
+        # lane.
         if not self.__pest_in_lane(pests):
             return None
         if not self._ready(self.__delay_pattern[self.__pattern_index]):
@@ -54,6 +57,6 @@ class SugarShooter(BaseGood):
         return self._make_projectile(canvas)
 
     def _make_projectile(self, canvas: tk.Canvas) -> Projectile:
-        # Fire from the front-right of the shooter, along its row
+        # Fire from the front-right of the shooter, along its row.
         x, y = self.rect.centre_right
         return SugarCube(canvas, x, y)

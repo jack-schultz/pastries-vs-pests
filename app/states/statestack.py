@@ -24,14 +24,18 @@ class StateStack:
         return self.__stack[0]
 
     def push(self, state: BaseState) -> None:
-        """Pause current state and push a new state on top (e.g., Pause Menu)."""
+        """Pause current state and push a new state on top (e.g., Pause
+        Menu).
+        """
         if self.current:
             self.current.exit()
         self.__stack.append(state)
         state.enter()
 
     def replace_all(self, state: BaseState) -> None:
-        """Discard every state and start fresh with a new one (e.g., restart)."""
+        """Discard every state and start fresh with a new one (e.g.,
+        restart).
+        """
         self.__stack.clear()
         self.__stack.append(state)
         state.enter()

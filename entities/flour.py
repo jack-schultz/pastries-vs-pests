@@ -8,8 +8,9 @@ class Flour(Entity):
     def __init__(self, canvas, x, y, amount: int) -> None:
         colour = "#ffffff"
         width, height = 30, 30
-        # Spawn in center of coords given
-        super().__init__(canvas, x - width // 2, y - height // 2, width, height, colour)
+        # Spawn in center of coords given.
+        super().__init__(canvas, x - width // 2, y - height // 2,
+                         width, height, colour)
         self.__amount = amount
         self.__destination = None
 
@@ -22,7 +23,7 @@ class Flour(Entity):
             dx = (self.__destination[0] - self.rect.left) / 20
             dy = (self.__destination[1] - self.rect.top) / 20
 
-            # Inside your update/run loop (called 20 times):
+            # Inside your update/run loop (called 20 times).
             self.rect.move((dx, dy))
 
     def finished_move(self) -> bool:
@@ -35,6 +36,6 @@ class Flour(Entity):
         return False
 
     def click(self, destination) -> None:
-        # Removes the flour from the canvas and hands back its amount
+        # Removes the flour from the canvas and hands back its amount.
         if not self.__destination:
             self.__destination = destination

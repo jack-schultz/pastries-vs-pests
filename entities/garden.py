@@ -20,7 +20,7 @@ class Garden(Entity):
             self.__rows * self.__grid_size,
             colour
         )
-        # Holds the rects that make up the grid on the floor
+        # Holds the rects that make up the grid on the floor.
         self.__tiles = self._create_tiles(self.canvas)
 
     @property
@@ -36,8 +36,8 @@ class Garden(Entity):
         x_margin, y_margin = self.position
         colour_a = "#e0fa5f"
         colour_b = "#c8e04a"
-        for i in range(self.__columns):  # columns
-            for j in range(self.__rows):  # rows
+        for i in range(self.__columns):
+            for j in range(self.__rows):
                 colour = colour_a if (i + j) % 2 == 0 else colour_b
                 positions.append(
                     (
@@ -53,7 +53,8 @@ class Garden(Entity):
         return tiles
 
     def tile_blocking(self, pest: BasePest) -> Tile | None:
-        # Returns the tile whose good the pest's left edge has reached, if any
+        # Returns the tile whose good the pest's left edge has reached,
+        # if any.
         _, py = pest.rect.centre
         for tile in self.__tiles:
             if not tile.good:
@@ -69,14 +70,15 @@ class Garden(Entity):
 
     def spawn_pest(self, pest_class, game_width) -> BasePest:
         row = random.randrange(self.__rows)
-        # Spawn just off the right edge of the canvas, centred in the row
+        # Spawn just off the right edge of the canvas, centred in the
+        # row.
         centre_y = self.position[1] + \
             self.__grid_size * row + self.__grid_size // 2
         return pest_class(self.canvas, game_width, centre_y)
 
     def goods_act(self, pests=None):
-        # Every good acts on its own timer; flour and projectiles it makes are
-        # routed to the right list
+        # Every good acts on its own timer; flour and projectiles it
+        # makes are routed to the right list.
         new_objs = []
         for tile in list(self.__tiles):
             if not isinstance(tile, Tile):
@@ -85,7 +87,8 @@ class Garden(Entity):
             if not tile.good:
                 continue
 
-            # Stunned goods (hit by a Basher) do nothing until it wears off
+            # Stunned goods (hit by a Basher) do nothing until it wears
+            # off.
             if not tile.good.can_act():
                 continue
 

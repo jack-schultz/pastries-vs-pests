@@ -15,7 +15,7 @@ class GameState(BaseState):
     def __init__(self, state_stack, window, level_number: int = 1) -> None:
         super().__init__(state_stack, window)
         self.__world = World(self.window, level_number)
-        # Cost shown next to the mouse while a card is over a tile
+        # Cost shown next to the mouse while a card is over a tile.
         self.__cost_preview = self.window.canvas.create_text(
             0, 0, text="", anchor="nw",
             font=("Arial", 14, "bold"), fill="#ffffff", state="hidden",
@@ -28,7 +28,7 @@ class GameState(BaseState):
     def tick(self) -> None:
         self.__world.tick()
 
-        # Check for game over
+        # The game over screen is shown once a pest gets through.
         if self.__world.game_over:
             self.state_stack.push(GameOverState(self.state_stack, self.window))
             return
@@ -43,13 +43,12 @@ class GameState(BaseState):
         pos = (event.x, event.y)
         self.window.canvas.itemconfig(self.__cost_preview, state="hidden")
 
-        # Next level button
+        # The next level button appears once the level is won.
         if self.__world.clicked_next_button(pos):
             self.__world.start_next_level()
             return
 
-        # ===== CHECK CLICK POS =====
-        # Tiles first, then cards. The two never overlap
+        # Check the tiles first, then the cards. The two never overlap.
         for tile in list(self.__world.garden.tiles):
             if not tile.rect.collide_point(point=pos):
                 continue
@@ -81,28 +80,29 @@ class GameState(BaseState):
             return
 
         if selected.tool == ToolType.BIN:
-            # Bin removes whatever good is on the tile, for free
+            # Bin removes whatever good is on the tile, for free.
             if not tile.is_empty:
                 self.__world.remove_good(tile)
                 selected.start_cooldown()
             holder.selected_card = None
             return
 
-        # Skip if tile has a good and this card cant replace it
+        # Skip if tile has a good and this card cant replace it.
         if not selected.can_place_on(tile.good):
             holder.selected_card = None
             return
 
-        # Replacing has its own cost, otherwise it's the card's normal cost
+        # Replacing has its own cost, otherwise it's the card's normal
+        # cost.
         existing = tile.good
         cost = selected.cost_for(existing)
 
-        # Skip if not enough flour
+        # Skip if not enough flour.
         if self.__world.flour < cost:
             holder.selected_card = None
             return
 
-        # Create new good on the tile and replace if able
+        # Create new good on the tile and replace if able.
         cx, cy = tile.rect.centre
         new_good = selected.create_good(self.window.canvas, cx, cy, existing)
         if existing is not None:
@@ -112,13 +112,14 @@ class GameState(BaseState):
         try:
             tile.good = new_good
         except ValueError:
-            # Remove good and deselect the card
+            # Remove good and deselect the card.
             if new_good is not None:
                 new_good.destroy()
             holder.selected_card = None
             return
 
-        # Take flour amount, start the card's cooldown and reset selected card
+        # Take flour amount, start the card's cooldown and reset
+        # selected card.
         self.__world.flour -= cost
         selected.start_cooldown()
         holder.selected_card = None
@@ -127,20 +128,20 @@ class GameState(BaseState):
         world = self.__world
         holder = world.card_holder
 
-        # pick up the good on this tile
+        # Pick up the good on this tile.
         if not world.is_holding:
             world.pick_up(tile)
             return
 
-        # Put it back where it came from
+        # Put it back where it came from.
         if tile is world.held_origin:
             world.return_held()
             holder.selected_card = None
             return
 
-        # Drop it on an empty tile
+        # Drop it on an empty tile.
         if world.drop_held(tile):
-            # The glove costs flour and starts its cooldown
+            # The glove costs flour and starts its cooldown.
             world.flour -= glove.cost
             glove.start_cooldown()
             holder.selected_card = None
@@ -149,31 +150,32 @@ class GameState(BaseState):
         world = self.__world
         holder = world.card_holder
 
-        # Return held good if clicked card and continue
+        # Return held good if clicked card and continue.
         if world.is_holding:
             world.return_held()
             holder.selected_card = None
 
-        # Cards recharging or too expensive can't be selected
+        # Cards recharging or too expensive can't be selected.
         if not card.is_usable(world.flour):
             return
 
-        # If card is already selected, deselect
+        # If card is already selected, deselect.
         if holder.selected_card == card:
             holder.selected_card = None
             return
 
-        # Select card
+        # Clicking a card selects it.
         holder.selected_card = card
 
     def handle_motion(self, event: tk.Event) -> None:
-        # The held good follows the mouse
+        # The held good follows the mouse.
         self.__world.move_held((event.x, event.y))
-        # Hovering over flour collects it
+        # Hovering over flour collects it.
         self.__world.collect_flour_at((event.x, event.y))
-        # Hovering over a card highlights it
+        # Hovering over a card highlights it.
         self.__world.card_holder.hover_at((event.x, event.y))
-        # Show what the selected card would cost on the tile under the mouse
+        # Show what the selected card would cost on the tile under the
+        # mouse.
         self.__update_cost_preview((event.x, event.y))
 
     def __tile_at(self, pos: tuple[int, int]) -> Tile | None:
@@ -187,8 +189,8 @@ class GameState(BaseState):
         selected = self.__world.card_holder.selected_card
         tile = self.__tile_at(pos)
 
-        # Only cards placing goods show a cost, not the glove or bin, and only
-        # where the placement would work
+        # Only cards placing goods show a cost, not the glove or bin,
+        # and only where the placement would work.
         if (
             not selected
             or selected.tool is not None
@@ -199,7 +201,7 @@ class GameState(BaseState):
             return
 
         cost = selected.cost_for(tile.good)
-        # Red when the player can't pay for it
+        # Red when the player can't pay for it.
         colour = "#ffffff" if self.__world.flour >= cost else "#ffb3b3"
         canvas.itemconfig(self.__cost_preview,
                           text=f"-{cost}", fill=colour, state="normal")

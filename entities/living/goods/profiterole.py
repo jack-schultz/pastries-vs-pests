@@ -7,7 +7,9 @@ from entities.living.goods.base_good import BaseGood
 
 
 class Profiterole(BaseGood):
-    """An explosive good that goes off a moment after being planted, hurting nearby pests."""
+    """An explosive good that goes off a moment after being planted,
+    hurting nearby pests.
+    """
 
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
@@ -16,10 +18,11 @@ class Profiterole(BaseGood):
             colour="#c2185b",
             health=450
         )
-        self.__fuse = 1.2  # seconds between planting and exploding
+        self.__fuse = 1.2  # Seconds between planting and exploding.
         self.__planted_at = time.monotonic()
         self.__blast_damage = 1800
-        self.__blast_radius = 135  # pixels; 1.5 tiles so it covers the 3x3 around its tile
+        # Pixels; 1.5 tiles so it covers the 3x3 around its tile.
+        self.__blast_radius = 135
         self.rect.set_text("Profiterole", colour="#ffffff")
 
     @property
@@ -27,8 +30,8 @@ class Profiterole(BaseGood):
         return time.monotonic() - self.__planted_at >= self.__fuse
 
     def detonate(self, pests) -> list:
-        # Hurts every pest within the blast radius, then destroys itself.
-        # Returns the pests hit
+        # Hurts every pest within the blast radius, then destroys
+        # itself. Returns the pests hit.
         cx, cy = self.rect.centre
         hit = []
         for pest in pests:
@@ -41,5 +44,5 @@ class Profiterole(BaseGood):
                 pest.take_damage(Damage(self.__blast_damage,
                                  DamageType.EXPLOSIVE, Direction.AMBIENT))
                 hit.append(pest)
-        self.take_damage(self.health)  # the bombe is used up
+        self.take_damage(self.health)  # The bombe is used up.
         return hit

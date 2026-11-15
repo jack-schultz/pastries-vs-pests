@@ -20,19 +20,22 @@ class BasePest(Living, ABC):
         armour: BaseArmour | None = None,
         layer_count: int = 1,
     ) -> None:
-        super().__init__(canvas, x, y, size, size, colour, health, armour, layer_count)
+        super().__init__(canvas, x, y, size, size, colour, health, armour,
+                         layer_count)
         self.rect.centre_left = (x, y)
         self.rect.set_text("BasePest", colour="#ffffff")
 
         self.__update_armour_outline()
 
-        self.__speed = speed  # pixels moved left each frame
-        self.__damage = damage  # damage dealt to a good per attack
-        self.__attack_interval = attack_interval  # seconds between attacks
+        self.__speed = speed  # Pixels moved left each frame.
+        self.__damage = damage  # Damage dealt to a good per attack.
+        # Time between attacks in seconds.
+        self.__attack_interval = attack_interval
         self.__last_attack = 0.0
 
     def __update_armour_outline(self) -> None:
-        # Armour's outline colour is only shown while the pest still has armour
+        # Armour's outline colour is only shown while the pest still has
+        # armour.
         if self.armour is not None and not self.armour.is_broken:
             self.rect.set_outline(self.armour.outline_colour, width=3)
         else:
@@ -71,7 +74,7 @@ class BasePest(Living, ABC):
 
     def is_blocked_by(self, good: BaseGood) -> bool:
         # Blocked when the pest's left edge (at its vertical centre) has
-        # reached the good
+        # reached the good.
         px = self.rect.left
         _, py = self.rect.centre
         return good.rect.collide_point((px, py))
@@ -80,15 +83,15 @@ class BasePest(Living, ABC):
         return self.rect.left + self.rect.w < 0
 
     def attack(self, good: BaseGood) -> None:
-        # Only hit once per attack interval
+        # Only hit once per attack interval.
         now = time.monotonic()
         if now - self.__last_attack < self.__attack_interval:
             return
         self.__last_attack = now
         self._strike(good)
 
-    # Protected instead of private to allow overwrites
+    # Protected instead of private to allow overwrites.
     def _strike(self, good: BaseGood) -> None:
-        # One hit on the good. Subclasses override this to attack in their own
-        # way
+        # One hit on the good. Subclasses override this to attack in
+        # their own way.
         good.take_damage(self.__damage)

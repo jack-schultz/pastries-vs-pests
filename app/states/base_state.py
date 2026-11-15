@@ -22,11 +22,14 @@ class BaseState(ABC):
         pass
 
     def enter(self) -> None:
-        """Called when this state becomes the active state on top of the stack."""
+        """Called when this state becomes the active state on top of the
+        stack.
+        """
         pass
 
     def exit(self) -> None:
-        """Called when this state is popped or covered by another state."""
+        """Called when this state is popped or covered by another state.
+        """
         pass
 
     def handle_click(self, event: tk.Event) -> None:

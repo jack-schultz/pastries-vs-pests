@@ -4,7 +4,9 @@ from armour.base_armour import BaseArmour
 
 
 class Shield(BaseArmour):
-    """Only protects the front (left). Very good against physical hits and fire"""
+    """Only protects the front (left). Very good against physical hits
+    and fire.
+    """
 
     def __init__(self) -> None:
         super().__init__(
@@ -14,9 +16,9 @@ class Shield(BaseArmour):
                 Direction.LEFT
             },
             absorption={
-                DamageType.GAS: 0.0,  # Blocks no gas
-                DamageType.EXPLOSIVE: 0.5,  # Blocks half explosions
-                DamageType.PIERCING: 0.5  # Blocks half piercing
+                DamageType.GAS: 0.0,  # It blocks no gas.
+                DamageType.EXPLOSIVE: 0.5,  # It blocks half explosions.
+                DamageType.PIERCING: 0.5  # It blocks half piercing.
             },
             wear={
                 DamageType.EXPLOSIVE: 2.0,

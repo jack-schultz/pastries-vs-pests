@@ -36,7 +36,7 @@ class MainMenuState(BaseState):
             self.open_level_select()
 
     def open_level_select(self) -> None:
-        # Imported here to avoid circular imports between states
+        # Imported here to avoid circular imports between states.
         from app.states.levelselect_state import LevelSelectState
         self.state_stack.replace_all(
             LevelSelectState(self.state_stack, self.window))

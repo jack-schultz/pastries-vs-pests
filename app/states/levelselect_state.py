@@ -7,7 +7,7 @@ from levels.level_collector import LevelCollector, dev_level_id
 
 class LevelSelectState(BaseState):
     """
-    Displays a grid of playable levels to select from
+    Displays a grid of playable levels to select from.
     """
 
     def __init__(self, state_stack, window) -> None:
@@ -46,7 +46,7 @@ class LevelSelectState(BaseState):
             button.set_text(str(level), colour="#ffffff", size=24)
             self.__level_buttons[level] = button
 
-        # Dev level button in the top right
+        # Dev level button in the top right.
         dev_button = Rectangle(
             canvas, self.window.width - 120, 20, 100, 45, "#81796d")
         dev_button.set_text("Dev", colour="#ffffff", size=12)
