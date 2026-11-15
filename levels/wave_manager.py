@@ -56,8 +56,12 @@ class WaveManager:
     def finished(self) -> bool:
         return self.__finished
 
-    def next_pest(self, now: float, pests_on_board: int) -> type[BasePest] | None:
-        # Returns the pest class to spawn right now, or None if nothing spawns this tick
+    def next_pest(
+            self,
+            now: float,
+            pests_on_board: int) -> type[BasePest] | None:
+        # Returns the pest class to spawn right now, or None if nothing spawns
+        # this tick
         if self.__finished:
             return None
 
@@ -77,7 +81,8 @@ class WaveManager:
             self.__next_spawn_at = now + self.__spawn_interval
             return self.__queue.popleft()
 
-        # Level is complete once every wave has arrived, spawned and been cleared
+        # Level is complete once every wave has arrived, spawned and been
+        # cleared
         if self.__wave_number >= self.total_waves and not self.__queue and pests_on_board == 0:
             self.__finished = True
         return None

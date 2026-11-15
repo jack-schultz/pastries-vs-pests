@@ -13,7 +13,8 @@ def make_good(canvas):
 
 
 def labels(canvas):
-    return [canvas.itemcget(i, "text") for i in canvas.find_all() if canvas.type(i) == "text"]
+    return [canvas.itemcget(i, "text")
+            for i in canvas.find_all() if canvas.type(i) == "text"]
 
 
 # Construction

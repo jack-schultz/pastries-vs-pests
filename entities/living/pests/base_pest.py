@@ -70,7 +70,8 @@ class BasePest(Living, ABC):
         self.rect.move((-self.__speed, 0))
 
     def is_blocked_by(self, good: BaseGood) -> bool:
-        # Blocked when the pest's left edge (at its vertical centre) has reached the good
+        # Blocked when the pest's left edge (at its vertical centre) has
+        # reached the good
         px = self.rect.left
         _, py = self.rect.centre
         return good.rect.collide_point((px, py))
@@ -88,5 +89,6 @@ class BasePest(Living, ABC):
 
     # Protected instead of private to allow overwrites
     def _strike(self, good: BaseGood) -> None:
-        # One hit on the good. Subclasses override this to attack in their own way
+        # One hit on the good. Subclasses override this to attack in their own
+        # way
         good.take_damage(self.__damage)

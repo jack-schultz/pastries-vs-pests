@@ -187,7 +187,8 @@ class GameState(BaseState):
         selected = self.__world.card_holder.selected_card
         tile = self.__tile_at(pos)
 
-        # Only cards placing goods show a cost, not the glove or bin, and only where the placement would work
+        # Only cards placing goods show a cost, not the glove or bin, and only
+        # where the placement would work
         if (
             not selected
             or selected.tool is not None

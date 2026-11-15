@@ -58,7 +58,12 @@ class Garden(Entity):
         for tile in self.__tiles:
             if not tile.good:
                 continue
-            if isinstance(tile, Tile) and isinstance(tile.good, BaseGood) and pest.is_blocked_by(tile.good):
+            if isinstance(
+                    tile,
+                    Tile) and isinstance(
+                    tile.good,
+                    BaseGood) and pest.is_blocked_by(
+                    tile.good):
                 return tile
         return None
 
@@ -70,7 +75,8 @@ class Garden(Entity):
         return pest_class(self.canvas, game_width, centre_y)
 
     def goods_act(self, pests=None):
-        # Every good acts on its own timer; flour and projectiles it makes are routed to the right list
+        # Every good acts on its own timer; flour and projectiles it makes are
+        # routed to the right list
         new_objs = []
         for tile in list(self.__tiles):
             if not isinstance(tile, Tile):

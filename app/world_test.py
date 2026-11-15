@@ -70,7 +70,8 @@ def test_finished_level_starts_the_next_one(world, canvas):
 
 def test_tick_resolves_combat(world, canvas, monkeypatch):
     tiles, pests = world.garden.tiles, world._World__pests
-    for index, good in ((0, Profiterole), (10, SugarShooter), (20, PoppingCandy)):
+    for index, good in (
+            (0, Profiterole), (10, SugarShooter), (20, PoppingCandy)):
         tiles[index].good = good(canvas, *tiles[index].rect.centre)
     tiles[10].good.take_damage(250)  # Leaves the shooter one bite from death.
     pests.extend(Ant(canvas, *tiles[i].rect.centre) for i in (0, 10, 20))

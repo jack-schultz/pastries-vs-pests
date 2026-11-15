@@ -47,12 +47,16 @@ class LevelCollector():
             {PestType.ANT: 5, PestType.ARMOUR_ANT: 4, PestType.MEALWORM: 2},
             {PestType.ANT: 4, PestType.ARMOUR_ANT: 5,
                 PestType.HEAVY_ARMOUR_ANT: 2, PestType.RHINO_BEETLE: 2},
-            {PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 2, PestType.STINKBUG: 2},
+            {PestType.ARMOUR_ANT: 8,
+             PestType.HEAVY_ARMOUR_ANT: 2,
+             PestType.STINKBUG: 2},
             {PestType.ANT: 6, PestType.ARMOUR_ANT: 6,
                 PestType.HEAVY_ARMOUR_ANT: 3, PestType.SPRINGTAIL: 3},
             {PestType.ANT: 4, PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 4,
                 PestType.MEALWORM: 2, PestType.RHINO_BEETLE: 2},
-            {PestType.ARMOUR_ANT: 10, PestType.HEAVY_ARMOUR_ANT: 4, PestType.STINKBUG: 3},
+            {PestType.ARMOUR_ANT: 10,
+             PestType.HEAVY_ARMOUR_ANT: 4,
+             PestType.STINKBUG: 3},
             {PestType.ANT: 6, PestType.ARMOUR_ANT: 8, PestType.HEAVY_ARMOUR_ANT: 5,
                 PestType.SPRINGTAIL: 4, PestType.RHINO_BEETLE: 3},
             {PestType.ANT: 5, PestType.ARMOUR_ANT: 10, PestType.HEAVY_ARMOUR_ANT: 6,
@@ -150,7 +154,8 @@ class LevelCollector():
         ]
 
     def level_7(self) -> list[dict[PestType, int]]:
-        # Bug infestation: each new pest is brought in one at a time, then they all come at once
+        # Bug infestation: each new pest is brought in one at a time, then they
+        # all come at once
         return [
             {PestType.ANT: 2},
             {PestType.ANT: 5},
@@ -160,7 +165,9 @@ class LevelCollector():
                 PestType.MEALWORM: 1},  # first Mealworm
             {PestType.ARMOUR_ANT: 3, PestType.SPRINGTAIL: 2, PestType.MEALWORM: 2},
             {PestType.ANT: 4, PestType.RHINO_BEETLE: 2},  # first Rhino Beetles
-            {PestType.ARMOUR_ANT: 3, PestType.SPRINGTAIL: 3, PestType.RHINO_BEETLE: 3},
+            {PestType.ARMOUR_ANT: 3,
+             PestType.SPRINGTAIL: 3,
+             PestType.RHINO_BEETLE: 3},
             {PestType.ANT: 3, PestType.ARMOUR_ANT: 3,
                 PestType.STINKBUG: 2},  # first Stinkbugs
             {PestType.HEAVY_ARMOUR_ANT: 2, PestType.MEALWORM: 2, PestType.STINKBUG: 3},

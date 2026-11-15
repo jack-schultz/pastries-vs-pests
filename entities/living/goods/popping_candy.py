@@ -44,12 +44,17 @@ class PoppingCandy(BaseGood):
         return None
 
     def detonate(self, pests) -> list:
-        # Hurts every pest in this row within the blast radius, then destroys itself. Returns the pests hit
+        # Hurts every pest in this row within the blast radius, then destroys
+        # itself. Returns the pests hit
         cx, cy = self.rect.centre
         hit = []
         for pest in pests:
             px, py = pest.rect.centre
-            if abs(py - cy) <= self.__row_tolerance and abs(px - cx) <= self.__blast_radius:
+            if abs(
+                    py -
+                    cy) <= self.__row_tolerance and abs(
+                    px -
+                    cx) <= self.__blast_radius:
                 pest.take_damage(Damage(self.__blast_damage,
                                  DamageType.EXPLOSIVE, Direction.AMBIENT))
                 hit.append(pest)

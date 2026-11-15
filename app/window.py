@@ -15,9 +15,14 @@ class Window:
         self.__width, self.__height = (900, 640)
 
         # Create the world canvas to store our rects coordinates
-        self.__canvas = tk.Canvas(self.__root, width=self.__width,
-                                  height=self.__height, bg="#fdf3e1", highlightthickness=0)
-        # Places canvas widget inside parent window as tk is designed for menus so it needs this
+        self.__canvas = tk.Canvas(
+            self.__root,
+            width=self.__width,
+            height=self.__height,
+            bg="#fdf3e1",
+            highlightthickness=0)
+        # Places canvas widget inside parent window as tk is designed for menus
+        # so it needs this
         self.__canvas.pack()
 
         self.__state_stack = StateStack()

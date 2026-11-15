@@ -14,7 +14,9 @@ def test_arms_only_after_its_arming_time(candy, fast_forward):
     assert candy.is_armed
 
 
-def test_detonating_kills_a_pest_in_its_row_and_uses_the_candy_up(candy, canvas):
+def test_detonating_kills_a_pest_in_its_row_and_uses_the_candy_up(
+        candy,
+        canvas):
     pest = Ant(canvas, 130, 100)
     assert candy.detonate([pest]) == [pest]
     assert pest.is_dead and candy.is_dead

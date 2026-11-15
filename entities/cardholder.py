@@ -14,14 +14,20 @@ from entities.entity import Entity
 class CardHolder(Entity):
     """The bar that holds the player's cards."""
 
-    def __init__(self, canvas, x: int = 175, y: int = 15, screen_width: int = 900):
+    def __init__(
+            self,
+            canvas,
+            x: int = 175,
+            y: int = 15,
+            screen_width: int = 900):
         colour = "#8b6c5c"
         self.__x, self.__y = x, y
         self.__margin = 5
         self.__card_size = (70, 85)
         self.__card_gap = 10
         self.__card_attributes = [
-            # Name, Cost, Class, Cooldown (seconds), Tool, Replaces (existing good class -> (class to spawn, replace cost))
+            # Name, Cost, Class, Cooldown (seconds), Tool, Replaces (existing
+            # good class -> (class to spawn, replace cost))
             ("Flour Flower", 50, FlourFlower, 5.0, None, {}),
             ("Sugar Shooter", 100, SugarShooter, 5.0, None, {
              SugarShooter: {"replace": SugarBlaster, "cost": 200}}),
@@ -59,7 +65,8 @@ class CardHolder(Entity):
         self.__cards = self._create_cards()
 
     def __panel_width(self, count: int) -> int:
-        return self.__card_size[0] * count + self.__card_gap * (count - 1) + self.__margin * 2
+        return self.__card_size[0] * count + \
+            self.__card_gap * (count - 1) + self.__margin * 2
 
     @property
     def cards(self) -> list[Card | None]:
@@ -105,7 +112,8 @@ class CardHolder(Entity):
     def __build_row(self, attributes, panel_x: int) -> list[Card]:
         w, h = self.__card_size
         cards = []
-        for i, (name, cost, good_class, cooldown, tool, replaces) in enumerate(attributes):
+        for i, (name, cost, good_class, cooldown, tool,
+                replaces) in enumerate(attributes):
             x = panel_x + w * i + self.__card_gap * i + self.__margin
             y = self.__y + self.__margin
             cards.append(

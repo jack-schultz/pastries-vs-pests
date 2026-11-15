@@ -22,7 +22,8 @@ class GameOverState(BaseState):
         self.__restart_button.set_text("Restart", colour="#ffffff", size=16)
 
     def handle_click(self, event: tk.Event) -> None:
-        if self.__restart_button and self.__restart_button.collide_point((event.x, event.y)):
+        if self.__restart_button and self.__restart_button.collide_point(
+                (event.x, event.y)):
             self.restart()
 
     def handle_key(self, event: tk.Event) -> None:

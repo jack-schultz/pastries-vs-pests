@@ -9,7 +9,14 @@ from entities.living.goods.base_good import BaseGood
 class SugarShooter(BaseGood):
     """A good that shoots sugar cubes at pests."""
 
-    def __init__(self, canvas, x, y, delay_pattern: Sequence[float] = (1.4,)) -> None:
+    def __init__(
+            self,
+            canvas,
+            x,
+            y,
+            delay_pattern: Sequence[float] = (
+                1.4,
+            )) -> None:
         super().__init__(
             canvas, x, y,
             width=40, height=40,
@@ -25,7 +32,8 @@ class SugarShooter(BaseGood):
         return self.__delay_pattern
 
     def __pest_in_lane(self, pests) -> bool:
-        # A pest is in the lane when its vertical centre is within this shooter's row and it is ahead of the shooter
+        # A pest is in the lane when its vertical centre is within this
+        # shooter's row and it is ahead of the shooter
         top = self.rect.top
         bottom = top + self.rect.h
         shooter_x = self.rect.centre[0]

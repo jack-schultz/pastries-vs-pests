@@ -27,7 +27,8 @@ class World:
         self.__garden = Garden(self.__window.canvas, 40, 120)
         self.__card_holder = CardHolder(
             self.__window.canvas, 180, 20, self.__window.width)
-        # A good lifted by the glove, with the tile it came from. It follows the mouse until it is dropped
+        # A good lifted by the glove, with the tile it came from. It follows
+        # the mouse until it is dropped
         self.__held: tuple[BaseGood, Tile] | None = None
 
         # === LEVEL SETTINGS ===
@@ -137,11 +138,13 @@ class World:
                 self.__projectiles.append(obj)
 
     def __pests_at(self, projectile: Projectile) -> list[BasePest]:
-        # Returns every pest the projectile is touching, in the order they were spawned
+        # Returns every pest the projectile is touching, in the order they were
+        # spawned
         return [pest for pest in self.__pests if projectile.hits(pest)]
 
     def spawn_pest_if_due(self) -> None:
-        # The current wave decides which pest spawns on the right edge of a random row
+        # The current wave decides which pest spawns on the right edge of a
+        # random row
         pest_class = self.__waves.next_pest(
             time.monotonic(), len(self.__pests))
         if pest_class:
@@ -150,7 +153,8 @@ class World:
         self.update_wave_text()
 
     def update_wave_text(self) -> None:
-        name = "Dev Level" if self.__level_number == dev_level_id else f"Level {self.__level_number}"
+        name = "Dev Level" if self.__level_number == dev_level_id else f"Level {
+            self.__level_number}"
         if self.__waves.finished:
             text = "Winner Winner Chicken Dinner!"
         elif self.__waves.wave_number == 0:
@@ -194,7 +198,8 @@ class World:
         good.rect.raise_to_top()
 
     def drop_held(self, tile: Tile) -> bool:
-        # Places the held good on an empty tile. Returns False if the tile can't take it
+        # Places the held good on an empty tile. Returns False if the tile
+        # can't take it
         if not self.__held:
             return False
         good, _ = self.__held
@@ -222,7 +227,8 @@ class World:
             tile.clear_good()
 
     def start_next_level(self) -> None:
-        # Look up the next level first, so nothing is cleared if it doesn't exist
+        # Look up the next level first, so nothing is cleared if it doesn't
+        # exist
         try:
             waves = self.__level_collector.get_level(self.__level_number + 1)
         except KeyError:
@@ -263,7 +269,8 @@ class World:
         self.update_wave_text()
 
     def clicked_next_button(self, pos: tuple[int, int]) -> bool:
-        return self.__next_button is not None and self.__next_button.collide_point(pos)
+        return self.__next_button is not None and self.__next_button.collide_point(
+            pos)
 
     def update_bombes(self) -> None:
         # Profiterole explode on their own once their fuse runs out
@@ -291,7 +298,8 @@ class World:
                     continue
 
                 # An armed mine goes off instead of being eaten
-                if isinstance(blocking_good, PoppingCandy) and blocking_good.is_armed:
+                if isinstance(blocking_good,
+                              PoppingCandy) and blocking_good.is_armed:
                     for hit_pest in blocking_good.detonate(self.__pests):
                         if hit_pest.is_dead:
                             hit_pest.destroy()
@@ -309,7 +317,8 @@ class World:
                 # If not colliding, moves
                 pest.move()
 
-            # A pest touching the left edge of the screen means the player loses
+            # A pest touching the left edge of the screen means the player
+            # loses
             if pest.rect.left <= 0:
                 self.__game_over = True
 
@@ -318,7 +327,8 @@ class World:
                 pest.destroy()
                 self.__pests.remove(pest)
             else:
-                # Draw pests above goods (flour is raised after, so it stays on top)
+                # Draw pests above goods (flour is raised after, so it stays on
+                # top)
                 pest.rect.raise_to_top()
 
     def update_projectiles(self) -> None:
@@ -338,8 +348,10 @@ class World:
                 if projectile.piercing <= 0:
                     break
 
-            # Used up after its last hit, finished on its own (like flames), or off the screen
-            if projectile.piercing <= 0 or projectile.is_expired() or projectile.rect.left > self.__window.width:
+            # Used up after its last hit, finished on its own (like flames), or
+            # off the screen
+            if projectile.piercing <= 0 or projectile.is_expired(
+            ) or projectile.rect.left > self.__window.width:
                 projectile.destroy()
                 self.__projectiles.remove(projectile)
 

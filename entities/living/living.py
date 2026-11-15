@@ -7,7 +7,17 @@ from armour.base_armour import BaseArmour
 class Living(Entity):
     """Base class for entities with health that can be hurt and die"""
 
-    def __init__(self, canvas, x, y, width, height, colour, health: int, armour: BaseArmour | None = None, layer_count: int = 1) -> None:
+    def __init__(
+            self,
+            canvas,
+            x,
+            y,
+            width,
+            height,
+            colour,
+            health: int,
+            armour: BaseArmour | None = None,
+            layer_count: int = 1) -> None:
         super().__init__(canvas, x, y, width, height, colour)
         self.__health = health
         self.__max_health = health
@@ -35,7 +45,8 @@ class Living(Entity):
 
     @property
     def layer_count(self) -> int:
-        # Pests and armour have layers. Sum both (exclude broken armour) and remove from piercing value
+        # Pests and armour have layers. Sum both (exclude broken armour) and
+        # remove from piercing value
         if self.__armour is not None and not self.__armour.is_broken:
             return self.__layer_count + self.__armour.layer_count
         return self.__layer_count
@@ -72,7 +83,13 @@ class Living(Entity):
         if self.__health_bar is None:
             # Create the health bar on first hit
             background = self.rect.draw(
-                "rectangle", l, t - 9, l + w, t - 4, fill="#3d405b", outline="")
+                "rectangle",
+                l,
+                t - 9,
+                l + w,
+                t - 4,
+                fill="#3d405b",
+                outline="")
             fill = self.rect.draw("rectangle", l, t - 9,
                                   l + w, t - 4, fill="#4caf50", outline="")
             self.__health_bar = (background, fill)

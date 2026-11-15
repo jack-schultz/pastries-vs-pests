@@ -27,12 +27,17 @@ class Profiterole(BaseGood):
         return time.monotonic() - self.__planted_at >= self.__fuse
 
     def detonate(self, pests) -> list:
-        # Hurts every pest within the blast radius, then destroys itself. Returns the pests hit
+        # Hurts every pest within the blast radius, then destroys itself.
+        # Returns the pests hit
         cx, cy = self.rect.centre
         hit = []
         for pest in pests:
             px, py = pest.rect.centre
-            if abs(px - cx) <= self.__blast_radius and abs(py - cy) <= self.__blast_radius:
+            if abs(
+                    px -
+                    cx) <= self.__blast_radius and abs(
+                    py -
+                    cy) <= self.__blast_radius:
                 pest.take_damage(Damage(self.__blast_damage,
                                  DamageType.EXPLOSIVE, Direction.AMBIENT))
                 hit.append(pest)

@@ -17,7 +17,15 @@ class BaseGood(Living, ABC):
     Each good acts on its own timer
     """
 
-    def __init__(self, canvas, x, y, width, height, colour, health: int) -> None:
+    def __init__(
+            self,
+            canvas,
+            x,
+            y,
+            width,
+            height,
+            colour,
+            health: int) -> None:
         super().__init__(canvas, x, y, width, height, colour, health)
         self.rect.centre = (x, y)
         self.__last_action = time.monotonic()
@@ -29,7 +37,8 @@ class BaseGood(Living, ABC):
         return time.monotonic() < self.__stunned_until
 
     def stun(self, seconds: float) -> None:
-        # Stops the good acting for a while. A new stun can extend it, never shorten it
+        # Stops the good acting for a while. A new stun can extend it, never
+        # shorten it
         self.__stunned_until = max(
             self.__stunned_until, time.monotonic() + seconds)
         self.__shown_stunned = True
@@ -47,12 +56,17 @@ class BaseGood(Living, ABC):
         return True
 
     def _ready(self, interval: float) -> bool:
-        # True once `interval` seconds have passed since the last action, and restarts the timer
+        # True once `interval` seconds have passed since the last action, and
+        # restarts the timer
         if time.monotonic() - self.__last_action < interval:
             return False
         self.__last_action = time.monotonic()
         return True
 
-    def act(self, canvas: tk.Canvas, pests: list[BasePest] | None = None) -> Flour | Projectile | None:
-        # Called every frame with the live pests. Returns whatever the good made this frame, if anything
+    def act(
+            self,
+            canvas: tk.Canvas,
+            pests: list[BasePest] | None = None) -> Flour | Projectile | None:
+        # Called every frame with the live pests. Returns whatever the good
+        # made this frame, if anything
         pass

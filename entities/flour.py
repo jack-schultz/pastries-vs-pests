@@ -27,7 +27,9 @@ class Flour(Entity):
 
     def finished_move(self) -> bool:
         if self.__destination:
-            if self.rect.collide_point((self.__destination[0] + 10, self.__destination[1] + 10)):
+            if self.rect.collide_point(
+                (self.__destination[0] + 10,
+                 self.__destination[1] + 10)):
                 self.destroy()
                 return True
         return False

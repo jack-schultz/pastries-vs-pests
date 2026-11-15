@@ -5,7 +5,14 @@ import tkinter as tk
 class Rectangle:
     """A coloured rectangle drawn on a tkinter canvas."""
 
-    def __init__(self, canvas: tk.Canvas, x: float, y: float, width: float, height: float, colour: str):
+    def __init__(
+            self,
+            canvas: tk.Canvas,
+            x: float,
+            y: float,
+            width: float,
+            height: float,
+            colour: str):
         self.__canvas = canvas
         self.__rect: int = self.__canvas.create_rectangle(
             x, y, x + width, y + height,
@@ -28,7 +35,11 @@ class Rectangle:
     def set_outline(self, colour: str, width: int = 1) -> None:
         self.__canvas.itemconfig(self.__rect, outline=colour, width=width)
 
-    def set_text(self, text: str, colour: str = "#3d405b", size: int = 9) -> None:
+    def set_text(
+            self,
+            text: str,
+            colour: str = "#3d405b",
+            size: int = 9) -> None:
         if self.__text is not None:
             # Label already there, so just update it
             self.__canvas.itemconfig(self.__text, text=text, fill=colour)
@@ -45,7 +56,8 @@ class Rectangle:
         )
 
     def hide_hitbox(self) -> None:
-        # Hides the rect itself but keeps it as a hitbox, for entities drawn with shapes instead
+        # Hides the rect itself but keeps it as a hitbox, for entities drawn
+        # with shapes instead
         self.__canvas.itemconfig(self.__rect, fill="", outline="")
 
     def draw(self, kind: str, *coords: float, **options) -> int:

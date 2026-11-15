@@ -14,6 +14,7 @@ def test_holds_fire_without_a_pest_in_its_lane(shooter, canvas, fast_forward):
     assert shooter.act(canvas, [Ant(canvas, 300, 400)]) is None
 
 
-def test_fires_a_sugar_cube_at_a_pest_in_its_lane(shooter, canvas, fast_forward):
+def test_fires_a_sugar_cube_at_a_pest_in_its_lane(
+        shooter, canvas, fast_forward):
     fast_forward()
     assert isinstance(shooter.act(canvas, [Ant(canvas, 300, 100)]), SugarCube)

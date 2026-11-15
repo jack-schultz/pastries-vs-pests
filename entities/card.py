@@ -29,7 +29,8 @@ class Card(Entity):
         self.__cost = cost
         self.__good_class = good_class
         self.__tool = tool
-        # Existing good class -> (good class to spawn in its place, cost of the replacement)
+        # Existing good class -> (good class to spawn in its place, cost of the
+        # replacement)
         self.__replaces: dict[type[BaseGood], ReplaceInfo] = replaces or {}
         self.__cooldown_frames = round(cooldown * 60)
         self.__frames_left = 0  # 0 means ready to select
@@ -64,9 +65,14 @@ class Card(Entity):
             fill="#ffffff", outline="",
         )
         self.__cost_text = canvas.create_text(
-            x + width / 2 + 6, y + height - badge_h / 2,
-            text=str(cost) if cost else "Free", fill=CardColour.MEET_COST_COLOUR.value,
-            font=("Arial", 11, "bold"),
+            x + width / 2 + 6,
+            y + height - badge_h / 2,
+            text=str(cost) if cost else "Free",
+            fill=CardColour.MEET_COST_COLOUR.value,
+            font=(
+                "Arial",
+                11,
+                "bold"),
         )
 
         # Free cards have no flour to show, so centre the word instead
@@ -124,8 +130,13 @@ class Card(Entity):
             self.__frames_left -= 1
             self.__refresh_display()
 
-    def update_display(self, flour: int, selected: bool, hovered: bool) -> None:
-        # Called every frame by the card holder so the card reflects the current game state
+    def update_display(
+            self,
+            flour: int,
+            selected: bool,
+            hovered: bool) -> None:
+        # Called every frame by the card holder so the card reflects the
+        # current game state
         self.__flour = flour
         self.__selected = selected
         self.__hovered = hovered
@@ -187,7 +198,9 @@ class Card(Entity):
         if self.__selected:
             self.rect.set_colour(CardColour.SELECTED_FILL.value)
             canvas.itemconfig(
-                self.__highlight, outline=CardColour.SELECTED_OUTLINE.value, width=4)
+                self.__highlight,
+                outline=CardColour.SELECTED_OUTLINE.value,
+                width=4)
             canvas.itemconfig(self.__status_text, text="Selected")
         elif self.__hovered:
             self.rect.set_colour(CardColour.HOVER_FILL.value)
@@ -202,7 +215,8 @@ class Card(Entity):
         if existing is None:
             return True
 
-        # Occupied tile means only allowed if this card has a replace fot that good
+        # Occupied tile means only allowed if this card has a replace fot that
+        # good
         good_class = type(existing)
         if good_class in self.__replaces:
             return True
@@ -216,21 +230,25 @@ class Card(Entity):
         # get replaces item from dict by type of existing good
         return self.__replaces.get(type(existing_good))
 
-    def good_class_for(self, existing: BaseGood | None) -> Callable[..., BaseGood] | None:
-        # Uses the replacement class when the rule matches, otherwise the card's own good
+    def good_class_for(self, existing: BaseGood |
+                       None) -> Callable[..., BaseGood] | None:
+        # Uses the replacement class when the rule matches, otherwise the
+        # card's own good
         rule: ReplaceInfo | None = self.__rule_for(existing)
         if rule:
             return rule["replace"]  # 0 is good class
         return self.__good_class
 
     def cost_for(self, existing_good: BaseGood | None) -> int:
-        # Replacing costs the rule's own price, otherwise the card's normal cost
+        # Replacing costs the rule's own price, otherwise the card's normal
+        # cost
         rule: ReplaceInfo | None = self.__rule_for(existing_good)
         if rule:
             return rule["cost"]  # 1 is cost
         return self.__cost
 
-    def create_good(self, canvas, x, y, existing: BaseGood | None = None) -> BaseGood | None:
+    def create_good(self, canvas, x, y, existing: BaseGood |
+                    None = None) -> BaseGood | None:
         # The card knows which good it sells, so the caller doesn't need to
         good_class = self.good_class_for(existing)
         if not good_class:

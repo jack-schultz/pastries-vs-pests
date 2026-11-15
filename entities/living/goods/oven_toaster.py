@@ -19,12 +19,14 @@ class OvenToaster(BaseGood):
         self.__fire_interval = 2.5  # seconds between flames
 
     def __pest_in_range(self, pests) -> bool:
-        # A pest is in range when it is in this plant's row and ahead of it, within range
+        # A pest is in range when it is in this plant's row and ahead of it,
+        # within range
         top, bottom = self.rect.top, self.rect.bottom
         front = self.rect.right
         for pest in pests or []:
             _, py = pest.rect.centre
-            if top <= py <= bottom and pest.rect.left < front + self.__range and pest.rect.right > front:
+            if top <= py <= bottom and pest.rect.left < front + \
+                    self.__range and pest.rect.right > front:
                 return True
         return False
 

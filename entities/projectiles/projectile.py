@@ -65,7 +65,8 @@ class Projectile(Entity):
     # Split from .hits to allow override for different behaviours
     # Ex: flame defines touching as anywhere along the projectile's length
     def touches(self, pest: BasePest) -> bool:
-        # A projectile hits a pest when its centre right is inside the pest's rect
+        # A projectile hits a pest when its centre right is inside the pest's
+        # rect
         return pest.rect.collide_point(self.rect.centre_right)
 
     def is_expired(self) -> bool:

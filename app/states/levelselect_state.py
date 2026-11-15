@@ -36,8 +36,13 @@ class LevelSelectState(BaseState):
             col, row = i % self.__columns, i // self.__columns
             x_position = start_x + col * (self.__button_size + self.__gap)
             y_position = 180 + row * (self.__button_size + self.__gap)
-            button = Rectangle(canvas, x_position, y_position,
-                               self.__button_size, self.__button_size, "#3d405e")
+            button = Rectangle(
+                canvas,
+                x_position,
+                y_position,
+                self.__button_size,
+                self.__button_size,
+                "#3d405e")
             button.set_text(str(level), colour="#ffffff", size=24)
             self.__level_buttons[level] = button
 
