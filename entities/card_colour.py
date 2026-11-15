@@ -3,6 +3,7 @@ from enum import Enum
 
 
 class CardColour(Enum):
+    """Colours used to draw cards."""
     READY_FILL = "#e63946"
     HOVER_FILL = "#f25c68"
     SELECTED_FILL = "#ff8a94"

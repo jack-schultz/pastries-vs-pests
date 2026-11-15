@@ -12,6 +12,7 @@ from entities.entity import Entity
 
 
 class CardHolder(Entity):
+    """The bar that holds the player's cards."""
     def __init__(self, canvas, x: int = 175, y: int = 15, screen_width: int = 900):
         colour = "#8b6c5c"
         self.__x, self.__y = x, y

@@ -4,6 +4,7 @@ from entities.living.goods.base_good import BaseGood
 
 
 # defiles the keys and type hints them for a dict
-class ReplaceInfo(TypedDict):  # total=false allows a dict with only 1 key
+class ReplaceInfo(TypedDict):
+    """The keys of a replacement entry: the good to replace with and its cost."""
     replace: Callable[..., BaseGood]
     cost: int

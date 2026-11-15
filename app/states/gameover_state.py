@@ -5,6 +5,7 @@ from app.rectangle import Rectangle
 
 
 class GameOverState(BaseState):
+    """The screen shown when the player loses."""
     def __init__(self, state_stack, window) -> None:
         super().__init__(state_stack, window)
         self.__restart_button: Rectangle | None = None

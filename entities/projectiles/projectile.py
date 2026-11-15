@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 
 class Projectile(Entity):
+    """Base class for things that fly across the board."""
     def __init__(
             self, canvas, centre_x, centre_y, size, colour,
             damage: int, speed: float, piercing: int,

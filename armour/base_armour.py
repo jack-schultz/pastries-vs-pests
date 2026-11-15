@@ -5,9 +5,11 @@ from entities.direction import Direction
 
 
 class BaseArmour:
-    # Armour has its own durability, separate from the wearer's health.
-    # Subclasses configure it through __init__, and can override absorb()
-    # for anything the tables can't express.
+    """
+    Armour has its own durability, separate from the wearer's health.
+    Subclasses configure it through __init__, and can override absorb()
+    for different functionality.
+    """
     def __init__(
             self,
             durability: float,

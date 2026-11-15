@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 
 class World:
-    # Owns the board objects that are drawn on the canvas: the garden, the inventory, the flour counter, pests, flours and projectiles
+    """Owns the board objects that are drawn on the canvas: the garden, the inventory, the flour counter, pests, flours and projectiles"""
     def __init__(self, window: Window, level_number: int = 1) -> None:
         self.__window = window
         self.__garden = Garden(self.__window.canvas, 40, 120)

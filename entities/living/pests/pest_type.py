@@ -12,6 +12,7 @@ from entities.living.pests.stinkbug import Stinkbug
 # Every kind of pest a level can spawn. Level data uses these as wave keys,
 # for example {PestType.ANT: 3} spawns three ants
 class PestType(Enum):
+    """The kinds of pests that can appear in a wave."""
     ANT = Ant
     ARMOUR_ANT = ArmourAnt
     HEAVY_ARMOUR_ANT = HeavyArmourAnt

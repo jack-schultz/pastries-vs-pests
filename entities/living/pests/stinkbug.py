@@ -6,8 +6,10 @@ from entities.living.pests.base_pest import BasePest
 
 
 class Stinkbug(Ant):
-    # Stinks the good it hits, stunning the good (prevents them from acting)
-    # Otherwise, like an ant with slower attacks
+    """
+    Stinks the good it hits, stunning the good (prevents them from acting)
+    Otherwise, like an ant with slower attacks
+    """
     def __init__(self, canvas, x, y) -> None:
         self.__stun_time = 3.0  # seconds
         super().__init__(

@@ -4,7 +4,7 @@ from entities.projectiles.projectile import Projectile
 
 
 class Flame(Projectile):
-    # burns every pest it touches, and disappears after it has fully stretched
+    """burns every pest it touches, and disappears after it has fully stretched"""
     def __init__(self, canvas, left: float, centre_y: float, range_px: float) -> None:
         super().__init__(
             canvas, left, centre_y,

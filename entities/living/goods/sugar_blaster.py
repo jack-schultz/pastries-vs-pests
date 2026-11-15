@@ -3,6 +3,7 @@ from entities.living.goods.sugar_shooter import SugarShooter
 
 
 class SugarBlaster(SugarShooter):
+    """An upgraded SugarShooter."""
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,

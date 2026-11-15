@@ -10,6 +10,7 @@ from app.world import World
 
 
 class GameState(BaseState):
+    """The main gameplay state for a single level."""
     def __init__(self, state_stack, window, level_number: int = 1) -> None:
         super().__init__(state_stack, window)
         self.__world = World(self.window, level_number)

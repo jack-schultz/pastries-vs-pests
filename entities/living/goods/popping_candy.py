@@ -7,7 +7,7 @@ from entities.living.goods.base_good import BaseGood
 
 
 class PoppingCandy(BaseGood):
-    # Buried and harmless while arming, then explodes when a pest reaches it
+    """Buried and harmless while arming, then explodes when a pest reaches it"""
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,

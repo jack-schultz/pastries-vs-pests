@@ -7,12 +7,13 @@ from entities.living.goods.base_good import BaseGood
 
 
 class Profiterole(BaseGood):
+    """An explosive good that goes off a moment after being planted, hurting nearby pests."""
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,
             width=60, height=60,
             colour="#c2185b",
-            health=150
+            health=450
         )
         self.__fuse = 1.2  # seconds between planting and exploding
         self.__planted_at = time.monotonic()

@@ -5,6 +5,7 @@ from app.rectangle import Rectangle
 
 
 class MainMenuState(BaseState):
+    """The main menu screen."""
     def __init__(self, state_stack, window) -> None:
         super().__init__(state_stack, window)
         self.__play_button: Rectangle | None = None

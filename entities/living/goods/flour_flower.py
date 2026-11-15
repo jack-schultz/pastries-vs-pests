@@ -8,6 +8,7 @@ from entities.living.goods.base_good import BaseGood
 
 
 class FlourFlower(BaseGood):
+    """A good that produces flour over time."""
     def __init__(self, canvas, x, y) -> None:
         super().__init__(
             canvas, x, y,

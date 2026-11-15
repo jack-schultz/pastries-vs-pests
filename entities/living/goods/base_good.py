@@ -12,7 +12,10 @@ if TYPE_CHECKING:
 
 
 class BaseGood(Living, ABC):
-    # Base class for goods placed on tiles. Each good acts on its own timer
+    """
+    Base class for goods placed on tiles.
+    Each good acts on its own timer
+    """
     def __init__(self, canvas, x, y, width, height, colour, health: int) -> None:
         super().__init__(canvas, x, y, width, height, colour, health)
         self.rect.centre = (x, y)

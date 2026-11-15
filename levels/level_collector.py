@@ -5,7 +5,7 @@ dev_level_id = 0  # hidden testing level, not counted in level_count
 
 
 class LevelCollector():
-    # Holds the level data. A level is a list of waves, in order.
+    """Holds the level data. A level is a list of waves, in order."""
     def __init__(self):
         self.__levels = {
             1: self.level_1,

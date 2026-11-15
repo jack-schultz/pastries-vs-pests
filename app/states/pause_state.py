@@ -5,6 +5,7 @@ import tkinter as tk
 
 
 class PauseState(BaseState):
+    """The pause screen shown over the game."""
     def __init__(self, state_stack, window):
         super().__init__(state_stack, window)
         self.__buttons: dict[str, Rectangle] = {}

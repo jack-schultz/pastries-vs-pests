@@ -8,6 +8,7 @@ from entities.living.goods.base_good import BaseGood
 
 
 class BasePest(Living, ABC):
+    """Base class for all pests."""
     def __init__(
         self, canvas, x, y,
         size, colour,

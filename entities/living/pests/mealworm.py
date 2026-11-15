@@ -5,7 +5,7 @@ from entities.living.pests.base_pest import BasePest
 
 
 class Mealworm(BasePest):
-    # Each bite into the same good does more and more damage.
+    """Each bite into the same good does more and more damage."""
     def __init__(self, canvas, x, y) -> None:
         self.__first_bite = 40
         self.__bite_growth = 25

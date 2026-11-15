@@ -6,6 +6,7 @@ if TYPE_CHECKING:
 
 
 class StateStack:
+    """Keeps a stack of states; the top state is the active one."""
     def __init__(self) -> None:
         self.__stack: list[BaseState] = []
 

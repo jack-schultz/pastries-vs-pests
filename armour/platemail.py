@@ -3,7 +3,7 @@ from armour.base_armour import BaseArmour
 
 
 class Platemail(BaseArmour):
-    # Covers all sides. Strong against physical hits, weak to fire/gas/piercing, and acid eats it
+    """Covers all sides. Strong against physical hits, weak to fire/gas/piercing, and acid eats it"""
     def __init__(self) -> None:
         super().__init__(
             durability=450,

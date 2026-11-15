@@ -7,6 +7,7 @@ from entities.living.goods.base_good import BaseGood
 
 
 class SugarShooter(BaseGood):
+    """A good that shoots sugar cubes at pests."""
     def __init__(self, canvas, x, y, delay_pattern: Sequence[float] = (1.4,)) -> None:
         super().__init__(
             canvas, x, y,

@@ -5,7 +5,7 @@ from armour.base_armour import BaseArmour
 
 
 class Living(Entity):
-    # Base class for entities with health that can be hurt and die
+    """Base class for entities with health that can be hurt and die"""
     def __init__(self, canvas, x, y, width, height, colour, health: int, armour: BaseArmour | None = None, layer_count: int = 1) -> None:
         super().__init__(canvas, x, y, width, height, colour)
         self.__health = health

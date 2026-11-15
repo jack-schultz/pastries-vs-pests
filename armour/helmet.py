@@ -4,6 +4,7 @@ from armour.base_armour import BaseArmour
 
 
 class Helmet(BaseArmour):
+    """Armour that protects the top of the wearer."""
     def __init__(self) -> None:
         super().__init__(
             durability=250,

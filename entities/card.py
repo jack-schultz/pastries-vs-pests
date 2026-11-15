@@ -9,6 +9,7 @@ from entities.replace_info import ReplaceInfo
 
 
 class Card(Entity):
+    """A card the player clicks to choose a good to place."""
     def __init__(
         self, canvas, x, y,
         width, height, name: str, cost: int,

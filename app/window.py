@@ -5,7 +5,7 @@ from app.states.statestack import StateStack
 
 
 class Window:
-    # Holds the Tk window and the canvas everything is drawn on
+    """Holds the Tk window and the canvas everything is drawn on"""
     def __init__(self) -> None:
         self.__root = tk.Tk()
         self.__root.title("Pastries vs. Pests")

@@ -3,6 +3,7 @@ import tkinter as tk
 
 
 class Rectangle:
+    """A coloured rectangle drawn on a tkinter canvas."""
     def __init__(self, canvas: tk.Canvas, x: float, y: float, width: float, height: float, colour: str):
         self.__canvas = canvas
         self.__rect: int = self.__canvas.create_rectangle(

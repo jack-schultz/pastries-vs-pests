@@ -7,6 +7,7 @@ from entities.living.pests.base_pest import BasePest
 
 
 class Garden(Entity):
+    """The grid of tiles that goods are placed on."""
     def __init__(self, canvas, x, y):
         colour = "#FFFF00"
         self.__position = (x, y)
