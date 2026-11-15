@@ -153,8 +153,7 @@ class World:
         self.update_wave_text()
 
     def update_wave_text(self) -> None:
-        name = "Dev Level" if self.__level_number == dev_level_id else f"Level {
-            self.__level_number}"
+        name = "Dev Level" if self.__level_number == dev_level_id else f"Level {self.__level_number}"
         if self.__waves.finished:
             text = "Winner Winner Chicken Dinner!"
         elif self.__waves.wave_number == 0:
